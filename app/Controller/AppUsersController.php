@@ -75,7 +75,11 @@ class AppUsersController extends UsersController {
 		ksort($institutions);
 		$countries = $this->AppUser->Country->find('list', array('order' => 'Country.name ASC'));
 		$userRoles = $this->AppUser->UserRole->find('list');
-		$this->set(compact('institutions','countries','userRoles'));
+		$cities = $this->AppUser->Institution->City->find('list', array(
+			'contain' => array('Country'),
+			'fields' => array('City.id', 'City.name', 'Country.name')
+		));
+		$this->set(compact('institutions','countries','userRoles','cities'));
 	}
 	
 	
@@ -189,7 +193,6 @@ class AppUsersController extends UsersController {
 			}else{
 				$this->Session->setFlash('Error: the user data did not pass validation. Please check the details.');
 			}
-			
 			
 			if($success) {
 				if($this->Auth->user()) $this->redirect(array(

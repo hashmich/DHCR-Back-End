@@ -91,7 +91,7 @@ class User extends UsersAppModel {
 	
 	public function requestNewPassword($email = null) {
 		$user = $this->findByEmail($email);
-		if(!empty($user) && $user[$this->alias]['email_verified'] == 1) {
+		if(!empty($user)) {
 			$expiry = date('Y-m-d H:i:s', time() + $this->tokenExpirationTime);
 			$token = $this->generateToken('password_token');
 			$data = array();
@@ -104,8 +104,6 @@ class User extends UsersAppModel {
 				$this->data = $user;
 				return $user;
 			}
-		}elseif(!empty($user) && $user[$this->alias]['email_verified'] == 0) {
-			$this->invalidate('email', 'This Email Address exists but was never validated.');
 		}else{
 			$this->invalidate('email', 'This Email Address does not exist in the system.');
 		}

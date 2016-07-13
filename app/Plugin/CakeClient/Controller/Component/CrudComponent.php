@@ -175,19 +175,10 @@ class CrudComponent extends Component {
 		$this->controller->AclMenu->setMenu();
 		$this->controller->AclMenu->setActions();
 		
-		// the page name
-		$page_title = Configure::read('Cakeclient.page_title');
-		if(empty($page_title)) {
-			// the domainname (+ subdomain)
-			$page_title = $this->controller->base;
-		}
+		// the domainname (+ subdomain)
+		$page_title = $this->controller->base;
 		// ... and a dynamic title about the context
 		$title_for_layout = $this->virtualController;
-		// configuration might contain a translated label for that model
-		$label = Configure::read('Cakeclient.tables.' . $this->controller->request->params['controller'] . '.label');
-		if(!empty($label)) {
-			$title_for_layout = $label;
-		}
 		if($this->controller->request->params['action'] != 'index') {
 			$title_for_layout = ucfirst($this->controller->request->params['action']) . ' ' . Inflector::singularize($title_for_layout);
 		}
@@ -210,6 +201,7 @@ class CrudComponent extends Component {
 		}else{
 			$list = $this->controller->{$modelName}->{$relatedModelName}->find('list');
 		}
+		
 		$this->controller->set($relatedModelListName, $list);
 		return $list;
 	}
@@ -327,7 +319,7 @@ class CrudComponent extends Component {
 		$role = 'admin';	// add the role level to the fieldlist configuration...
 		$cacheName = $role . '_fieldlist_' . $modelName . '_' . $action;
 		if(!$fieldlist = Cache::read($cacheName, 'cakeclient')) {
-			
+		
 			$has_form = false;
 			if(in_array($action, array('add', 'edit'))) $has_form = true;
 			

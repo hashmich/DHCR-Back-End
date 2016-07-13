@@ -139,6 +139,8 @@ class AppUser extends User {
 	public function approve($data = array()) {
 		$this->data = $data;
 		$validator = $this->validator();
+		unset($validator['email']);
+		unset($validator['new_email']);
 		unset($validator['institution_id']['special']);
 		$validator['institution_id'] = array(
 			'notEmpty' => array(
@@ -163,7 +165,7 @@ class AppUser extends User {
 		$this->data[$this->alias]['approved'] = 1; // if approved is true, but active false, then the user is banned!
 		$this->data[$this->alias]['approval_token'] = null;
 		$this->data[$this->alias]['approval_token_expires'] = null;
-		if($this->save($data, array('validate' => true))) {
+		if($this->save($this->data, array('validate' => true))) {
 			$this->recursive = -1;
 			return $this->read();
 		}

@@ -54,7 +54,8 @@ Configure::write('Users.adminEmailAddress', false);
 /**
 * This Plugin also uses the following configuration constants:
 */
-Configure::write('App.EmailSubjectPrefix', '[Your Site]');
+if(!Configure::read('App.EmailSubjectPrefix'))
+	Configure::write('App.EmailSubjectPrefix', '[Your Site]');
 
 
 $filename = APP . 'Config' . DS . 'Users' . DS . 'bootstrap.php';
