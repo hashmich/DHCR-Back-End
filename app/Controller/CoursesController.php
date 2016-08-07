@@ -26,7 +26,7 @@ class CoursesController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		
-		$this->Auth->allow(array('index', 'reset'));
+		$this->Auth->allow(array('index', 'view', 'reset'));
 		
 		if($this->request->is('requested') AND $this->request->params['action'] == 'map')
 			$this->Auth->allow(array('map'));
@@ -78,7 +78,14 @@ class CoursesController extends AppController {
 	}
 	
 	
-	
+	public function view($id = null) {
+		if(empty($id)) $this->redirect('index');
+		$courses = $this->Course->find('all', array(
+			'conditions' => array('Course.id' => $id)
+		));
+		$this->set(compact('courses'));
+		$this->render('index');
+	}
 	
 	
 	public function edit($id = null) {

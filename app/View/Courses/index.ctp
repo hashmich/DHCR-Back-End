@@ -21,5 +21,5 @@
 	echo $this->element('courses/index');
 	echo $this->element('pager');
 	
-	$this->append('menu', $this->element('courses/filter'));
+	if($this->action == 'index') $this->append('menu', $this->element('courses/filter'));
 ?>
