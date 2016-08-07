@@ -16,36 +16,37 @@
  * limitations under the License.
  */
 $toggle = ($showDetails) ? ''
-	: 'style="display:none" onclick="toggleRow(event, \'record-details-' . $k . '\');" onmouseover="siblingHover(this, \'prev\');" onmouseout="siblingHover(this, \'prev\')"';
+	: 'style="display:none" onclick="toggleRow(event, \'record-details-' . $record['Course']['id'] . '\');" onmouseover="siblingHover(this, \'prev\');" onmouseout="siblingHover(this, \'prev\')"';
 
-$outdated = 'Green';
-$title = 'entry actively maintained';
+$state = 'Green';
+$stateTitle = 'entry actively maintained';
 if($record['Course']['updated'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseYellow'))) {
-	$outdated = 'Yellow';
-	$title = 'entry not revised since one year';
+	$state = 'Yellow';
+	$stateTitle = 'entry not revised since one year';
 }
 if(	$record['Course']['updated'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseRed'))
 OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
 ) {
-	$outdated = 'Red';
-	$title = 'entry not revised since > 1,5 year';
+	$state = 'Red';
+	$stateTitle = 'entry not revised since > 1,5 year';
 }
 
-if($outdated !== 'Green' AND !empty($edit))
-	$title = '<span style="color:red">Entry will disappear after 2 years.<br>Please update!</span>';
+if($state !== 'Green' AND !empty($edit))
+	$stateTitle = '<span style="color:red">Entry will disappear after 2 years.<br>Please update!</span>';
 ?>
 
 <tr <?php echo $toggle; ?>
-	id="record-details-<?php echo $k; ?>" 
+	id="record-details-<?php echo $record['Course']['id']; ?>" 
 	class="<?php echo $classname; ?>"
+	data-id="<?php echo $record['Course']['id']; ?>"
 	>
 	<td colspan="<?php echo $colspan; ?>">
 		<p class="strong">Details</p>
 		<div class="record_details">
 			<div class="left narrow">
 				<dl>
-					<dt>State <?php echo $outdated; ?></dt>
-					<dd><?php echo $title; ?></dd>
+					<dt>State <?php echo $state; ?></dt>
+					<dd><?php echo $stateTitle; ?></dd>
 					<dt>Language</dt>
 					<dd><?php echo (!empty($record['Language']['name'])) ? $record['Language']['name'] : ' - '; ?></dd>
 					<dt>Start Date</dt>
@@ -82,6 +83,17 @@ if($outdated !== 'Green' AND !empty($edit))
 						echo (!empty($lecturer)) ? $lecturer : ' - ';
 						?>
 					</dd>
+					
+					<dt>Permalink</dt>
+					<dd>
+						<?php
+						$url = array(
+							'controller' => 'courses',
+							'action' => 'view',
+							$record['Course']['id']);
+						echo $this->Html->link(Router::url($url, true), $url);
+						?>
+					</dd>
 				</dl>
 			</div>
 			<div class="left wide">
@@ -90,6 +102,10 @@ if($outdated !== 'Green' AND !empty($edit))
 					<dd><?php echo (!empty($record['Course']['access_requirements'])) ? $record['Course']['access_requirements'] : ' - '; ?></dd>
 					<?php
 					$keywords = array();
+					if(!empty($record['NwoDiscipline'])) {
+						foreach($record['NwoDiscipline'] as $tag) $cat[] = trim($tag['name']);
+						$keywords['Disciplines'] = $cat;
+					}
 					if(!empty($record['TadirahActivity'])) {
 						foreach($record['TadirahActivity'] as $tag) $cat[] = trim($tag['name']);
 						$keywords['Activities'] = $cat;

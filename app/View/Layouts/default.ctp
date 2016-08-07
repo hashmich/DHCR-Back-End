@@ -34,19 +34,17 @@ $this->start('header');
 	);
 	if($this->request->params['controller'] == 'projects' OR $DODH) 
 		$logo = array(
-			'file' => 'eHumanities_small.png',
-			'alt' => 'The eHumanities Group',
+			'file' => '3logos.png',
+			'alt' => 'The eHumanities Group, Erasmus Studio and CLARIAH',
 			'url' => 'https://www.knaw.nl/en/institutes/e-humanities-group',
 			'width' => 236,
-			'height' => 46
+			'height' => 100,
+			'style' => 'margin-top: 8px;'
 		);	
-	echo $this->Html->image('/img/logos/' . $logo['file'], array(
-		'alt' => $logo['alt'],
-		'class' => 'left',
-		'url' => $logo['url'],
-		'width' => $logo['width'],
-		'height' => $logo['height']
-	));
+	
+	$file = '/img/logos/' . $logo['file'];
+	unset($logo['file']);
+	echo $this->Html->image($file, $logo);
 	?>
 	<div>
 		<h1>

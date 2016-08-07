@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 $toggle = ($showDetails) ? ''
-	: 'onclick="toggleRow(event, \'record-details-' . $k . '\');" onmouseover="siblingHover(this, \'next\');" onmouseout="siblingHover(this, \'next\')"';
+	: 'onclick="toggleRow(event, \'record-details-' . $record['Course']['id'] . '\');" onmouseover="siblingHover(this, \'next\');" onmouseout="siblingHover(this, \'next\')"';
 
 $outdated = null;
 if($record['Course']['updated'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseYellow'))) {
@@ -30,6 +30,7 @@ OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() 
 ?>
 <tr <?php echo $toggle; ?>
 	class="<?php echo $classname; ?>"
+	data-id="<?php echo $record['Course']['id']; ?>"
 	>
 	<?php
 	if(!empty($edit)) {
@@ -87,20 +88,6 @@ OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() 
 						'title' => 'external information link (new tab)'
 					));
 				}
-				break;
-			case 'Course.location':
-				$value = $this->Html->image('/img/markerRedSmall.png', array(
-					'url' => array(
-						'controller' => 'courses',
-						'action' => 'index',
-						'id' => $record[$fieldModelName]['id']
-					),
-					'alt' => 'show on map',
-					'title' => 'show on map',
-					'width' => 16,
-					'height' => 28,
-					'style' => 'vertical-align: middle;'
-				));
 		}
 		echo '<td' . $classname . '>' . $value . '</td>';
 	}

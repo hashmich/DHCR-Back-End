@@ -21,11 +21,11 @@ $fieldlist = array(
 	'Institution.name' => array('label' => 'Institution'),
 	'Course.department' => array('label' => 'Department'),
 	'Course.url' => array('label' => 'Information'),
-	'Course.guide_url' => array('label' => 'Curriculum'),
-	'Course.location' => array('label' => 'Location')
+	'Course.guide_url' => array('label' => 'Curriculum')
 );
 $colspan = count($fieldlist);
 if(!empty($edit)) $colspan++;
+$colspan++;	// add one for the state column
 ?>
 	
 <div class="scroll_wrapper">
@@ -37,8 +37,8 @@ if(!empty($edit)) $colspan++;
 			$showDetails = (count($courses) === 1) ? true : false;
 			foreach($courses as $k => $record) {
 				$classname = ($k % 2 == 0) ? 'even' : 'odd';
+				$classname .= ' record-'.$record['Course']['id'];
 				echo $this->element('courses/table/row', array(
-					'k' => $k,
 					'record' => $record,
 					'fieldlist' => $fieldlist,
 					'colspan' => $colspan,
@@ -46,7 +46,6 @@ if(!empty($edit)) $colspan++;
 					'showDetails' => $showDetails
 				));
 				echo $this->element('courses/table/row_details', array(
-					'k' => $k,
 					'record' => $record,
 					'colspan' => $colspan,
 					'classname' => $classname,
@@ -71,8 +70,14 @@ if(!empty($edit)) $colspan++;
 function toggleRow(event, id) {
 	if(event.target.tagName.toLowerCase() === 'a') return;
 	var element = document.getElementById(id);
-	if(element.style.display == 'table-row') element.style.display = 'none';
-	else element.style.display = 'table-row';
+	var id = $(element).attr('data-id');
+	if(element.style.display == 'table-row') {
+		element.style.display = 'none';
+		closeMarker(id);
+	}else{
+		element.style.display = 'table-row';
+		openMarker(id);
+	}
 }
 function siblingHover(target, orientation) {
 	var element = target.nextSibling;

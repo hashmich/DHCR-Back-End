@@ -584,10 +584,9 @@ class CrudComponent extends Component {
 	}
 	
 	function getCleanReferer($default = '/') {
-		$referer = str_replace(
-			getInstallationSubDir(), '',
-			$this->controller->referer($default, $restrict_local = true)
-		);
+		$referer = $this->controller->referer($default, $restrict_local = true);
+		if(getInstallationSubDir() != '/')
+			$referer = str_replace(getInstallationSubDir(), '', $referer);
 		if(empty($referer)) $referer = $default;
 		return $referer;
 	}

@@ -38,17 +38,8 @@ class User extends UsersAppModel {
 			),
 			'isUnique' => array(
 				'rule' => array('isUnique', 'email'),
-				'message' => 'An account with that email already exists.'
-			)
-		),
-		'new_email' => array(
-			'isValid' => array(
-				'rule' => 'email',
-				'message' => 'Please enter a valid email address.'
-			),
-			'isUnique' => array(
-				'rule' => array('newMailIsUnique'),
-				'message' => 'An account with that email already exists.'
+				'message' => 'An account with that email already exists.',
+				'on' => 'create'
 			)
 		),
 		'password' => array(
@@ -230,9 +221,22 @@ class User extends UsersAppModel {
 			$data[$this->alias]['new_email'] = $new_email;
 			$this->set($data);
 			$result = false;
-			if(	$new_email == $user['email']
-			OR	$this->validates(array('fieldlist' => array('new_email')))
-			) {
+			$validate = array(
+				'isValid' => array(
+					'rule' => 'email',
+					'message' => 'Please enter a valid email address.'
+				)
+			);
+			if($new_email != $user['email']) {
+				$validate['isUnique'] = array(
+					'rule' => array('newMailIsUnique'),
+					'message' => 'An account with that email already exists.'
+				);
+			}
+			$validator = $this->validate();
+			$validator['new_email'] = $validate;
+			
+			if($this->validates(array('fieldlist' => array('new_email')))) {
 				$result = $this->save($this->data, array('validate' => false));
 			}
 			if($result) {
@@ -265,6 +269,7 @@ class User extends UsersAppModel {
 	public function saveProfile($data = array(), $admin = false) {
 		if(!empty($data[$this->alias])) $this->set($data);
 		$this->id = $this->data[$this->alias][$this->primaryKey];
+		
 		if(!$admin AND !empty($this->blacklist)) {
 			foreach($this->blacklist as $fieldname) {
 				unset($this->data[$this->alias][$fieldname]);

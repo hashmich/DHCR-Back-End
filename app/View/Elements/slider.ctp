@@ -110,9 +110,19 @@ jQuery(document).ready(function ($) {
         <div>
 			<?php
 			echo $this->Html->image('dhpr_slideshow/eHumanities.png', array(
-				'u' => 'image',
-				'width' => 428,
-				'height' => 85
+				'width' => 257,
+				'height' => 51,
+				'style' => 'display: block; margin: 45px auto;'
+			));
+			echo $this->Html->image('dhpr_slideshow/erasmus.png', array(
+				'width' => 208,
+				'height' => 90,
+				'style' => 'display: block; margin: 45px auto;'
+			));
+			echo $this->Html->image('dhpr_slideshow/clariah.png', array(
+				'width' => 257,
+				'height' => 72,
+				'style' => 'display: block; margin: 45px auto;'
 			));
 			?>
 		</div>

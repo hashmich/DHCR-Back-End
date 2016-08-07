@@ -161,18 +161,20 @@ class UsersController extends UsersAppController {
 	
 	
 	public function profile($id = null) {
+		//$this->plugin = 'Users';
 		$user = array();
 		$auth_user = $this->Auth->user();
 		$admin = false;
+		if(!empty($auth_user['is_admin']) OR $this->DefaultAuth->isAdmin())
+			$admin = true;
 		if(!empty($auth_user)) {
 			$user[$this->modelClass] = $auth_user;
 		}
-		if(!empty($id) AND $this->DefaultAuth->isAdmin()) {
+		if(!empty($id) AND $admin) {
 			$user = $this->{$this->modelClass}->find('first', array(
 				'contain' => array(),
 				'conditions' => array($this->modelClass . '.id' => $id)
 			));
-			$admin = true;
 		}
 		if(empty($user)) $this->redirect(array(
 			'plugin' => null,
@@ -183,11 +185,14 @@ class UsersController extends UsersAppController {
 		if(!empty($this->request->data[$this->modelClass])) {
 			$this->request->data[$this->modelClass]['id'] = $user[$this->modelClass]['id'];
 			$result = $this->{$this->modelClass}->saveProfile($this->request->data, $admin);
-			if($result) $this->redirect(array(
-				'plugin' => null,
-				'controller' => 'users',
-				'action' => 'dashboard'
-			));
+			if($result) {
+				$this->Session->setFlash('Please log out and in again to let the changes take effect.');
+				$this->redirect(array(
+					'plugin' => null,
+					'controller' => 'users',
+					'action' => 'dashboard'
+				));
+			}
 		}
 		$this->request->data = $user;
 	}

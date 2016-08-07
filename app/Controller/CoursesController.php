@@ -62,7 +62,7 @@ class CoursesController extends AppController {
 	
 	// set the unpaginated results to view for the map
 	public function map() {
-		$locations = $this->Course->find('all', array(
+		$courses = $this->Course->find('all', array(
 			'contain' => array('Institution.name'),
 			'conditions' => $this->_getFilter(),
 			'fields' => array('id','active','name','department','user_id','city_id','country_id','course_type_id','course_parent_type_id','institution_id','lon','lat'),
@@ -70,9 +70,9 @@ class CoursesController extends AppController {
 		));
 		if($this->request->is('requested')) {
             // used by view-caching
-			return $locations;
+			return $courses;
         }else{
-            $this->set('locations', $locations);
+            $this->set('mapCourses', $courses);
         }
 		$this->render('index');
 	}
