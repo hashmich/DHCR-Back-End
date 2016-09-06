@@ -69,7 +69,7 @@ if($this->action == 'edit') {
 		echo $this->Form->input('update', array(
 			'type' => 'checkbox',
 			'label' => 'Update Timestamp',
-			'checked' => false,
+			'checked' => true,
 			'value' => 1
 		));	// do or not update the timestamp 
 	}

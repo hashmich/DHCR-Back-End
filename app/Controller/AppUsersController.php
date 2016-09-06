@@ -219,20 +219,30 @@ class AppUsersController extends UsersController {
 	
 	
 	public function dashboard($id = null) {
-		if(!empty($id) AND $this->DefaultAuth-isAdmin())
+		if(!empty($id) AND $this->DefaultAuth->isAdmin())
 			$course_user_id = $id;
 		else
 			$course_user_id = $this->Auth->user('id');
 		
+		$moderated = array();
 		$courses = $this->AppUser->Course->find('all', array(
 			'conditions' => array(
 				'Course.user_id' => $course_user_id,
 				'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
 			)
 		));
-		$this->set(compact('courses'));
+		// moderators
+		if($this->Auth->user('user_role_id') == 2 AND !empty($this->Auth->user('country_id'))) {
+			$moderated = $this->AppUser->Course->find('all', array(
+			'conditions' => array(
+				'Course.country_id' => $this->Auth->user('country_id'),
+				'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
+			)
+		));
+		}
+		$this->set(compact('courses', 'moderated'));
 		
-		if($this->DefaultAuth->isAdmin()) {
+		if($this->DefaultAuth->isAdmin() OR $this->Auth->user('user_role_id') == 2) {
 			if(empty($id)) {
 				// admin dashboard
 				$unapproved = $this->AppUser->find('all', array(

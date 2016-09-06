@@ -17,19 +17,18 @@
  */
 
 $this->append('menu',
-  '
-  <li>Register</li>
+  '<li>Register</li>
   <li>Log In</li>
   <li>Dashboard</li>
   <li>Add new course</li>
-  <li>Special user roles</li>
-  ');
+  <li>Special user roles</li>');
 
 
 echo $this->element('manual/register');
 echo $this->element('manual/login');
 echo $this->element('manual/dashboard');
 echo $this->element('manual/addnewcourses');
+echo $this->element('manual/userroles');
 
 ?>
 

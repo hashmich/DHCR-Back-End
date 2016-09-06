@@ -33,6 +33,9 @@ class UsersController extends UsersAppController {
 				$this->Auth->deny('register');
 			}
 			if($this->Auth->user()) {
+				if($this->DefaultAuth->isAdmin()) {
+					$this->Auth->allow(array('delete'));
+				}
 				$this->Auth->allow(array(
 					'dashboard',
 					'profile'
@@ -551,9 +554,7 @@ class UsersController extends UsersAppController {
 	
 	
 	public function delete($id = null) {
-		if($this->DefaultAuth->isAdmin() AND !empty($id)) {
-			$this->AppUser->delete($id, $cascade = false);
-		}
+		$this->AppUser->delete($id, $cascade = false);
 		$this->redirect(array(
 			'plugin' => null,
 			'controller' => 'users',

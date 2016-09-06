@@ -116,7 +116,6 @@ class CoursesController extends AppController {
 			
 			if(!$admin) {
 				$this->request->data['Course']['user_id'] = $this->Auth->user('id');
-				$this->request->data['Course']['id'] = $id;
 				unset($this->request->data['Course']['created']);
 				unset($this->request->data['Course']['updated']);
 			}else{
@@ -124,12 +123,14 @@ class CoursesController extends AppController {
 					$this->request->data['Course']['updated'] = $course['Course']['updated'];
 				}
 			}
+			$this->request->data['Course']['id'] = $id;
 			if(!empty($this->request->data['Course']['skip_validation'])) {
 				$this->Course->validator()->remove('url', 'status_ok');
 				$this->Course->validator()->remove('guide_url', 'status_ok');
 			}
 			if($this->Course->validateAll($this->request->data)) {
 				$this->request->data = $this->Course->data;		// callback beforeValidate manipulates data
+				$this->request->data['Course']['id'] = $id;		// we need to set this again...
 				if($this->Course->saveAll($this->request->data, array('validate' => false))) {
 					$this->Session->delete('edit.Course.id');
 					$this->redirect(array(

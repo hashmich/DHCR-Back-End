@@ -23,6 +23,20 @@
 
 <?php echo $this->element('dashboard/admin_invited_users'); ?>
 
+<?php
+if(!empty($moderated)) {
+	?>
+	<h3>Moderated Courses</h3>
+	<?php
+	if(empty($moderated)) {
+		echo '<p>There are no courses in the registry moderated by you.</p>';
+	}else{
+		echo $this->element('courses/map', array('courses' => $moderated));
+		$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
+		echo $this->element('courses/index', array('courses' => $moderated));
+	}
+}
+?>
 
 <h3>Your Courses</h3>
 <?php
