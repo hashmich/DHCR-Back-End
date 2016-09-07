@@ -123,13 +123,36 @@ echo $this->Form->input('guide_url', array(
 echo $this->Form->input('ects', array('title' => 'Decimal numbers only. Optionally use the decimal point.'));
 echo $this->Form->input('contact_name');
 echo $this->Form->input('contact_mail');
-echo $this->Form->input('lat', array('label' => 'Latitude', 'title' => 'Lookup coordinates of the university or department in Google maps.'));
-echo $this->Form->input('lon', array('label' => 'Longitude', 'title' => 'Lookup coordinates of the university or department in Google maps.'));
+
 $opts = array('empty' => ' -- none -- ');
 if($this->action === 'add' AND !empty($auth_user) AND !empty($auth_user['institution_id']))
 	$opts = array('selected' => $auth_user['institution_id']);
 echo $this->Form->input('institution_id', $opts);
 echo $this->Form->input('department');
+
+echo $this->Html->para(null, 'Coordinates can be drawn in from the institution selector above. To adjust if not applicable, you can make use of '.$this->Html->link('this tool', 'http://dbsgeo.com/latlon/').'or similar to figure out proper coordinates. Changing your selection from the institutions list above will override your edits made in the fields longitude &amp; latitude beyond.');
+
+$this->Html->scriptStart(array('inline' => false));
+?>
+var selector = $('#CourseInstitutionId');
+var lon = $('#CourseLon');
+var lat = $('#CourseLat');
+var institution_id = null;
+var locations = <?php echo json_encode($locations); ?>
+
+selector.change(function() {
+	institution_id = selector.val();
+	if(institution_id != '' && typeof(institution_id) != 'undefined') {
+		lon.val(locations[institution_id].lon);
+		lat.val(locations[institution_id].lat);
+	}
+});
+<?php
+$this->Html->scriptEnd();
+
+echo $this->Form->input('lat', array('label' => 'Latitude', 'title' => 'Lookup coordinates of the university or department in Google maps.'));
+echo $this->Form->input('lon', array('label' => 'Longitude', 'title' => 'Lookup coordinates of the university or department in Google maps.'));
+
 
 echo $this->element('taxonomy/selector', array('habtmModel' => 'NwoDiscipline', 'dropdown' => true, 'label' => 'Disciplines'));
 

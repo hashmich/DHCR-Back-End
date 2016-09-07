@@ -232,6 +232,14 @@ class CoursesController extends AppController {
 			'conditions' => array('Institution.can_have_course' => 1)
 		));
 		ksort($institutions);
+		$institutionsLocations = $this->Course->Institution->find('all', array(
+			'contain' => array(),
+			'fields' => array('Institution.id', 'Institution.lon', 'Institution.lat'),
+			'conditions' => array('Institution.can_have_course' => 1)
+		));
+		$locations = array();
+		foreach($institutionsLocations as $record)
+			$locations[$record['Institution']['id']] = $record['Institution'];
 		$languages = $this->Course->Language->find('list');
 		$courseTypes = $this->Course->CourseType->find('list', array(
 			'contain' => array('CourseParentType'),
@@ -243,6 +251,7 @@ class CoursesController extends AppController {
 		$this->set(compact(
 			'users',
 			'institutions',
+			'locations',
 			'languages',
 			'courseTypes',
 			'admin'

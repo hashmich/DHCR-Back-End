@@ -152,8 +152,8 @@ class Course extends AppModel {
 				'required' => true
 			),
 			'range' => array(
-				'rule' => array('range', -11, 34),
-				'message' => 'This does not look not like an European coordinate.'
+				'rule' => array('range', -180, 180),
+				'message' => 'This does not look not like a proper coordinate.'
 			)
 		),
 		'lat' => array(
@@ -164,8 +164,8 @@ class Course extends AppModel {
 				'required' => true
 			),
 			'range' => array(
-				'rule' => array('range', 35, 72),
-				'message' => 'This does not look not like an European coordinate.'
+				'rule' => array('range', -90, 90),
+				'message' => 'This does not look not like a proper coordinate.'
 			)
 		),
 		'department' => array(

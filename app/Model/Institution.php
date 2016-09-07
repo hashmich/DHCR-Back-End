@@ -61,6 +61,30 @@ class Institution extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
+		'lon' => array(
+			'decimal' => array(
+				'rule' => array('decimal', 6),
+				'message' => 'Enter a decimal with 6 digits after the decimal point.',
+				'allowEmpty' => false,
+				'required' => true
+			),
+			'range' => array(
+				'rule' => array('range', -180, 180),
+				'message' => 'This does not look not like a proper coordinate.'
+			)
+		),
+		'lat' => array(
+			'decimal' => array(
+				'rule' => array('decimal', 6),
+				'message' => 'Enter a decimal with 6 digits after the decimal point.',
+				'allowEmpty' => false,
+				'required' => true
+			),
+			'range' => array(
+				'rule' => array('range', -90, 90),
+				'message' => 'This does not look not like a proper coordinate.'
+			)
+		),
 		'abbreviation' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
