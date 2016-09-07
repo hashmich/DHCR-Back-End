@@ -36,13 +36,17 @@ $this->Html->script('/leaflet/leaflet.markercluster.js', array('inline' => false
 // to disable element cache, the key "cache" must not be present in the options array
 $options = array();
 $get_locations = false;
+if(empty($courses)) $courses = array();
 // locations will be (bool)false if empty because of set filters
 if($this->action == 'index' AND !isset($locations)) {
 	$options = array('cache' => true);
 	$get_locations = true;
 }
 $this->Html->scriptBlock(
-	$this->element('courses/initialize_map', array('get_locations' => $get_locations), $options),
+	$this->element('courses/initialize_map', array(
+		'get_locations' => $get_locations,
+		'courses' => $courses
+	), $options),
 	array('inline' => false)
 );
 
