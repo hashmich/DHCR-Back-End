@@ -218,16 +218,16 @@ class AppUsersController extends UsersController {
 	}
 	
 	
-	public function dashboard($id = null) {
-		if(!empty($id) AND $this->DefaultAuth->isAdmin())
-			$course_user_id = $id;
-		else
-			$course_user_id = $this->Auth->user('id');
-		
+	public function dashboard($user_id = null) {
+		$assist = true;
+		if(empty($user_id) OR !$this->DefaultAuth->isAdmin()) {
+			$user_id = $this->Auth->user('id');
+			$assist = false;
+		}
 		$moderated = array();
 		$courses = $this->AppUser->Course->find('all', array(
 			'conditions' => array(
-				'Course.user_id' => $course_user_id,
+				'Course.user_id' => $user_id,
 				'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
 			)
 		));
@@ -243,32 +243,38 @@ class AppUsersController extends UsersController {
 		$this->set(compact('courses', 'moderated'));
 		
 		if($this->DefaultAuth->isAdmin() OR $this->Auth->user('user_role_id') == 2) {
-			if(empty($id)) {
+			$conditionsUnapproved = array(
+				$this->modelClass . '.active' => 0,
+				$this->modelClass . '.approved' => 0
+			);
+			$conditionsInvited = array(
+				'OR' => array(
+					$this->modelClass . '.password IS NULL',
+					$this->modelClass . '.password' => ''
+				),
+				$this->modelClass . '.active' => 1
+			);
+			if($this->Auth->user('user_role_id') == 2) {
+				$conditionsUnapproved[$this->modelClass.'.country_id'] = $this->Auth->user('country_id');
+				$conditionsInvited[$this->modelClass.'.country_id'] = $this->Auth->user('country_id');
+			}
+			if(!$assist) {
 				// admin dashboard
 				$unapproved = $this->AppUser->find('all', array(
 					'contain' => array('Institution'),
-					'conditions' => array(
-						$this->modelClass . '.active' => 0,
-						$this->modelClass . '.approved' => 0
-					)
+					'conditions' => $conditionsUnapproved
 				));
 				
 				$invited = $this->AppUser->find('all', array(
 					'contain' => array('Institution'),
-					'conditions' => array(
-						'OR' => array(
-							$this->modelClass . '.password IS NULL',
-							$this->modelClass . '.password' => ''
-						),
-						$this->modelClass . '.active' => 1
-					)
+					'conditions' => $conditionsInvited
 				));
 				
 				$this->set(compact('unapproved', 'invited'));
 				$this->render('admin_dashboard');
 				
 			}else{
-				$this->set('notice', 'You are viewing the dashboard of User '.$id);
+				$this->set('notice', 'You are viewing the dashboard of User '.$user_id);
 				$this->render('user_dashboard');
 			}
 			

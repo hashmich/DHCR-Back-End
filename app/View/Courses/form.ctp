@@ -54,116 +54,136 @@ if(!empty($errors)) {
 	</div>
 	<?php
 }
+?>
 
-if($this->action == 'edit') {
-	echo $this->Form->input('id', array('disabled' => true, 'type' => 'text'));
-	?>
-	
-	<p>Courses are not displayed any more, if the "last-update" field's date is too old. </p>
-	<p>To mark this record as up-to-date, you have to submit this form, even if the information did not change.</p>
-	
+<fieldset>
 	<?php
-	if(!empty($admin)) {
-		echo '<p>Admin: leave this box unchecked to *NOT* update the "last-update" field when saving your revisions.</p>';
-		echo '<p>Owners of course records are emailed based on the date in the field "last-update" to keep their entries alive.</p>';
-		echo $this->Form->input('update', array(
-			'type' => 'checkbox',
-			'label' => 'Update Timestamp',
-			'checked' => true,
-			'value' => 1
-		));	// do or not update the timestamp 
+	if($this->action == 'edit') {
+		echo $this->Form->input('id', array('disabled' => true, 'type' => 'text'));
+		?>
+		
+		<p>Courses are not displayed any more, if the "last-update" field's date is too old. </p>
+		<p>To mark this record as up-to-date, you have to submit this form, even if the information did not change.</p>
+		
+		<?php
+		if(!empty($admin)) {
+			?>
+			<p>
+				Leave this box unchecked to <strong>not</strong> update the "last-update" field when saving your revisions.
+			</p>
+			<p>
+				Owners of course records are emailed based on the date in the field "last-update" 
+				to keep their entries alive.
+				Please consider this if you are making changes to entries not maintained by yourself.
+			</p>
+			<?php
+			echo $this->Form->input('update', array(
+				'type' => 'checkbox',
+				'label' => 'Update Timestamp',
+				'checked' => true,
+				'value' => 1
+			));	// do or not update the timestamp 
+		}
 	}
-}
-?>
+	?>
+	<p>If you leave this box unchecked, the course will not appear in the public listing. </p>
+	<?php
+	echo $this->Form->input('active', array('label' => 'publish'));
+	?>
 
-<p>
-	Validation has been set up to assist you entering valid content. <br />
-	However, sometimes technology plays tricks on us (especially with the URL fields). 
-</p>
-<p>Please check this box if you have trouble to pass URLs you otherwise experience being valid.</p>
+	<p>
+		Validation has been set up to assist you entering valid content. <br />
+		However, sometimes technology plays tricks on us (especially with the URL fields). 
+	</p>
+	<p>Please check this box if you have trouble to pass URLs you otherwise experience being valid.</p>
 
-<?php
-echo $this->Form->input('skip_validation', array(
-	'label' => 'Skip URL Validation',
-	'type' => 'checkbox',
-	'checked' => false,
-	'value' => 1
-));
-?>
-
-<br />
-
-<?php
-if(!empty($admin)) {
-	echo $this->Form->input('user_id', array(
-		'label' => 'Owner',
-		'empty' => ' -- nobody -- '
+	<?php
+	echo $this->Form->input('skip_validation', array(
+		'label' => 'Skip URL Validation',
+		'type' => 'checkbox',
+		'checked' => false,
+		'value' => 1
 	));
-}
-
-echo $this->Form->input('active', array('label' => 'publish'));
-echo $this->Form->input('name');
-echo $this->Form->input('description', array('type' => 'textarea'));
-echo $this->Form->input('course_type_id', array('empty' => ' -- none -- '));
-echo $this->Form->input('language_id', array('empty' => ' -- none -- '));
-echo $this->Form->input('access_requirements');
-echo $this->Form->input('start_date', array('title' => 'One or many course start dates, format YYYY-MM-DD, separated by ";".'));
-echo $this->Form->input('recurring', array(
-	'title' => 'Check box if the course begins every year at the same date. Uncheck if the course takes place only once.',
-	'required' => false
-));
-echo $this->Form->input('url', array(
-	'label' => 'Information URL',
-	'title' => 'Course information URL.'
-));
-echo $this->Form->input('guide_url', array(
-	'label' => 'Curriculum URL',
-	'title' => 'URL of a course guide (eg a .pdf), that describes the course modules and structure.'
-));
-echo $this->Form->input('ects', array('title' => 'Decimal numbers only. Optionally use the decimal point.'));
-echo $this->Form->input('contact_name');
-echo $this->Form->input('contact_mail');
-
-$opts = array('empty' => ' -- none -- ');
-if($this->action === 'add' AND !empty($auth_user) AND !empty($auth_user['institution_id']))
-	$opts = array('selected' => $auth_user['institution_id']);
-echo $this->Form->input('institution_id', $opts);
-echo $this->Form->input('department');
-
-echo $this->Html->para(null, 'Coordinates can be drawn in from the institution selector above. To adjust if not applicable, you can make use of '.$this->Html->link('this tool', 'http://dbsgeo.com/latlon/').'or similar to figure out proper coordinates. Changing your selection from the institutions list above will override your edits made in the fields longitude &amp; latitude beyond.');
-
-$this->Html->scriptStart(array('inline' => false));
-?>
-var selector = $('#CourseInstitutionId');
-var lon = $('#CourseLon');
-var lat = $('#CourseLat');
-var institution_id = null;
-var locations = <?php echo json_encode($locations); ?>
-
-selector.change(function() {
-	institution_id = selector.val();
-	if(institution_id != '' && typeof(institution_id) != 'undefined') {
-		lon.val(locations[institution_id].lon);
-		lat.val(locations[institution_id].lat);
+	
+	if(!empty($admin)) {
+		echo $this->Form->input('user_id', array(
+			'label' => 'Maintainer',
+			'empty' => ' -- nobody -- '
+		));
 	}
-});
-<?php
-$this->Html->scriptEnd();
+	?>
+</fieldset>
+<fieldset>
+	<?php
+	echo $this->Form->input('name');
+	echo $this->Form->input('description', array('type' => 'textarea'));
+	echo $this->Form->input('course_type_id', array('empty' => ' -- none -- '));
+	echo $this->Form->input('language_id', array('empty' => ' -- none -- '));
+	echo $this->Form->input('access_requirements');
+	echo $this->Form->input('start_date', array('title' => 'One or many course start dates, format YYYY-MM-DD, separated by ";".'));
+	echo $this->Form->input('recurring', array(
+		'title' => 'Check box if the course begins every year at the same date. Uncheck if the course takes place only once.',
+		'required' => false
+	));
+	?>
+</fieldset>
+<fieldset>
+	<?php
+	echo $this->Form->input('url', array(
+		'label' => 'Information URL',
+		'title' => 'Course information URL.'
+	));
+	echo $this->Form->input('guide_url', array(
+		'label' => 'Curriculum URL',
+		'title' => 'URL of a course guide (eg a .pdf), that describes the course modules and structure.'
+	));
+	echo $this->Form->input('ects', array('title' => 'Decimal numbers only. Optionally use the decimal point.'));
+	echo $this->Form->input('contact_name');
+	echo $this->Form->input('contact_mail');
+	?>
+</fieldset>
+<fieldset>
+	<?php
+	$opts = array('empty' => ' -- none -- ');
+	if($this->action === 'add' AND !empty($auth_user) AND !empty($auth_user['institution_id']))
+		$opts = array('selected' => $auth_user['institution_id']);
+	echo $this->Form->input('institution_id', $opts);
+	echo $this->Form->input('department');
 
-echo $this->Form->input('lat', array('label' => 'Latitude', 'title' => 'Lookup coordinates of the university or department in Google maps.'));
-echo $this->Form->input('lon', array('label' => 'Longitude', 'title' => 'Lookup coordinates of the university or department in Google maps.'));
+	echo $this->Html->para(null, 'Coordinates can be drawn in from the institution selector above. To adjust if not applicable, you can make use of '.$this->Html->link('this tool', 'http://dbsgeo.com/latlon/').'or similar to figure out proper coordinates. Changing your selection from the institutions list above will override your edits made in the fields longitude &amp; latitude beyond.');
 
+	$this->Html->scriptStart(array('inline' => false));
+	?>
+	var selector = $('#CourseInstitutionId');
+	var lon = $('#CourseLon');
+	var lat = $('#CourseLat');
+	var institution_id = null;
+	var locations = <?php echo json_encode($locations); ?>
 
-echo $this->element('taxonomy/selector', array('habtmModel' => 'NwoDiscipline', 'dropdown' => true, 'label' => 'Disciplines'));
+	selector.change(function() {
+		institution_id = selector.val();
+		if(institution_id != '' && typeof(institution_id) != 'undefined') {
+			lon.val(locations[institution_id].lon);
+			lat.val(locations[institution_id].lat);
+		}
+	});
+	<?php
+	$this->Html->scriptEnd();
 
-echo $this->element('taxonomy/selector', array('habtmModel' => 'TadirahActivity', 'dropdown' => true));
+	echo $this->Form->input('lat', array('label' => 'Latitude', 'title' => 'Lookup coordinates of the university or department in Google maps.'));
+	echo $this->Form->input('lon', array('label' => 'Longitude', 'title' => 'Lookup coordinates of the university or department in Google maps.'));
+	?>
+</fieldset>
+<fieldset>
+	<?php
+	echo $this->element('taxonomy/selector', array('habtmModel' => 'NwoDiscipline', 'dropdown' => true, 'label' => 'Disciplines'));
+	echo $this->element('taxonomy/selector', array('habtmModel' => 'TadirahActivity', 'dropdown' => true));
+	echo $this->element('taxonomy/selector', array('habtmModel' => 'TadirahTechnique', 'dropdown' => true));
+	echo $this->element('taxonomy/selector', array('habtmModel' => 'TadirahObject', 'dropdown' => true));
+	?>
+</fieldset>
 
-echo $this->element('taxonomy/selector', array('habtmModel' => 'TadirahTechnique', 'dropdown' => true));
-
-echo $this->element('taxonomy/selector', array('habtmModel' => 'TadirahObject', 'dropdown' => true));
-
-echo $this->Form->end('submit');
-?>
+<?php echo $this->Form->end('submit'); ?>
 
 
 
