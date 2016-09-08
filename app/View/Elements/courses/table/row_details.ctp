@@ -94,6 +94,27 @@ if($state !== 'Green' AND !empty($edit))
 						echo $this->Html->link(Router::url($url, true), $url);
 						?>
 					</dd>
+					
+					<?php
+					if(!empty($edit)) {
+						?>
+						<dt>Maintainer</dt>
+						<dd>
+							<?php
+							if(empty($record['Course']['user_id'])) {
+								echo 'No maintainer assigned';
+							}else{
+								echo $record['AppUser']['first_name'].' '.$record['AppUser']['last_name'].'<br>';
+								echo $this->Html->link($record['AppUser']['email'], 'mailto:'.$record['AppUser']['email'], array(
+									'target' => '_blank'));
+									echo '<br>';
+								echo $this->Html->link('View maintainer data', '/moderator/users/view/'.$record['Course']['user_id']);
+							}
+							?>
+						</dd>
+						<?php
+					}
+					?>
 				</dl>
 			</div>
 			<div class="left wide">
