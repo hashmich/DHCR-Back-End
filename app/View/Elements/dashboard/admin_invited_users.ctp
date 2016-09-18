@@ -92,18 +92,24 @@ if(empty($invited)) {
 			?>
 		</table>
 	</div>
-		
-	<div class="actions">
-		<ul>
-			<li>
-				<?php
-				echo $this->Html->link('Invite a new course maintainer', array(
-					'controller' => 'users',
-					'action' => 'invite',
-					'plugin' => null
-				));
-				?>
-			</li>
+	<?php
+}
+?>
+	
+<div class="actions">
+	<ul>
+		<li>
+			<?php
+			echo $this->Html->link('Invite a new course maintainer', array(
+				'controller' => 'users',
+				'action' => 'invite',
+				'plugin' => null
+			));
+			?>
+		</li>
+		<?php
+		if(!empty($invited)) {
+			?>
 			<li>
 				<?php
 				echo $this->Html->link('Re-Invite All!', array(
@@ -115,10 +121,8 @@ if(empty($invited)) {
 				);
 				?>
 			</li>
-		</ul>
-	</div>
-		
-	
-	<?php
-}
-?>
+			<?php
+		}
+		?>
+	</ul>
+</div>

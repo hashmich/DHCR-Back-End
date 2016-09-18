@@ -256,11 +256,11 @@ class UsersController extends UsersAppController {
 			if(!empty($options['from'])) $Email->from($options['from']);	// set default in email config on app level
 			if(!empty($options['sender'])) {
 				$Email->sender($options['sender']);
-				$Email->returnPath($options['returnPath']);
+				if(!empty($options['returnPath'])) $Email->returnPath($options['returnPath']);
 			}
 			if(!empty($options['replyTo'])) {
 				$Email->replyTo($options['replyTo']);
-				$Email->returnPath($options['returnPath']);
+				if(!empty($options['returnPath'])) $Email->returnPath($options['returnPath']);
 			}
 			if(!empty($options['cc'])) $Email->cc($options['cc']);
 			if(!empty($options['bcc'])) $Email->bcc($options['bcc']);

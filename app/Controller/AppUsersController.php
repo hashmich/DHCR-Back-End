@@ -256,7 +256,6 @@ class AppUsersController extends UsersController {
 			);
 			if($this->Auth->user('user_role_id') == 2) {
 				$conditionsUnapproved[$this->modelClass.'.country_id'] = $this->Auth->user('country_id');
-				$conditionsInvited[$this->modelClass.'.country_id'] = $this->Auth->user('country_id');
 			}
 			if(!$assist) {
 				// admin dashboard
@@ -266,9 +265,12 @@ class AppUsersController extends UsersController {
 				));
 				
 				$invited = $this->AppUser->find('all', array(
-					'contain' => array('Institution'),
+					'contain' => array('Institution' => array(
+						'conditions' => array('Institution.country_id' => $this->Auth->user('country_id'))
+					)),
 					'conditions' => $conditionsInvited
 				));
+				foreach($invited as $k => $record) if(empty($record['Institution']['id'])) unset($invited[$k]);
 				
 				$this->set(compact('unapproved', 'invited'));
 				$this->render('admin_dashboard');
@@ -292,7 +294,8 @@ class AppUsersController extends UsersController {
 			'subject' => 'Join the Digital Humanities Course Registry',
 			'bcc' => $this->Auth->user('email'),
 			'sender' => $this->Auth->user('email'),
-			'replyTo' => $this->Auth->user('email')
+			'replyTo' => $this->Auth->user('email'),
+			'returnPath' => $this->Auth->user('email')
 		);
 		if(Configure::read('debug') > 0) $mailOpts['transport'] = 'Debug';
 		
