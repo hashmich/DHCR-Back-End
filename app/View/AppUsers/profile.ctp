@@ -36,9 +36,9 @@
 			array('class' => 'label'));
 	echo '</div>';
 	$modSettingOptions = array('disabled' => true, 'type' => 'text');
-	if(!empty($auth_user['is_admin'])) {
-		echo $this->Form->input('is_admin');
-		echo '<p>As UserAdmin, the user will recieve emails that are not being catched by the national moderators.</p>';
+	if($auth_user['user_role_id'] <= 2) {
+		//echo $this->Form->input('is_admin');
+		echo '<p>As UserAdmin, you will recieve emails that are not being catched by the national moderators.</p>';
 		echo $this->Form->input('user_admin');	// get the emails not catched by the national mods
 		if($auth_user['id'] != $this->request->data[$modelName]['id']) {
 			echo '<p>If not active, the user is banned and cannot log in!</p>';
