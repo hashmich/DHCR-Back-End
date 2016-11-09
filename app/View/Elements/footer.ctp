@@ -21,17 +21,23 @@
 
 <p>
 	Copyright 2016 
-	<?php echo $this->Html->link('Hendrik Schmeer', 'http://hendrikschmeer.de', array('target' => '_blank')); ?>.
-</p>
-<p>
-	On behalf of: 
+	<?php echo $this->Html->link('Hendrik Schmeer', 'http://hendrikschmeer.de', array('target' => '_blank')); ?>
+	on behalf of
 	<?php
-	echo $this->Html->link('Dariah-EU', 'https://dariah.eu/', array('target' => '_blank')) . ', ';
-	echo $this->Html->link('DARIAH-VCC2', 'https://dariah.eu/activities/general-vcc-meetings/2nd-general-vcc-meeting.html', array('target' => '_blank')) . ',<br>';
+	if(!Configure::read('App.DODH')) {
+		echo '<br>';
+		echo $this->Html->link('Dariah-EU', 'https://dariah.eu/', array('target' => '_blank')) . ', ';
+		echo $this->Html->link('DARIAH-VCC2', 'https://dariah.eu/activities/general-vcc-meetings/2nd-general-vcc-meeting.html', array('target' => '_blank')) . ',<br>';
+	}
 	echo $this->Html->link('Erasmus Studio', 'http://www.eur.nl/erasmusstudio/es/', array('target' => '_blank')) . ' &amp; ';
 	echo $this->Html->link('CLARIAH', 'http://www.clariah.nl/', array('target' => '_blank')) . '.';
 	?>
 </p>
-<p>
-	<?php echo $this->Html->link('Impressum', '/pages/about#impressum'); ?>
-</p>
+
+<?php
+if(!Configure::read('App.DODH')) {
+	?>
+	<p><?php echo $this->Html->link('Impressum', '/pages/about#impressum'); ?></p>
+	<?php
+}
+?>

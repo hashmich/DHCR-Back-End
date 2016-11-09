@@ -102,8 +102,9 @@ class AppUsersController extends UsersController {
 		// try fetching the moderator in charge of the user's country, 
 		$country_id = (!empty($user[$this->modelClass]['country_id'])) 
 			? $user[$this->modelClass]['country_id'] : null;
+		// if country is not set, try retrieving it from the institution of the user
 		if(empty($country_id) AND !empty($user[$this->modelClass]['institution_id'])) {
-			$institution = $this->{$this->modelClass}->find('first', array(
+			$institution = $this->{$this->modelClass}->Institution->find('first', array(
 				'contain' => array(),
 				'conditions' => array(
 					'Institution.id' => $user[$this->modelClass]['institution_id']
@@ -112,6 +113,7 @@ class AppUsersController extends UsersController {
 			if($institution AND !empty($institution['Institution']['country_id']))
 				$country_id = $institution['Institution']['country_id'];
 		}
+		// find the moderators in charge
 		if(!empty($country_id)) {
 			$admins = $this->{$this->modelClass}->find('all', array(
 				'contain' => array(),
@@ -123,8 +125,8 @@ class AppUsersController extends UsersController {
 			));
 		}
 		
-		// then user_admin
-		if(empty($country_id)) {
+		// if no country or then escalate to user_admin
+		if(empty($country_id) OR empty($admins)) {
 			$admins = $this->{$this->modelClass}->find('all', array(
 				'contain' => array(),
 				'conditions' => array(

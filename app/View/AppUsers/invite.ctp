@@ -20,6 +20,7 @@
 <p>The invited user will recieve an email to set their password and join the DH-Courseregistry.</p>
 <?php
 echo $this->Form->create($modelName);
+
 echo '<fieldset>';
 if(Configure::read('Users.username')) {
 	echo $this->Form->input('username', array(
@@ -66,11 +67,12 @@ Best wishes and thank you for your effort,
 echo '</fieldset>';
 echo '<fieldset>';
 ?>
-<p>If the new users Institution is not available, you have to create that entry in the database.</p>
+<p>If the new users' Institution is not available, you have to create that entry in the database.</p>
 <p>Adding a new institution requires the institution's city and the city's country to be pre-existant.</p>
 <p>
 	Start here to check whether the country exists: <?php echo $this->Html->link('Countries List', '/moderator/countries/index'); ?>,<br>
-	then check if the city exists: <?php echo $this->Html->link('Cities List', '/moderator/cities/index'); ?>.
+	then check if the city exists: <?php echo $this->Html->link('Cities List', '/moderator/cities/index'); ?>.<br>
+	Finally, you can add a missing institution here, if you cannot find it in the list beyond: <?php echo $this->Html->link('Add Institution', '/moderator/institutions/add'); ?>.
 </p>
 <?php
 echo $this->Form->input('institution_id', array(
