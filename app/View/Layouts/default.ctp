@@ -55,25 +55,27 @@ $this->start('header');
 			?>
 		</h1>
 		<?php
-		if($this->request->params['controller'] != 'projects') {
-			?>
-			<p>
-				Courseregistry <strong>ALPHA</strong> |
-				<?php echo $this->Html->link('About', '/pages/about'); ?>
-			</p>
-			<?php
-		}else{
+		if($DODH) {
 			?>
 			<p>
 				Projectregistry <strong>BETA</strong> |
 				<?php echo $this->Html->link('About', '/pages/projectregistry'); ?>
 			</p>
 			<?php
-			if(!$DODH) {
+		}else{
+			?>
+			<p>
+				Courseregistry <strong>BETA</strong> |
+				<?php echo $this->Html->link('About', '/pages/about'); ?>
+			</p>
+			<?php
+			if(!$DODH AND $this->request->params['controller'] == 'projects') {
 				?>
 				<p>
 					<strong>This Project-Registry is a copy of</strong>
-					<?php echo $this->Html->link('DODH', 'http://dh-projectregistry.org'); ?> (Dutch Overview Digital Humanities)
+					<?php echo $this->Html->link('DODH', 'http://dh-projectregistry.org'); ?> 
+					(Dutch Overview Digital Humanities) and not actively maintained. 
+					Please visit their page to see the most recent data. 
 				</p>
 				<?php
 			}

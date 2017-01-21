@@ -22,6 +22,10 @@ class CrudComponent extends Component {
 	
 	protected $modelName = null;			// the derived model - overridable by config
 	
+	protected $relations = null;			// detected or stored relations of the loaded model
+	
+	protected $hasForm = false;
+	
 	
 	
 	
@@ -86,8 +90,9 @@ class CrudComponent extends Component {
 			$this->controller->uses = array($this->modelName);
 			$this->controller->modelClass = $this->modelName;
 			
-			// try to detect and set some relations (belongsTo) on virtual models
-			$this->__setModelRelations($this->modelName, $reset = false);
+			// try to detect and set some relations (belongsTo) on virtual models,
+			// store detected relations ($reset = false)
+			$this->__getBelongsTo($this->modelName, $reset = false);
 			
 			// map the special crud parameters to their respective keys - requests without those won't arrive in here!
 			$this->controller->request->params['controller'] = $this->table;
@@ -168,10 +173,15 @@ class CrudComponent extends Component {
 		
 		$this->controller->set(compact('modelName', 'controllerName', 'primaryKeyName', 'actionName'));
 		
+		// set 
+		$this->hasForm = false;
+		if(in_array($actionName, array('add', 'edit'))) $this->hasForm = true;
+		
 		// set the view for CRUD actions automatically
 		$this->setView();
-		$this->setFieldlist();
 		$this->setRelations();
+		$this->setFieldlist();	// overrides $this->hasForm
+		$this->setAssocFieldOptions($modelName);
 		$this->controller->AclMenu->setMenu();
 		$this->controller->AclMenu->setActions();
 		
@@ -186,11 +196,10 @@ class CrudComponent extends Component {
 	}
 	
 	
-	// set an option list for hasMany relations. list depends on model's displayField
-	function setOptionList($modelName, $relatedModelName, $getFunction = 'getOptions') {
+	// get an option list for belongsTo relations. list depends on model's displayField
+	function getOptionList($modelName, $relatedModelName, $getFunction = 'getOptions') {
 		if(empty($modelName))
 			$modelName = $this->modelName;
-		$relatedModelListName = Inflector::variable(Inflector::pluralize($relatedModelName));
 		if(method_exists($this->controller->{$modelName}->{$relatedModelName}, $getFunction)) {
 			// Pass the current model id. If none is set, use pass[0] instead.
 			$id = $this->controller->{$modelName}->id;
@@ -201,23 +210,49 @@ class CrudComponent extends Component {
 		}else{
 			$list = $this->controller->{$modelName}->{$relatedModelName}->find('list');
 		}
+		return $list;
+	}
+	function setOptionList($modelName, $relatedModelName, $getFunction = 'getOptions') {
+		$relatedModelListName = Inflector::variable(Inflector::pluralize($relatedModelName));
+		if(!empty($table = $this->controller->$modelName->$relatedModelName->useTable)) {
+			$relatedModelListName = Inflector::variable($table);
+		}
 		
+		$list = $this->getOptionList($modelName, $relatedModelName, $getFunction);
 		$this->controller->set($relatedModelListName, $list);
 		return $list;
 	}
+	public function setAssocFieldOptions($modelName, $has_form = false) {
+		if($this->hasForm OR $has_form) {
+			$model = $this->getModel($modelName);
+			if($relations = $this->getRelations($modelName)) {
+				if(!empty($relations['belongsTo'])) {
+					foreach($relations['belongsTo'] as $relation) {
+						$related = $relation['classname'];
+						$this->setOptionList($modelName, $related, 'getOptions');
+					}
+				}
+				if(!empty($relations['hasAndBelongsToMany'])) {
+					foreach($relations['hasAndBelongsToMany'] as $relation) {
+						$related = $relation['classname'];
+						$this->setOptionList($modelName, $related, 'getHabtmOptions');
+					}
+				}
+			}
+		}
+	}
 	
 	
-	public function getRelations($tableName = null, $modelName = null) {
-		if(empty($tableName)) $tableName = $this->table;
+	public function getRelations($modelName = null) {
 		if(empty($modelName)) $modelName = $this->modelName;
 		
 		$role = 'admin'; // don't forget to enhance allowedActions checking!
-		$cacheName = $role . '_relations_' . $tableName;
+		$cacheName = $role . '_relations_' . $modelName;
 		if(!$relations = Cache::read($cacheName, 'cakeclient')) {
 			
-			$tableDef = $this->getTableConfig($tableName);
-			// Yet we do not really need this
-			//if($tableDef = $this->getTableConfig($tableName)) {
+			//$tableDef = $this->getTableConfig($this->tableName);
+			// we do not really need this, as no config has been stored, yet
+			//if($tableDef = $this->getTableConfig($this->tableName)) {
 			if(0) {
 				//$table_id = $tableModel->getTable($tableName);
 				$table_id = $tableDef['id'];
@@ -253,7 +288,7 @@ class CrudComponent extends Component {
 				if(method_exists($dummy, 'getAppClass'))
 					$dummy->getAppClass($this->modelName, 'Model', $virtual, $plugin);
 				if($virtual) {
-					// detect belongsTo relations
+					// detect belongsTo relations of a virtually created model
 					$columns = $model->schema();
 					$i = 0;
 					foreach($columns as $fieldName => $schema) {
@@ -273,6 +308,7 @@ class CrudComponent extends Component {
 						}
 					}
 				}else{
+					// parse the relations array of an existing model
 					$associations = $model->associations();
 					foreach($associations as $assocType) {
 						$associated = $model->{$assocType};
@@ -302,10 +338,11 @@ class CrudComponent extends Component {
 			
 			Cache::write($cacheName, $relations, 'cakeclient');
 		}
+		$this->relations = $relations;
 		return $relations;
 	}
-	public function setRelations($tableName = null, $modelName = null) {
-		$relations = $this->getRelations($tableName, $modelName);
+	public function setRelations($modelName = null) {
+		$relations = $this->getRelations($modelName);
 		$this->controller->set('crudRelations', $relations);
 		return $relations;
 	}
@@ -319,9 +356,6 @@ class CrudComponent extends Component {
 		$role = 'admin';	// add the role level to the fieldlist configuration...
 		$cacheName = $role . '_fieldlist_' . $modelName . '_' . $action;
 		if(!$fieldlist = Cache::read($cacheName, 'cakeclient')) {
-		
-			$has_form = false;
-			if(in_array($action, array('add', 'edit'))) $has_form = true;
 			
 			$tableModel = $this->getModel($this->tableModelName);
 			
@@ -331,14 +365,15 @@ class CrudComponent extends Component {
 				'conditions' => array('CcConfigTable.name' => $tableName)
 			));
 			if(isset($currentAction['CcConfigAction'][0]['has_form'])) {
-				$has_form = $currentAction['CcConfigAction'][0]['has_form'];
+				$this->hasForm = $currentAction['CcConfigAction'][0]['has_form'];
 			}
 			
 			$configList = false;
 			//$tableConfig = Configure::read('Cakeclient.tables');
 			$tableConfig = $this->getTableConfig($tableName);
-			// #ToDo: get the configuration of related tables
+			// #ToDo: get the configuration of related tables (for the action at issue?)
 			if(0) {	
+			//if(!empty($tableConfig)) {
 			//if(!empty($tableConfig['fieldlists'][$action])) {
 				$fieldlist = $tableConfig['fieldlists'][$action];
 				// do not alter a manually edited fieldlist...
@@ -357,14 +392,14 @@ class CrudComponent extends Component {
 				$fieldlist = array();
 				foreach($columns as $fieldName => $schema) {
 					// don't add the timestamp fields to forms
-					if(in_array($fieldName, array('updated','modified','created')) AND $has_form) continue;
+					if(in_array($fieldName, array('updated','modified','created')) AND $this->hasForm) continue;
 					
 					$fielddef = array(
 						'fieldname' => $modelName . '.' . $fieldName,
 						'label' => Inflector::camelize($fieldName)
 					);
 					// by default, do not display an editable id field in forms...
-					if(isset($schema['key']) AND $schema['key'] == 'primary' AND $has_form) {
+					if(isset($schema['key']) AND $schema['key'] == 'primary' AND $this->hasForm) {
 						$fielddef['formoptions']['readonly'] = 'readonly';
 					}
 					if(isset($schema['comment'])) {
@@ -390,8 +425,7 @@ class CrudComponent extends Component {
 				}
 			}
 			
-			$this->__inspectAssociations($modelName, $fieldlist, $configList, $has_form, $tableConfig);
-			
+			$this->__getAssocFieldDefinitions($modelName, $fieldlist, $configList);
 			Cache::write($cacheName, $fieldlist, 'cakeclient');
 		}
 		return $fieldlist;
@@ -403,7 +437,11 @@ class CrudComponent extends Component {
 	}
 	
 	
-	private function __setModelRelations($modelName = null, $reset = true) {
+	/**
+	 * Boolean $reset: optional, true. Reset the model to it's original 
+	 * associations after one successive find operation.
+	 */
+	private function __getBelongsTo($modelName = null, $reset = true) {
 		if(empty($modelName)) $modelName = $this->modelName;
 		$model = $this->getModel($modelName);
 		$belongsTo = $model->belongsTo;
@@ -430,15 +468,16 @@ class CrudComponent extends Component {
 					$model->bindModel(array('belongsTo' => $belongsTo), $reset);
 			}
 		}
+		
 		return $belongsTo;
 	}
 	
 	
-	// destroys the column label
-	private function __inspectAssociations($modelName, &$fieldlist, $is_configList, $has_form, $tableConfig) {
+
+	private function __getAssocFieldDefinitions($modelName, &$fieldlist, $is_configList) {
 		// examine related models and add fields / change definitions
 		$model = $this->getModel($modelName);
-		$belongsTo = $this->__setModelRelations($modelName, $reset = true);
+		$belongsTo = $this->__getBelongsTo($modelName, $reset = true);
 		
 		if(!empty($belongsTo)) {
 			foreach($model->belongsTo as $modelAlias => $modelRelation) {
@@ -448,14 +487,8 @@ class CrudComponent extends Component {
 					// relatedModelName.displayField would be even better - but is much too long!
 					$foreignKey = $modelRelation['foreignKey'];
 					$label = Inflector::camelize($modelRelation['foreignKey']);
-					if(!empty($tableConfig[$relatedTable]['displayfield_label'])) {
-						$label = $tableConfig[$relatedTable]['displayfield_label'];
-					}
 					// get the keys where the related values are stored
 					$displayField = $model->{$modelAlias}->displayField;
-					if(!empty($tableConfig[$relatedTable]['displayfield'])) {
-						$displayField = $tableConfig[$relatedTable]['displayfield'];
-					}
 					// update fieldlist - do not override form_options label
 					if(!is_array($fieldlist[$modelName . '.' . $foreignKey])) {
 						$fieldlist[$modelName . '.' . $foreignKey] = array();
@@ -473,20 +506,13 @@ class CrudComponent extends Component {
 						)
 					);
 				}
-				// set the option list
-				if($has_form) {
-					$this->setOptionList($modelName, $modelAlias, 'getOptions');
-				}
 			}
 		}
-		if(!empty($this->controller->$modelName->hasAndBelongsToMany)) {
-			if($has_form) {
-				foreach($this->controller->$modelName->hasAndBelongsToMany as $modelAlias => $modelRelation) {
-					$this->setOptionList($modelName, $modelAlias, 'getHabtmOptions');
-				}
-			}
-		}
+		return $fieldlist;
 	}
+	
+	
+	
 	
 	/**	A Hook for Sortable Behavior. 
 	*	Manipulates the fieldlist by inspecting the data for Sortable settings. 

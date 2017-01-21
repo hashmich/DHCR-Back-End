@@ -73,9 +73,11 @@
 				?>
 				<ul>
 				<?php
-				echo '<li>' . $this->Html->link('Courses', array('controller' => 'courses', 'action' => 'index', 'plugin' => null)) . '</li>';
-				if(stristr($_SERVER['HTTP_HOST'], 'dh-projectregistry.org') !== false)
+				if(Configure::read('App.DODH')) {
 					echo '<li>' . $this->Html->link('Projects', array('controller' => 'projects', 'action' => 'index', 'plugin' => null)) . '</li>';
+				}else{
+					echo '<li>' . $this->Html->link('Courses', array('controller' => 'courses', 'action' => 'index', 'plugin' => null)) . '</li>';
+				}
 				
 				echo $this->fetch('menu');
 				?><li><hr></li><?php

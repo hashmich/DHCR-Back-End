@@ -27,6 +27,7 @@ class ProjectsController extends AppController {
 			$this->Auth->allow(array('index', 'view', 'review', 'reset', 'schema', 'review_invitation', 'institutions'));
 		}else{
 			$this->Auth->allow(array('index', 'view', 'review', 'reset', 'schema'));
+			if($this->Auth->user()) $this->Auth->allow();
 		}
 	}
 	
@@ -330,13 +331,14 @@ class ProjectsController extends AppController {
 		$this->viewVars['_serialize']['projectExternalIdentifierFieldlist'] = json_encode($projectExternalIdentifierFieldlist);
 	}
 	
-	
+	/*
 	public function institutions() {
 		Configure::write('debug', 2);
 		$result = $this->Project->Institution->getHierarchicOptions();
 		debug($result);
 		exit;
 	}
+	*/
 	
 	
 	protected function _setFilterOptions() {
