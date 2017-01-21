@@ -49,7 +49,7 @@ class ContactsController extends AppController {
 				));
 			}
 			// then user_admin
-			if(empty($country_id)) {
+			if(empty($admins)) {
 				$admins = $this->AppUser->find('all', array(
 					'contain' => array(),
 					'conditions' => array(
