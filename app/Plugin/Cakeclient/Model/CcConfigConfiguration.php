@@ -10,11 +10,11 @@ class CcConfigConfiguration extends CakeclientAppModel {
 	var $validate = array(
 		'key' => array(
 			'rule1' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'Provide a configuration key'
 			),
 			'rule2' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'The configuration key must be unique'
 			)
 		)

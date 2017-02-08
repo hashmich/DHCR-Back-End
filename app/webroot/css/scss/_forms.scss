@@ -28,6 +28,14 @@ form.bulk_processor {
 }
 
 
+.validation-errors {
+	background-color: #FD897F;
+	border: 1px solid $border_color;
+	margin-bottom: 10px;
+	max-width: 500px;
+	padding: 20px;
+}
+
 
 /* Generic forms */
 form {
@@ -36,13 +44,17 @@ form {
 	display: block;
 	position:relative;
 	
+	
 	fieldset {
+		border: 1px solid $border_color;
 		margin-bottom: 10px;
 		max-width: 500px;
 		padding: 20px;
 	}
-	&.full fieldset {
-		max-width: 700px;
+	&.full {
+		fieldset {
+			max-width: 700px;
+		}
 	}
 	
 	div {
@@ -330,10 +342,5 @@ form {
 	}
 }
 
-div.validation-errors {
-	border: 2px solid #999;
-	padding: 10px;
-	margin-bottom: 15px;
-	
-}
+
 

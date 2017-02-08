@@ -35,25 +35,11 @@ if($this->action == 'edit') {
 	<?php
 }
 
-echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 
-if(!empty($errors)) {
-	?>
-	<div class="validation-errors">
-		<h3>Validation Errors</h3>
-		<dl>
-			<?php
-			foreach($errors as $field => $error) {
-				?>
-				<dt><?php echo Inflector::humanize($field); ?></dt>
-				<dd><?php echo implode('<br />', $error); ?></dd>
-				<?php
-			}
-			?>
-		</dl>
-	</div>
-	<?php
-}
+echo $this->element('Utils.validation_errors');
+
+
+echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 ?>
 
 <fieldset>

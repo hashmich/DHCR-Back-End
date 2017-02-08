@@ -50,7 +50,7 @@ class CourseType extends AppModel {
 		),
 		'name' => array(
 			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+				'rule' => array('notBlank'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,

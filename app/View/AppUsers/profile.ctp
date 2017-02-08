@@ -19,6 +19,8 @@
 <div class="users_form">
 	<h2>Edit Profile</h2>
 	<?php
+	echo $this->element('Utils.validation_errors');
+	
 	echo $this->Form->create($modelName);
 	
 	echo '<fieldset>';

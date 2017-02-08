@@ -18,7 +18,12 @@
 ?>
 <h2>Invite New Course Maintainer</h2>
 <p>The invited user will recieve an email to set their password and join the DH-Courseregistry.</p>
+
 <?php
+
+echo $this->element('Utils.validation_errors');
+
+
 echo $this->Form->create($modelName);
 
 echo '<fieldset>';

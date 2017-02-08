@@ -30,11 +30,11 @@ $menu_width: 236px;
 
 
 
-@import "mixins";
-@import "basics";
+@import "_mixins";
+@import "_basics";
 
 /* Users plugin */
-@import "users";
+@import "_users";
 
 
 
@@ -65,7 +65,7 @@ $menu_width: 236px;
 	@include clearfix;
 	
 	img {
-		margin: 25px 0 0  10px;
+		margin: 20px 0 0  25px;
 		display: block;
 		float: left;
 	}
@@ -150,7 +150,7 @@ $col_min_height: 400px;
 				
 				padding-bottom: 0.5em;
 				
-				@import "filter";
+				@import "_filter";
 			}
 			
 			/* li:hover - make secondary menus visible */
@@ -297,9 +297,9 @@ $col_min_height: 400px;
 			}
 		}
 		
-		@import "content_tables";
-		@import "paging";
-		@import "forms";
+		@import "_content_tables";
+		@import "_paging";
+		@import "_forms";
 
 		@include taxonomySelector;
 		

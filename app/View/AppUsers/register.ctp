@@ -24,7 +24,11 @@
 <div class="users_form">
 	<h2>User Registration</h2>
 	<p>Registration for the universities' maintainers of course information.</p>
+
 	<?php
+	echo $this->element('Utils.validation_errors');
+	
+	
 	echo $this->Form->create($modelName, array('novalidate' => true));
 	
 	echo $this->Form->input('email', array(

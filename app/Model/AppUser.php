@@ -33,25 +33,25 @@ class AppUser extends User {
 		),
 		'last_name' => array(
 			'required' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'Please enter your last name.'
 			)
 		),
 		'first_name' => array(
 			'required' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'Please enter your first name.'
 			)
 		),
 		'telephone' => array(
 			'required' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'For verification of your involvement, please enter your telephone number.'
 			)
 		),
 		'about' => array(
 			'required' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'For verification of your involvement, please provide any further information.'
 			)
 		)
@@ -144,19 +144,19 @@ class AppUser extends User {
 		unset($validator['institution_id']['special']);
 		$validator['institution_id'] = array(
 			'notEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'Institution may not be left blank.'
 			)
 		);
 		$validator['city_id'] = array(
 			'notEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'City may not be left blank.'
 			)
 		);
 		$validator['country_id'] = array(
 			'notEmpty' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'Country may not be left blank.'
 			)
 		);

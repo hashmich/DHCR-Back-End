@@ -41,25 +41,25 @@ class Contact extends AppModel {
 	public $validationRules = array(
 		'last_name' => array(
 			'required' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'Please enter your last name.'
 			)
 		),
 		'first_name' => array(
 			'required' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'Please enter your first name.'
 			)
 		),
 		'telephone' => array(
 			'required' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'Please enter your telephone number so we can call you in case we have further questions.'
 			)
 		),
 		'message' => array(
 			'required' => array(
-				'rule' => 'notEmpty',
+				'rule' => 'notBlank',
 				'message' => 'Please type in a message.'
 			)
 		)

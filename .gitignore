@@ -1,7 +1,4 @@
-/app/Config/core.php
-/app/Config/bootstrap.php
-/app/Config/database.php
-/app/Config.template/Schema/dh-registry_datamodel.mwb.bak
+/app/Config/
 /app/webroot/info.php
 tmp
 .sass-cache

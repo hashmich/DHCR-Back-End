@@ -27,7 +27,7 @@ class ProjectReview extends AppModel {
 	public $validate = array(
 		'email' => array(
 			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+				'rule' => array('notBlank'),
 				'message' => 'Please provide your email address, in case we have any more questions.',
 				'required' => true
 			),

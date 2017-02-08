@@ -167,9 +167,8 @@ class UsersController extends UsersAppController {
 		//$this->plugin = 'Users';
 		$user = array();
 		$auth_user = $this->Auth->user();
-		$admin = false;
-		if(!empty($auth_user['is_admin']) OR $this->DefaultAuth->isAdmin())
-			$admin = true;
+		$admin = $this->DefaultAuth->isAdmin();
+		
 		if(!empty($auth_user)) {
 			$user[$this->modelClass] = $auth_user;
 		}
@@ -184,7 +183,7 @@ class UsersController extends UsersAppController {
 			'controller' => 'users',
 			'action' => 'dashboard'
 		));
-		
+
 		if(!empty($this->request->data[$this->modelClass])) {
 			$this->request->data[$this->modelClass]['id'] = $user[$this->modelClass]['id'];
 			$result = $this->{$this->modelClass}->saveProfile($this->request->data, $admin);
@@ -195,9 +194,12 @@ class UsersController extends UsersAppController {
 					'controller' => 'users',
 					'action' => 'dashboard'
 				));
+			}else{
+				$user[$this->modelClass] = array_merge($user[$this->modelClass], $this->request->data[$this->modelClass]);
 			}
 		}
 		$this->request->data = $user;
+		$this->set('errors', $this->{$this->modelClass}->validationErrors);
 	}
 	
 	
@@ -379,6 +381,7 @@ class UsersController extends UsersAppController {
 					));
 				}
 			}
+			$this->set('errors', $this->{$this->modelClass}->validationErrors);
 		}
 	}
 	
@@ -513,6 +516,7 @@ class UsersController extends UsersAppController {
 	
 	public function approve($id = null) {
 		$proceed = false;
+		$redirect = true;
 		if($this->DefaultAuth->isAdmin() AND !empty($id) AND ctype_digit($id)) {
 			$proceed = true;
 		}else{
@@ -540,16 +544,19 @@ class UsersController extends UsersAppController {
 				));
 				$this->Session->setFlash('The account has been approved successfully.');
 			}else{
-				$this->Session->setFlash('ERROR! The user data did not pass validation. Please check the data manually.');
+				$redirect = false;
+				$this->set('errors', $this->{$this->modelClass}->validationErrors);
 			}
 		}
 		
-		if($this->DefaultAuth->isAdmin()) $this->redirect(array(
-			'plugin' => null,
-			'controller' => 'users',
-			'action' => 'dashboard'
-		));
-		$this->redirect('/');
+		if($redirect) {
+			if($this->DefaultAuth->isAdmin()) $this->redirect(array(
+				'plugin' => null,
+				'controller' => 'users',
+				'action' => 'dashboard'
+			));
+			$this->redirect('/');
+		}
 	}
 	
 	

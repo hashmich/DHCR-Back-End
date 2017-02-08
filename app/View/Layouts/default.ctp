@@ -26,11 +26,11 @@ $this->start('header');
 <div id="header">
 	<?php
 	$logo = array(
-		'file' => 'DARIAH-EURGB-Klein.png',
-		'alt' => 'DARIAH-EU',
-		'url' => 'http://dariah.eu/',
-		'width' => 202,
-		'height' => 61
+		'file' => 'logo-clarin.png',
+		'alt' => 'CLARIN Logo',
+		'url' => 'https://www.clarin.eu/',
+		'width' => 200,
+		'height' => 78
 	);
 	if($this->request->params['controller'] == 'projects' OR $DODH) 
 		$logo = array(

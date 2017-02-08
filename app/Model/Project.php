@@ -147,7 +147,7 @@ class Project extends AppModel {
 	public $validate = array(
 		'name' => array(
 			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+				'rule' => array('notBlank'),
 				'message' => 'Provide a meaningful name for your course.',
 				'allowEmpty' => false,
 				'required' => true

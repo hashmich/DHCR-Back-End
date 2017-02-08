@@ -50,7 +50,7 @@ class Course extends AppModel {
 	public $validate = array(
 		'name' => array(
 			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+				'rule' => array('notBlank'),
 				'message' => 'Provide a meaningful name for your course.',
 				'allowEmpty' => false,
 				'required' => true
@@ -82,7 +82,7 @@ class Course extends AppModel {
 		),
 		'url' => array(
 			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+				'rule' => array('notBlank'),
 				'message' => 'Provide an URL of further information on the course.',
 				'allowEmpty' => false,
 				'required' => true,
@@ -111,7 +111,7 @@ class Course extends AppModel {
 		),
 		'start_date' => array(
 			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+				'rule' => array('notBlank'),
 				'message' => 'Enter one or many start dates of the course.',
 				'allowEmpty' => false,
 				'required' => true,
@@ -170,7 +170,7 @@ class Course extends AppModel {
 		),
 		'department' => array(
 			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+				'rule' => array('notBlank'),
 				'message' => 'Please enter the name of the department.',
 				'allowEmpty' => false,
 				'required' => true

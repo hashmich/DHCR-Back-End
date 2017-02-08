@@ -15,7 +15,7 @@ class User extends UsersAppModel {
 	public $validate = array(
 		'username' => array(
 			'required' => array(
-				'rule' => array('notEmpty'),
+				'rule' => array('notBlank'),
 				'message' => 'Please enter a username.'
 			),
 			'alpha' => array(
@@ -53,8 +53,8 @@ class User extends UsersAppModel {
 	
 	// blacklist for profile-edit/registration
 	public $blacklist = array(
-		'id','email','password','email_verified','active','is_admin','user_admin','last_login','password_token',
-		'email_token','new_email','password_token_expires','email_token_expires','created','modified'
+		'id','email','password','email_verified','active','is_admin','user_admin','user_role_id','last_login',
+		'password_token','email_token','new_email','password_token_expires','email_token_expires','created','modified'
 	);
 	
 	
@@ -269,13 +269,12 @@ class User extends UsersAppModel {
 	public function saveProfile($data = array(), $admin = false) {
 		if(!empty($data[$this->alias])) $this->set($data);
 		$this->id = $this->data[$this->alias][$this->primaryKey];
-		
 		if(!$admin AND !empty($this->blacklist)) {
 			foreach($this->blacklist as $fieldname) {
 				unset($this->data[$this->alias][$fieldname]);
 			}
 		}
-		return $result = $this->save($this->data);
+		return $this->save($this->data);
 	}
 	
 	

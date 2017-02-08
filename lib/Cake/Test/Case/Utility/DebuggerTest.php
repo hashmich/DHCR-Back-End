@@ -156,6 +156,24 @@ class DebuggerTest extends CakeTestCase {
 	}
 
 /**
+ * test encodes error messages
+ *
+ * @return void
+ */
+	public function testOutputEncodeDescription() {
+		set_error_handler('Debugger::showError');
+		$this->_restoreError = true;
+
+		ob_start();
+		$a = array();
+		$b = $a['<script>alert(1)</script>'];
+		$result = ob_get_clean();
+
+		$this->assertNotContains('<script>alert(1)', $result);
+		$this->assertContains('&lt;script&gt;alert(1)', $result);
+	}
+
+/**
  * Tests that changes in output formats using Debugger::output() change the templates used.
  *
  * @return void
@@ -187,7 +205,7 @@ class DebuggerTest extends CakeTestCase {
 			'error' => array(),
 			'code' => array(), '8', '/code',
 			'file' => array(), 'preg:/[^<]+/', '/file',
-			'line' => array(), '' . (intval(__LINE__) - 7), '/line',
+			'line' => array(), '' . ((int)__LINE__ - 7), '/line',
 			'preg:/Undefined variable:\s+foo/',
 			'/error'
 		);
@@ -246,7 +264,7 @@ class DebuggerTest extends CakeTestCase {
 			'<error',
 			'<code', '8', '/code',
 			'<file', 'preg:/[^<]+/', '/file',
-			'<line', '' . (intval(__LINE__) - 7), '/line',
+			'<line', '' . ((int)__LINE__ - 7), '/line',
 			'preg:/Undefined variable:\s+foo/',
 			'/error'
 		);
@@ -516,8 +534,8 @@ TEXT;
 		Debugger::dump($var);
 		$result = ob_get_clean();
 
-		$open = php_sapi_name() === 'cli' ? "\n" : '<pre>';
-		$close = php_sapi_name() === 'cli' ? "\n" : '</pre>';
+		$open = PHP_SAPI === 'cli' ? "\n" : '<pre>';
+		$close = PHP_SAPI === 'cli' ? "\n" : '</pre>';
 		$expected = <<<TEXT
 {$open}array(
 	'People' => array(
@@ -540,8 +558,8 @@ TEXT;
 		Debugger::dump($var, 1);
 		$result = ob_get_clean();
 
-		$open = php_sapi_name() == 'cli' ? "\n" : '<pre>';
-		$close = php_sapi_name() == 'cli' ? "\n" : '</pre>';
+		$open = PHP_SAPI === 'cli' ? "\n" : '<pre>';
+		$close = PHP_SAPI === 'cli' ? "\n" : '</pre>';
 		$expected = <<<TEXT
 {$open}array(
 	'People' => array(
