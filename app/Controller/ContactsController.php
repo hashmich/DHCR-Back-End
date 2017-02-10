@@ -58,6 +58,16 @@ class ContactsController extends AppController {
 					)
 				));
 			}
+			// then admin
+			if(empty($admins)) {
+				$admins = $this->AppUser->find('all', array(
+					'contain' => array(),
+					'conditions' => array(
+						'AppUser.role_id' => 1,	// admins - do not check for the 'is_admin' flag, as it is currently also set for the mods
+						'AppUser.active' => 1
+					)
+				));
+			}
 			if($admins) {
 				foreach($admins as $admin) {
 					// email logic

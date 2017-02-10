@@ -311,6 +311,7 @@ class CoursesController extends AppController {
 					$value = $this->Course->Country->field('id', array('Country.name' => $named['country']));
 				}
 				$this->filter['Course.country_id'] = $named['country'];
+				unset($this->filter['Course.country']);
 			}
 		}
 	}
@@ -353,6 +354,11 @@ class CoursesController extends AppController {
 					$this->filter['CoursesTadirahActivity.tadirah_activity_id'] = $this->request->data['TadirahActivity']['TadirahActivity'];
 				else unset($this->filter['CoursesTadirahActivity.tadirah_activity_id']);
 			}
+			if(!empty($this->request->data['NwoDiscipline'])) {
+				if(!empty($this->request->data['NwoDiscipline']['NwoDiscipline']))
+					$this->filter['CoursesNwoDiscipline.nwo_discipline_id'] = $this->request->data['NwoDiscipline']['NwoDiscipline'];
+				else unset($this->filter['CoursesNwoDiscipline.nwo_discipline_id']);
+			}
 		}
 	}
 	
@@ -377,6 +383,9 @@ class CoursesController extends AppController {
 						break;
 					case 'CoursesTadirahTechnique':
 						$model = $field = 'TadirahTechnique';
+						break;
+					case 'CoursesNwoDiscipline':
+						$model = $field = 'NwoDiscipline';
 						break;
 				}
 				$this->request->data[$model][$field] = $value;
