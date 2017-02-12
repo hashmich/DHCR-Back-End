@@ -15,14 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-if($get_locations) $mapCourses = $this->requestAction('courses/map');
 
 $located = array();
 // get the markers
-if(empty($mapCourses) AND !empty($courses)) $mapCourses = $courses;
-if(!empty($mapCourses) AND is_array($mapCourses)) {
+if(!empty($courses) AND is_array($courses)) {
 	
-	foreach($mapCourses as $k => $record) {
+	foreach($courses as $k => $record) {
 		if(empty($record['Course']['lat']) OR empty($record['Course']['lon']))
 			continue;
 		$title = $record['Course']['name'];
@@ -53,8 +51,15 @@ var markers = [];
 var mymap, cluster;
 
 function initializeMap() {
-	mymap = L.map('coursesMap').setView([50.000, 10.189551], 4);
+	mymap = L.map('coursesMap', {scrollWheelZoom: false});
+	mymap.setView([50.000, 10.189551], 4);
 	L.tileLayer('https://api.mapbox.com/styles/v1/hashmich/ciqhed3uq001ae6niop4onov3/tiles/256/{z}/{x}/{y}?access_token=<?php echo Configure::read('App.mapApiKey'); ?>').addTo(mymap);
+	mymap.on('click', function() {
+		mymap.scrollWheelZoom.enable();
+	});
+	mymap.on('mouseout', function() {
+		mymap.scrollWheelZoom.disable();
+	});
 	
 	cluster = new L.MarkerClusterGroup({
 		spiderfyOnMaxZoom: true,

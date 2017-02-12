@@ -28,9 +28,6 @@ class CoursesController extends AppController {
 		
 		$this->Auth->allow(array('index', 'view', 'reset'));
 		
-		if($this->request->is('requested') AND $this->request->params['action'] == 'map')
-			$this->Auth->allow(array('map'));
-		
 		if($this->Auth->user()) {
 			$this->Auth->allow(array('edit', 'add', 'delete'));
 		}
@@ -38,44 +35,15 @@ class CoursesController extends AppController {
 	
 	
 	public function index() {
-        $filter = $this->_getFilter();
-		
-		$this->Paginator->settings = $this->paginate;
-		try{
-			$courses = $this->Paginator->paginate('Course', $filter);
-		}catch(NotFoundException $e) {
-			$this->redirect(array(
-				'controller' => 'courses',
-				'action' => 'index'
-			));
-		}
+        $courses = $this->Course->find('all', array(
+			'conditions' => $this->_getFilter()
+		));
 		
 		if($this->Auth->user('is_admin')) $this->set('edit', true);
 		
 		// set results to view
 		$this->set(compact('courses'));
-		// Only invoke the map logic, if a filter is set. Otherwise a cached view will be rendered.
-		if(!empty($this->filter)) {
-			$this->map();
-		}
     }
-	
-	// set the unpaginated results to view for the map
-	public function map() {
-		$courses = $this->Course->find('all', array(
-			'contain' => array('Institution.name'),
-			'conditions' => $this->_getFilter(),
-			'fields' => array('id','active','name','department','user_id','city_id','country_id','course_type_id','course_parent_type_id','institution_id','lon','lat'),
-			'limit' => 1000
-		));
-		if($this->request->is('requested')) {
-            // used by view-caching
-			return $courses;
-        }else{
-            $this->set('mapCourses', $courses);
-        }
-		$this->render('index');
-	}
 	
 	
 	public function view($id = null) {

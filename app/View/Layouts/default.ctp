@@ -25,14 +25,23 @@ $this->start('header');
 ?>
 <div id="header">
 	<?php
-	$logo = array(
-		'file' => 'logo-clarin.png',
+	$logo1 = array(
+		'file' => 'clarin-small.png',
 		'alt' => 'CLARIN Logo',
 		'url' => 'https://www.clarin.eu/',
-		'width' => 200,
-		'height' => 78
+		'width' => 67,
+		'height' => 55,
+		'style' => 'margin-left: 25px;'
 	);
-	if($this->request->params['controller'] == 'projects' OR $DODH) 
+	$logo2 = array(
+		'file' => 'dariah-small.png',
+		'alt' => 'DARIAH Logo',
+		'url' => 'https://dariah.eu/',
+		'width' => 133,
+		'height' => 55,
+		'style' => 'margin-left: 10px;'
+	);
+	if($this->request->params['controller'] == 'projects' OR $DODH) {
 		$logo = array(
 			'file' => '3logos.png',
 			'alt' => 'The eHumanities Group, Erasmus Studio and CLARIAH',
@@ -40,11 +49,19 @@ $this->start('header');
 			'width' => 236,
 			'height' => 100,
 			'style' => 'margin-top: 8px;'
-		);	
+		);
+		$file = '/img/logos/' . $logo['file'];
+		unset($logo['file']);
+		echo $this->Html->image($file, $logo);
+	}else{
+		$file = '/img/logos/' . $logo1['file'];
+		unset($logo1['file']);
+		echo $this->Html->image($file, $logo1);
+		$file = '/img/logos/' . $logo2['file'];
+		unset($logo2['file']);
+		echo $this->Html->image($file, $logo2);
+	}
 	
-	$file = '/img/logos/' . $logo['file'];
-	unset($logo['file']);
-	echo $this->Html->image($file, $logo);
 	?>
 	<div>
 		<h1>

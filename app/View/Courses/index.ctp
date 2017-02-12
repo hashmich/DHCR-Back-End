@@ -17,9 +17,9 @@
  */
 	echo $this->element('courses/map');
 	
-	if($this->action == 'index') echo $this->element('pager');
+	//if($this->action == 'index') echo $this->element('pager');
 	echo $this->element('courses/index');
-	if($this->action == 'index') echo $this->element('pager');
+	//if($this->action == 'index') echo $this->element('pager');
 	
 	if($this->action == 'index') $this->append('menu', $this->element('courses/filter'));
 ?>
