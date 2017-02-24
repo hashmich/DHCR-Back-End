@@ -26,11 +26,59 @@ class CoursesController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		
-		$this->Auth->allow(array('index', 'view', 'reset'));
+		$this->Auth->allow(array('index', 'view', 'reset', 'statistic'));
 		
 		if($this->Auth->user()) {
 			$this->Auth->allow(array('edit', 'add', 'delete'));
 		}
+	}
+
+
+	public function statistic() {
+		$count = $this->Course->find('count', array(
+			'conditions' => array(
+				'Course.active' => 1,
+				'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod'))
+			)
+		));
+
+		$institutionsList = $this->Course->Institution->find('list', array(
+			'conditions' => array('Institution.can_have_course' => true)
+		));
+		$institutions = array();
+		foreach($institutionsList as $id => $label) {
+			$c = $this->Course->find('count', array(
+				'conditions' => array(
+					'Course.active' => 1,
+					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod')),
+					'Course.institution_id' => $id
+				)
+			));
+			$institutions[] = array(
+				'label' => $label,
+				'count' => $c
+			);
+			//array_sort_by_key count
+		}
+
+		$countriesList = $this->Course->Country->find('list');
+		$countries = array();
+		foreach($countriesList as $id => $label) {
+			$c = $this->Course->find('count', array(
+				'conditions' => array(
+					'Course.active' => 1,
+					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod')),
+					'Course.country_id' => $id
+				)
+			));
+			$countries[] = array(
+				'label' => $label,
+				'count' => $c
+			);
+			//array_sort_by_key count
+		}
+		
+		$this->set(compact('count', 'institutions', 'countries'));
 	}
 	
 	

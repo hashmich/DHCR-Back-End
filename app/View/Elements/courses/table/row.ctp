@@ -75,7 +75,7 @@ OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() 
 				break;
 			case 'Course.url':
 				if($value != ' - ' AND !empty($value)) {
-					$value = $this->Html->link('Link >>', $record[$fieldModelName][$fieldname], array(
+					$value = $this->Html->link('Info', $record[$fieldModelName][$fieldname], array(
 						'target' => '_blank',
 						'title' => 'external information link (new tab)'
 					));
@@ -83,7 +83,7 @@ OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() 
 				break;
 			case 'Course.guide_url':
 				if($value != ' - ' AND !empty($value)) {
-					$value = $this->Html->link('Guide >>', $record[$fieldModelName][$fieldname], array(
+					$value = $this->Html->link('Guide', $record[$fieldModelName][$fieldname], array(
 						'target' => '_blank',
 						'title' => 'external information link (new tab)'
 					));

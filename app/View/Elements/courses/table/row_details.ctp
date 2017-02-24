@@ -127,10 +127,6 @@ if($state !== 'Green' AND !empty($edit))
 						foreach($record['NwoDiscipline'] as $tag) $cat[] = trim($tag['name']);
 						$keywords['Disciplines'] = $cat;
 					}
-					if(!empty($record['TadirahActivity'])) {
-						foreach($record['TadirahActivity'] as $tag) $cat[] = trim($tag['name']);
-						$keywords['Activities'] = $cat;
-					}
 					if(!empty($record['TadirahTechnique'])) {
 						foreach($record['TadirahTechnique'] as $tag) $cat[] = trim($tag['name']);
 						$keywords['Techniques'] = $cat;

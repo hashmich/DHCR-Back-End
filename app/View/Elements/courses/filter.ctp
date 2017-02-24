@@ -55,10 +55,10 @@ if(!empty($filter['Course.id']) AND !is_array($filter['Course.id'])) $location_f
 		echo $this->Form->input('institution_id');
 	}
 	echo $this->Form->input('course_parent_type_id', array(
-		'label' => '1. Type'
+		'label' => 'Type I'
 	));
 	echo $this->Form->input('course_type_id', array(
-		'label' => '2. Type'
+		'label' => 'Type II'
 	));
 	
 	echo $this->element('taxonomy/taxonomy_filter', array('dropdownChecklist' => true));
@@ -71,13 +71,6 @@ if(!empty($filter['Course.id']) AND !is_array($filter['Course.id'])) $location_f
 </li>
 
 <?php
-if($location_fixed) 
-	echo '<li class="filter">' . $this->Html->link('Fixed Location (remove)', array(
-		'controller' => 'courses',
-		'action' => 'reset',
-		$location_fixed
-	), array('title' => 'remove this filter')) . '</li>';
-
 if(!empty($filter))
 	echo '<li class="filter">' . $this->Html->link('>> Reset all Filters', array(
 		'controller' => 'courses',

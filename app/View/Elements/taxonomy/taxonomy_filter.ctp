@@ -33,12 +33,6 @@ echo $this->element('taxonomy/selector', array(
 echo '<p>TaDiRAH keywords</p>';
 
 echo $this->element('taxonomy/selector', array(
-	'habtmModel' => 'TadirahActivity',
-	'label' => 'Activities',
-	'dropdown' => $dropdownChecklist,
-	'buttons' => true
-));
-echo $this->element('taxonomy/selector', array(
 	'habtmModel' => 'TadirahTechnique',
 	'label' => 'Techniques',
 	'dropdown' => $dropdownChecklist,

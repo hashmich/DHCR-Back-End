@@ -81,8 +81,7 @@ function initializeMap() {
 	}
 	
 	mymap.addLayer(cluster);
-	mymap.fitBounds(cluster.getBounds());
-	mymap.zoomIn();
+	mymap.fitBounds(cluster.getBounds(), {padding: [10, 10]});
 }
 
 function openMarker(id) {

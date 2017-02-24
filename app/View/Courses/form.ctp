@@ -74,7 +74,7 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 	?>
 	<p>If you leave this box unchecked, the course will not appear in the public listing. </p>
 	<?php
-	echo $this->Form->input('active', array('label' => 'publish'));
+	echo $this->Form->input('active', array('label' => 'Publish'));
 	?>
 
 	<p>
@@ -163,7 +163,6 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 <fieldset>
 	<?php
 	echo $this->element('taxonomy/selector', array('habtmModel' => 'NwoDiscipline', 'dropdown' => true, 'label' => 'Disciplines'));
-	echo $this->element('taxonomy/selector', array('habtmModel' => 'TadirahActivity', 'dropdown' => true));
 	echo $this->element('taxonomy/selector', array('habtmModel' => 'TadirahTechnique', 'dropdown' => true));
 	echo $this->element('taxonomy/selector', array('habtmModel' => 'TadirahObject', 'dropdown' => true));
 	?>

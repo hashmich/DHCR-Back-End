@@ -571,16 +571,16 @@ class CrudComponent extends Component {
 		if(!empty($view)) {
 			// check for an override view
 			if(	Configure::read('Cakeclient.allowViewOverride')
-			AND (is_file(APP . 'View' . DS . $this->virtualController . DS . $view . '.ctp')
-				OR	is_file(APP . 'View' . DS . $this->virtualController . DS . $action . '.ctp'))
+			AND (is_file(APP . 'View' . DS . $this->virtualController . DS . $view)
+				OR	is_file(APP . 'View' . DS . $this->virtualController . DS . $action))
 			) {
-				$this->controller->view = APP . 'View' . DS . $this->virtualController . DS . $view . '.ctp';
+				$this->controller->view = APP . 'View' . DS . $this->virtualController . DS . $view;
 				// use the action-named view over a view called "form"
-				if($view != $action AND is_file(APP . 'View' . DS . $this->virtualController . DS . $action . '.ctp')) {
-					$this->controller->view = APP . 'View' . DS . $this->virtualController . DS . $action . '.ctp';
+				if($view != $action AND is_file(APP . 'View' . DS . $this->virtualController . DS . $action)) {
+					$this->controller->view = APP . 'View' . DS . $this->virtualController . DS . $action;
 				}
 			}else{
-				$this->controller->view = $this->viewPath . $view . '.ctp';
+				$this->controller->view = $this->viewPath . $view;
 			}
 		}
 	}

@@ -997,11 +997,11 @@ class View extends CakeObject {
  */
 	protected function _getViewFileName($name = null) {
 		$subDir = null;
-
+		
 		if ($this->subDir !== null) {
 			$subDir = $this->subDir . DS;
 		}
-
+		
 		if ($name === null) {
 			$name = $this->view;
 		}
