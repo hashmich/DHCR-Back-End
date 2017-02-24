@@ -282,13 +282,6 @@ class Course extends AppModel {
  * @var array
  */
 	public $hasAndBelongsToMany = array(
-		'TadirahActivity' => array(
-			'className' => 'TadirahActivity',
-			'joinTable' => 'courses_tadirah_activities',
-			'foreignKey' => 'course_id',
-			'associationForeignKey' => 'tadirah_activity_id',
-			'unique' => 'keepExisting'
-		),
 		'TadirahTechnique' => array(
 			'className' => 'TadirahTechnique',
 			'joinTable' => 'courses_tadirah_techniques',
@@ -348,8 +341,6 @@ class Course extends AppModel {
 	
 	
 	public function validateAll($data) {
-		$this->TadirahActivity->set($data);
-		$errors1 = $this->TadirahActivity->invalidFields();
 		$this->TadirahTechnique->set($data);
 		$errors2 = $this->TadirahTechnique->invalidFields();
 		$this->TadirahObject->set($data);
