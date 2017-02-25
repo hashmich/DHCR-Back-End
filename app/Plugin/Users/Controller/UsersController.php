@@ -244,7 +244,6 @@ class UsersController extends UsersAppController {
 			'emailFormat' => 'text',
 			'template' => 'default',
 			'layout' => 'default',
-			'transport' => 'Mail',
 			'content' => ''
 		);
 		$options = array_merge($defaults, $options);
@@ -275,7 +274,7 @@ class UsersController extends UsersAppController {
 				'content' => $options['content']
 			));
 			if(!empty($options['message'])) $Email->message($options['message']);
-			$Email->transport($options['transport']);
+			
 			$result = $Email->send();
 		}
 		return $result;
