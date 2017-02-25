@@ -288,8 +288,6 @@ class CoursesController extends AppController {
 		$this->_namedFilters();
 		$this->_filterToForm();
 		
-		$this->_extendFilters();
-		
 		$this->_setJoins();
 		
 		return $this->filter;
@@ -556,12 +554,6 @@ class CoursesController extends AppController {
 	protected function _setTaxonomy() {
 		$tadirahObjects = $this->Course->TadirahObject->find('all', array('contain' => array()));
 		$tadirahTechniques = $this->Course->TadirahTechnique->find('all', array('contain' => array()));
-		$tadirahActivities = $this->Course->TadirahActivity->find('threaded', array(
-			'contain' => array(
-				'ParentTadirahActivity',
-				'TadirahTechnique'		// both needed for filter extension
-			)
-		));
 		$nwoDisciplines = $this->Course->NwoDiscipline->find('all', array(
 			'contain' => array(),
 			'order' => 'NwoDiscipline.name ASC'
@@ -570,101 +562,11 @@ class CoursesController extends AppController {
 		$this->set(compact(
 			'tadirahObjects',
 			'tadirahTechniques',
-			'tadirahActivities',
 			'nwoDisciplines'
 		));
 	}
 	
-	//extend the filters according to the TaDiRAH taxonomy relations
-	protected function _extendFilters() {
-		$addParent = false;
-		$addChildren = true;	// add children 3 levels deep (hardcoded... TadiRAH has no more levels.)
-		$addTechniques = false;
-		
-		//hierarchical activities relations: additionally select direct child and parent category
-		$activityFilter = false;
-		if(!empty($this->filter['CoursesTadirahActivity.tadirah_activity_id']))
-			$activityFilter = $this->filter['CoursesTadirahActivity.tadirah_activity_id'];
-		
-		$techniqueFilter = array();	
-		if(!empty($this->filter['CoursesTadirahTechnique.tadirah_technique_id']))
-			$techniqueFilter = $this->filter['CoursesTadirahTechnique.tadirah_technique_id'];
-		
-		if(!empty($this->viewVars['tadirahActivities'])) {
-			$tadirahActivities = $this->viewVars['tadirahActivities'];
-			$additionalActivities = array();
-			
-			foreach($tadirahActivities as $pk => $pv) {
-				if($addChildren AND $addTechniques AND !empty($pv['TadirahTechnique'])) {
-					foreach($pv['TadirahTechnique'] as $tqv) {
-						if(!empty($techniqueFilter) AND !in_array($tqv['id'], $techniqueFilter))
-							$techniqueFilter[] = $tqv['id'];
-					}
-				}
-				if(!empty($pv['children'])) {
-					foreach($pv['children'] as $sk => $sv) {
-						if($activityFilter) {
-							if(	$addChildren
-							AND	in_array($pv['TadirahActivity']['id'], $activityFilter)
-							AND	!in_array($sv['TadirahActivity']['id'], $activityFilter)
-							) {
-								$additionalActivities[] = $sv['TadirahActivity']['id'];
-							}
-							if(	$addParent
-							AND	in_array($sv['TadirahActivity']['id'], $activityFilter)
-							AND	!in_array($sv['ParentTadirahActivity']['id'], $activityFilter)
-							) {
-								$additionalActivities[] = $sv['ParentTadirahActivity']['id'];
-							}
-						}
-						if($addChildren AND $addTechniques AND !empty($sv['TadirahTechnique'])) {
-							foreach($sv['TadirahTechnique'] as $tqv) {
-								if(!empty($techniqueFilter) AND !in_array($tqv['id'], $techniqueFilter))
-									$techniqueFilter[] = $tqv['id'];
-							}
-						}
-						if(!empty($sv['children'])) {
-							foreach($sv['children'] as $tk => $tv) {
-								if($activityFilter) {
-									if(	$addChildren
-									AND	in_array($sv['TadirahActivity']['id'], $activityFilter)
-									AND	!in_array($tv['TadirahActivity']['id'], $activityFilter)
-									) {
-										$additionalActivities[] = $tv['TadirahActivity']['id'];
-									}
-									if(	$addParent
-									AND	in_array($tv['TadirahActivity']['id'], $activityFilter)
-									AND	!in_array($tv['ParentTadirahActivity']['id'], $activityFilter)
-									) {
-										$additionalActivities[] = $tv['ParentTadirahActivity']['id'];
-									}
-								}
-								if($addChildren AND $addTechniques AND !empty($tv['TadirahTechnique'])) {
-									foreach($tv['TadirahTechnique'] as $tqv) {
-										if(!empty($techniqueFilter) AND !in_array($tqv['id'], $techniqueFilter))
-											$techniqueFilter[] = $tqv['id'];
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(!empty($activityFilter)) $this->filter['CoursesTadirahActivity.tadirah_activity_id'] = array_merge($activityFilter, $additionalActivities);
-			elseif(!empty($additionalActivities)) $this->filter['CoursesTadirahActivity.tadirah_activity_id'] = $additionalActivities;
-			
-			if(!empty($techniqueFilter)) $this->filter['CoursesTadirahTechnique.tadirah_technique_id'] = $techniqueFilter;
-			
-			if(!empty($this->filter['Course.lon']) OR !empty($this->filter['Course.lat'])) {
-				unset($this->filter['Course.country_id']);
-				unset($this->filter['Course.city_id']);
-				unset($this->filter['Course.institution_id']);
-			}
-			if(!empty($this->filter['Course.id'])) {
-				$this->filter = array('Course.id' => $this->filter['Course.id']);
-			}
-		}
-	}
+	
 	
 }
 ?>
