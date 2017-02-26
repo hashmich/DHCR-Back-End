@@ -108,13 +108,7 @@ class AppController extends Controller {
 		if(!empty($filter)) {
 			// Only remove a single filter key. As the filter keys contain find-conditions in "."-notation, Session::delete() doesn't handle it correctly
 			$store = $this->Session->read('filter');
-			// special handling for geolocation, because it affects to keys
-			if($filter == 'geolocation') {
-				unset($store['Course.lon']);
-				unset($store['Course.lat']);
-			}else{
-				unset($store[$filter]);
-			}
+			unset($store[$filter]);
 			$this->Session->write('filter', $store);
 		}else{
 			// remove all filters

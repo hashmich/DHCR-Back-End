@@ -226,7 +226,8 @@ form {
 	input[type=checkbox] + label, input[type=radio] + label {
 		float: none;
 		margin: 0 4px 14px 20px;
-		font: normal 12px Verdana, sans-serif;
+		font-size: 12px;
+		font-weight: normal;
 		line-height: 14px;
 	}
 	input[type=radio] + label {
@@ -243,7 +244,8 @@ form {
 			float: left;
 			font-weight:bold;
 			font-size: inherit;
-			margin: 0 0 14px;
+			margin: 2px 0 4px;
+			line-height: 18px;
 		}
 	}
 

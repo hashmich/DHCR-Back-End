@@ -1087,7 +1087,8 @@ div.auth {
       .columns #content form input[type=checkbox] + label, .columns #content form input[type=radio] + label {
         float: none;
         margin: 0 4px 14px 20px;
-        font: normal 12px Verdana, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
         line-height: 14px; }
       .columns #content form input[type=radio] + label {
         margin: -1px 4px 6px 20px; }
@@ -1101,7 +1102,8 @@ div.auth {
         float: left;
         font-weight: bold;
         font-size: inherit;
-        margin: 0 0 14px; }
+        margin: 2px 0 4px;
+        line-height: 18px; }
       .columns #content form .radio > fieldset {
         border: 1px solid #999;
         background: #e4e4e4;

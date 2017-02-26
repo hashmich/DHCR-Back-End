@@ -3,7 +3,6 @@
 	// layout: [bool]false (don't override app-layout), any other
 	Configure::write('Cakeclient.layout', 'Cakeclient.cakeclient');	// Cakeclient default layout (naming conflict with 'default')
 	// disallow app-level view overrides by default. 
-	// #ToDo: exceptions might come in array format...
 	Configure::write('Cakeclient.allowViewOverride',false);
 	// show or hide the navbar
 	Configure::write('Cakeclient.navbar', true);

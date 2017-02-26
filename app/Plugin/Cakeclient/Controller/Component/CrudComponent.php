@@ -1,9 +1,11 @@
 <?php
 class CrudComponent extends Component {
 	
-	/**	This component contains the relevant logic of Cakeclient's applicational scaffolding (not the same as the cake scaffolding). 
-	*	It is packed into a component to have it available in other controllers as well. 
-	*/
+	/**	
+	 * This component contains the relevant logic of Cakeclient's applicational scaffolding 
+	 * (not the same as the cake scaffolding). 
+	 *	It is packed into a component to have it available in other controllers as well. 
+	 */
 	
 	
 	
@@ -150,10 +152,8 @@ class CrudComponent extends Component {
 	
 	function setCRUDenv() {
 		if($this->onCrud) {
-			// to make Crud views available outside the plugin, it requires setting an absolute path
-			// one also needs to mention the file extension ".ctp"!
-			$this->viewPath = APP . 'Plugin' . DS . 'Cakeclient' . DS . 'View' . DS . 'Crud' . DS;
-			if(Configure::read('Cakeclient.layout')) $this->controller->layout = Configure::read('Cakeclient.layout');
+			if(Configure::read('Cakeclient.layout'))
+				$this->controller->layout = Configure::read('Cakeclient.layout');
 			$this->defaultRedirect = array(
 				'action' => 'index',
 				'plugin' => Configure::read('Cakeclient.prefix')
@@ -359,7 +359,7 @@ class CrudComponent extends Component {
 			
 			$tableModel = $this->getModel($this->tableModelName);
 			
-			// #ToDo: get ACO!
+			// TODO: get ACO!
 			$currentAction = $tableModel->find('first', array(
 				'contain' => array('CcConfigAction' => array('conditions' => array('CcConfigAction.name' => $action))),
 				'conditions' => array('CcConfigTable.name' => $tableName)
@@ -405,6 +405,18 @@ class CrudComponent extends Component {
 					if(isset($schema['comment'])) {
 						$fielddef['title'] = $schema['comment'];
 					}
+					
+					if((!empty($schema['default']) OR $schema['default'] === '0') AND $action == 'add') {
+						if($schema['type'] == 'boolean') {
+							if($schema['default'] !== '0' AND $schema['default'])
+								$fielddef['formoptions']['checked'] = true;
+						}else{
+							$fielddef['formoptions']['default'] = $schema['default'];
+						}
+					}
+					
+					
+					// Sortable behavior handling
 					if($sortable AND !empty($sortable['orderBy']) AND $fieldName == $sortable['orderBy']) {
 						$fielddef['display']['method'] = 'inlineForm';
 					}
@@ -567,20 +579,23 @@ class CrudComponent extends Component {
 				$view = $action;
 				break;
 		}
+		
 		// don't set a view if non-CRUD
 		if(!empty($view)) {
 			// check for an override view
 			if(	Configure::read('Cakeclient.allowViewOverride')
-			AND (is_file(APP . 'View' . DS . $this->virtualController . DS . $view)
-				OR	is_file(APP . 'View' . DS . $this->virtualController . DS . $action))
+			AND (is_file(APP . 'View' . DS . $this->virtualController . DS . $view . '.ctp')
+				OR	is_file(APP . 'View' . DS . $this->virtualController . DS . $action . '.ctp'))
 			) {
-				$this->controller->view = APP . 'View' . DS . $this->virtualController . DS . $view;
+				$this->controller->view = $this->virtualController . DS . $view;
 				// use the action-named view over a view called "form"
-				if($view != $action AND is_file(APP . 'View' . DS . $this->virtualController . DS . $action)) {
-					$this->controller->view = APP . 'View' . DS . $this->virtualController . DS . $action;
+				if(	$view != $action
+				AND	is_file(APP . 'View' . DS . $this->virtualController . DS . $action . '.ctp')) {
+					$this->controller->view = $this->virtualController . DS . $action;
 				}
 			}else{
-				$this->controller->view = $this->viewPath . $view;
+				// use the plugin's generic view
+				$this->controller->view = 'Cakeclient.Crud' . DS . $view;
 			}
 		}
 	}
