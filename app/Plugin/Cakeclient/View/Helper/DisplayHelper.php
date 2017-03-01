@@ -19,7 +19,8 @@ class DisplayHelper extends AppHelper {
 				$method = $args['method'];
 				unset($args['method']);
 			}
-			if($method == 'display') return $this->display($value);
+			if($method == 'display' OR !method_exists($this, $method))
+				return $this->display($value);
 			// if $args is an array, $value and $record are optional
 			if($method) return $this->{$method}($args, $value, $record, $fieldname);
 		}

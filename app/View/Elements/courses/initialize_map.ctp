@@ -87,12 +87,9 @@ function initializeMap() {
 function openMarker(id) {
 	for(var k in markers) {
 		if(id == markers[k].id) {
-			//mymap.options.maxZoom = 14;
 			cluster.zoomToShowLayer(markers[k].marker, function() {
 				markers[k].marker.openPopup();
 			});
-			//mymap.options.maxZoom = 18;
-			//cluster.getVisibleParent(markers[k].marker).spiderfy();
 			break;
 		}
 	}
@@ -102,7 +99,6 @@ function closeMarker(id) {
 		if(id == markers[k].id) {
 			markers[k].marker.closePopup();
 			mymap.fitBounds(cluster.getBounds());
-			mymap.zoomIn();
 			break;
 		}
 	}

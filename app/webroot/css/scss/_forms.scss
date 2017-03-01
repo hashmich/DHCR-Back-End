@@ -342,6 +342,15 @@ form {
 		float: left; 
 		margin: 5px 0px 5px 207px;
 	}
+
+	
+	/* a leaflet map as an interface to lon|lat inputs */
+	#locationPicker {
+		width: 287px;
+		height: 300px;
+		margin-bottom: 5px;
+		clear: none;
+	}
 }
 
 
