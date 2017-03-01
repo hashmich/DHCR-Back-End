@@ -958,7 +958,8 @@ div.auth {
       /* Selects - Label links, inputs rechts*/
       /* legend wird als label für radio-selects benutzt - hier nach links verschieben */
       /* Standard-Button */
-      /* Standard-SubmitButton */ }
+      /* Standard-SubmitButton */
+      /* a leaflet map as an interface to lon|lat inputs */ }
       .columns #content form fieldset {
         border: 1px solid #ccc;
         margin-bottom: 10px;
@@ -1175,6 +1176,11 @@ div.auth {
       .columns #content form input[type=submit] {
         float: left;
         margin: 5px 0px 5px 207px; }
+      .columns #content form #locationPicker {
+        width: 287px;
+        height: 300px;
+        margin-bottom: 5px;
+        clear: none; }
     .columns #content .input.taxonomy.select.dropdown_checklist:after {
       visibility: hidden;
       display: block;
