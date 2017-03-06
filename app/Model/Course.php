@@ -145,6 +145,9 @@ class Course extends AppModel {
 			),
 		),
 		'lon' => array(
+			'notEmpty' => array(
+				'rule' => array('notBlank')
+			)/*
 			'decimal' => array(
 				'rule' => array('decimal', 6),
 				'message' => 'Enter a decimal with 6 digits after the decimal point.',
@@ -154,9 +157,12 @@ class Course extends AppModel {
 			'range' => array(
 				'rule' => array('range', -180, 180),
 				'message' => 'This does not look not like a proper coordinate.'
-			)
+			)*/
 		),
 		'lat' => array(
+			'notEmpty' => array(
+				'rule' => array('notBlank')
+			)/*
 			'decimal' => array(
 				'rule' => array('decimal', 6),
 				'message' => 'Enter a decimal with 6 digits after the decimal point.',
@@ -166,7 +172,7 @@ class Course extends AppModel {
 			'range' => array(
 				'rule' => array('range', -90, 90),
 				'message' => 'This does not look not like a proper coordinate.'
-			)
+			)*/
 		),
 		'department' => array(
 			'notEmpty' => array(
@@ -185,6 +191,20 @@ class Course extends AppModel {
 			),
 		)
 	);
+	
+	
+	public function beforeSave($options = array()) {
+		$lon = $this->data['Course']['lon'];
+		$lat = $this->data['Course']['lat'];
+	
+		$lon = substr($lon, 0, strpos($lon, '.') + 7);
+		$lat = substr($lat, 0, strpos($lat, '.') + 7);
+	
+		$this->data['Course']['lon'] = floatval($lon);
+		$this->data['Course']['lat'] = floatval($lat);
+	
+		return true;
+	}
 
 	// custom validation
 	public function checkList($check, $listModel = null) {
