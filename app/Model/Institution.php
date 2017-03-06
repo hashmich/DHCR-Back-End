@@ -62,6 +62,9 @@ class Institution extends AppModel {
 			),
 		),
 		'lon' => array(
+			'notEmpty' => array(
+				'rule' => array('notBlank')
+			)/*
 			'decimal' => array(
 				'rule' => array('decimal', 6),
 				'message' => 'Enter a decimal with 6 digits after the decimal point.',
@@ -71,10 +74,12 @@ class Institution extends AppModel {
 			'range' => array(
 				'rule' => array('range', -180, 180),
 				'message' => 'This does not look not like a proper coordinate.'
-			)
+			)*/
 		),
 		'lat' => array(
-			'decimal' => array(
+			'notEmpty' => array(
+				'rule' => array('notBlank')
+			)/*'decimal' => array(
 				'rule' => array('decimal', 6),
 				'message' => 'Enter a decimal with 6 digits after the decimal point.',
 				'allowEmpty' => false,
@@ -83,7 +88,7 @@ class Institution extends AppModel {
 			'range' => array(
 				'rule' => array('range', -90, 90),
 				'message' => 'This does not look not like a proper coordinate.'
-			)
+			)*/
 		),
 		'abbreviation' => array(
 			'notEmpty' => array(
@@ -97,7 +102,22 @@ class Institution extends AppModel {
 		),
 	);
 
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
+	
+	public function beforeSave($options = array()) {
+		$lon = $this->data['Institution']['lon'];
+		$lat = $this->data['Institution']['lat'];
+		
+		$lon = substr($lon, 0, strpos($lon, '.') + 7);
+		$lat = substr($lat, 0, strpos($lat, '.') + 7);
+		
+		$this->data['Institution']['lon'] = floatval($lon);
+		$this->data['Institution']['lat'] = floatval($lat);
+		
+		return true;
+	}
+	
+	
+	
 
 /**
  * belongsTo associations

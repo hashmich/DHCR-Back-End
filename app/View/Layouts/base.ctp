@@ -47,7 +47,7 @@
 	
 	if(Configure::read('debug') > 0) echo $this->Html->css('cake_debugging.css');
 	
-	// TODO: streamline the styles with bootstrap
+	// TODO: streamline the styles with bootstrap?
 	/*echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', array(
 		'integrity' => 'sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7',
 		'crossorigin' => 'anonymous'));*/
@@ -109,7 +109,7 @@
 		window.jQuery || document.write('<script type="text/javascript" src="<?php echo $this->Html->url('/js/jquery-1.12.4.min.js', true); ?>"><\/script>')
 	</script>
 	
-	<!--
+	
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
 		integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
 		crossorigin="anonymous">
@@ -117,7 +117,7 @@
 	<script type="text/javascript">
 		(typeof $().modal == 'function') || document.write('<script type="text/javascript" src="<?php echo $this->Html->url('/js/bootstrap.min.js', true); ?>"><\/script>')
 	</script>
-	-->
+	
 	
 	<?php echo $this->fetch('script'); ?>
 	<script type="text/javascript"><?php echo $this->fetch('script_bottom'); ?></script>

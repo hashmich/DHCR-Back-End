@@ -1176,11 +1176,34 @@ div.auth {
       .columns #content form input[type=submit] {
         float: left;
         margin: 5px 0px 5px 207px; }
-      .columns #content form #locationPicker {
+      .columns #content form #locationPickerMap {
         width: 287px;
         height: 300px;
         margin-bottom: 5px;
         clear: none; }
+        .columns #content form #locationPickerMap .punch {
+          box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+          margin-left: 10px; }
+          .columns #content form #locationPickerMap .punch a {
+            background: #fff url(../img/markerRedSmall.png) no-repeat center center;
+            width: 16px;
+            height: 28px;
+            padding: 4px;
+            border: none;
+            border-radius: 5px;
+            display: block;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            left: 0; }
+        .columns #content form #locationPickerMap #locationPicker {
+          height: 100%;
+          width: 100%;
+          background: url(../img/crosshair.png) no-repeat center center;
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 500; }
     .columns #content .input.taxonomy.select.dropdown_checklist:after {
       visibility: hidden;
       display: block;
