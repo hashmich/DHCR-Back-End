@@ -1,152 +1,232 @@
+<h2>Imprint</h2>
 
-
-<h2>Intent</h2>
-
-<p>
-	The DH Course Registry is a collaborative inventory of DH courses in Europe. 
-	It links educational efforts on the interaction between 
-	humanities and information technology. <br>
-	The main objective of this resource is to help students, researchers, 
-	lecturers and institutions to find, add and connect to courses 
-	or programmes in the DH field. <br>
-	Furthermore, it will allow academic institutions to improve 
-	the visibility of their courses and study programmes. 
-	In the near future, the DH-Registry is intended to be extended 
-	to also cover research projects in the field of digital humanities. <br>
-	For further information or individual requests, please consult the 
-	manual or use the contact form on the left.
+<p class="strong">
+	Legal disclosure according to §§ 24, 25 Austrian media law and § 5 E-Commerce law
 </p>
-
-
-<h2>License</h2>
-
+<h3>Media owner, publisher, service provider:</h3>
 <p>
-	Licensed under the Apache License, Version 2.0 (the "License"). <br>
-	You may not use this file except in compliance with the License. <br>
-	You may obtain a copy of the License at <br>
-	<?php echo $this->Html->link(
-		'http://www.apache.org/licenses/LICENSE-2.0',
-		'http://www.apache.org/licenses/LICENSE-2.0'
-	); ?>. <br>
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License. 
+	Austrian Academy of Sciences<br>
+	Body corporate organized under public law (BGBl 569/1921 idF BGBl I 130/2003)<br>
+	Austrian Centre for Digital Humanities (ACDH)<br>
+	Sonnenfelsgasse 19, 1010 Vienna, Austria<br>
+	E-Mail: <?php echo $this->Html->link('acdh-tech@oeaw.ac.at', 'mailto:acdh-tech@oeaw.ac.at'); ?>
+</p>
+<h3>Nature and purpose of the business:</h3>
+<p>
+	The Austrian Academy of Sciences (OEAW) has the legal duty to support the sciences and 
+	humanities in every respect. As a learned society, the OEAW fosters discourse and 
+	cooperation between science and society, politics and economy.<br>
+	The Austrian Centre for Digital Humanities (ACDH) is an OEAW institute founded with the goal 
+	to support digital methods in arts and humanities disciplines. 
+	The ACDH supports digital research in manifold ways.
+	The project DH course registry is hosted on the servers of the ACDH and was built as a joint 
+	effort of the European research infrastructures 
+	<a href="https://www.clarin.eu/" target="_blank">CLARIN-ERIC</a> and 
+	<a href="http://dariah.eu/" target="_blank">DARIAH-EU</a>.
+</p>
+<h3>Signing power:</h3>
+<p>
+	President: o. Univ.-Prof. Dr. Anton Zeilinger<br>
+	Vice president: Univ.-Doz. Dr. phil. Michael Alram<br>
+	Class presidents: o. Univ.-Prof. Dr. Brigitte Mazohl, 
+	Univ.-Prof. Dipl.-Ing. Dr.techn. Georg Brasseur<br>
+	Supervisory body:  Academy council.<br> 
+	For more information, please visit 
+	<a href="http://www.oeaw.ac.at/die-oeaw/gremien-der-oeaw/akademierat/" target="_blank">
+		http://www.oeaw.ac.at/die-oeaw/gremien-der-oeaw/akademierat/
+	</a> 
+</p>
+<h3>Credits:</h3>
+<p>
+	The DH Course Registry is developed by Hendrik Schmeer since 2014 
+	on behalf of CLARIN-ERIC and DARIAH-EU.
 </p>
 <p>
-	Copyright 2014 Hendrik Schmeer on behalf of DARIAH-EU, <br>
-	VCC2 and DARIAH-DE,  <br><br>
-	Credits to:  <br>
-	Royal Netherlands Academy of Arts and Sciences KNAW, <br>
+	Created by a consortium of partners in DARIAH-VCC2 “Research and Education”: <br>
+	Royal Netherlands Academy of Arts and Sciences (KNAW), <br>
 	the eHumanities Group, <br>
-	Data Archiving and Networked Services DANS, <br>
-	Erasmus University Rotterdam,  <br>
-	University of Cologne,  <br>
-	PIREH / University Paris 1. 
+	Data Archiving and Networked Services (DANS),<br> 
+	Erasmus University Rotterdam, <br>
+	University of Cologne, <br>
+	Pôle Informatique de Recherche et d'Enseignement en Histoire (PIREH) / University Paris 1,<br>
+	Georg-August-Universität Göttingen,<br>
+	University of Graz.
+</p>
+<h3>Main aim:</h3>
+<p>
+	This website provides information on the DH Course registry and the data collected 
+	within this project. The Digital Humanities Course Registry is an open online 
+	inventory of DH modules, courses and programmes in Europe which aims to help students, 
+	researchers, lecturers and institutions to find, promote and connect to teaching and 
+	training activities related to Digital Humanities. 
+	The registry is offered and maintained as a joint effort of CLARIN-ERIC and DARIAH-EU.
+</p>
+<h3>Disclaimer:</h3>
+<p>
+	The Austrian Academy of Sciences does not take responsibility for the topicality, 
+	correctness, completeness or quality of the provided information.
+	In the case of links to websites of other media owners, whose content the OEAW is 
+	neither directly nor indirectly responsible for, the OEAW does not assume liability 
+	for their content and excludes any liability in this case.
+</p>
+<h3>License:</h3>
+<p>
+	The DH Course Registry software is licensed under the Apache License, Version 2.0 (the "License"). 
+	You may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at 
+	<a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">
+		http://www.apache.org/licenses/LICENSE-2.0
+	</a>.
+	Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+	The code is freely available on GitHub at 
+	<a href="https://github.com/hashmich/DH-Registry" target="_blank">
+		https://github.com/hashmich/DH-Registry
+	</a>
 </p>
 <p>
-	Created by a consortium of DARIAH-VCC2, <br>
-	Royal Netherlands Academy of Arts and Sciences &amp; the eHumanities Group, <br>
-	Erasmus	UniversityRotterdam, University of Cologne. <br>
-	With credits to University Paris 1.
+	All of the metadata and content is provided under a Creative Commons 
+	CC-BY Attribution 4.0 International license.
+	You may obtain a copy of the License at 
+	<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">
+		https://creativecommons.org/licenses/by/4.0/
+	</a>.
+</p>
+<h3>Data privacy notice:</h3>
+<p>
+	This is a notice to indicate that for reasons of system security and overview of 
+	user behavior, personal data of users of this website (visiting period, operating 
+	system, browser version, browser resolution, country of origin, number of visits) 
+	will be stored using cookies and piwik tracking. Data will be stored until further notice. 
+	Data will not be disseminated without your explicit consent. 
+	By using this website, you agree to the manner and purposes of data processing. 
+	You can disable cookies in your browser settings. However, this might limit functionality 
+	of this website.
+</p>
+<p>
+	The contact data published in the context of the imprint duty may not be used to send 
+	promotional or informational material not explicitly requested. 
+	We explicitly disagree with this usage.<br>
+	[this text was last updated on 16 March 2017]
 </p>
 
 
 
-<h2 id="impressum">Impressum</h2>
-<h3>Verantwortlich für den Inhalt</h3>
-<h4>Anbieter</h4>
-<p>
-	Anbieter dieser Internetpräsenz ist im Rechtssinne die 
-	Niedersächsische Staats- und Universitätsbibliothek Göttingen.
-</p>
-<p>
-	Georg-August-Universität Göttingen <br>
-	Niedersächsische Staats- und Universitätsbibliothek Göttingen <br>
-	Platz der Göttinger Sieben 1 <br>
-	37073 Göttingen
-</p>
-<p>
-	Tel.: +49 (0)551 / 39-5212 <br>
-	Fax: +49 (0)551 / 39-5222 <br>
-	E-Mail: sekretariat@sub.uni-goettingen.de <br>
-	www.sub.uni-goettingen.de
-</p>
-<p>
-	Die Niedersächsische Staats- und Universitätsbibliothek Göttingen 
-	(SUB Göttingen) wird vertreten durch den leitenden Direktor 
-	Dr. Wolfram Horstmann.
-	Die SUB Göttingen ist als zentrale Einrichtung eine organisatorische, 
-	rechtlich nicht selbständige Einheit der Georg-August-Universität Göttingen. 
-	Die Georg-August-Universität Göttingen ist eine Körperschaft des 
-	öffentlichen Rechts. Sie wird durch die Präsidentin 
-	Prof. Dr. Ulrike Beisiegel gesetzlich vertreten:
-</p>
-<p>
-	Georg-August-Universität Göttingen <br>
-	Wilhelmsplatz 1 <br>
-	37073 Göttingen <br>
-	Tel.: +49 (0)551 / 39-0 <br>
-	Fax: +49 (0)551 / 39-9612
-</p>
-
-<h4>Zuständige Aufsichtsbehörde</h4>
-<p>
-	Georg-August-Universität Göttingen Stiftung Öffentlichen Rechts <br>
-	Stiftungsausschuss Universität 	(§§ 59 Abs. 2, 60 Abs. 2 Satz 2 Nr. 7, 60 a Abs. 1 NHG) <br>
-	Wilhelmsplatz 1 <br>
-	37073 Göttingen
-</p>
-<p>
-	Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:  <br>
-	DE 152 336 201
-</p>
-
-<h4>Inhaltlich Verantwortlicher gemäß § 55 Abs. 2 RStV</h4>
-<p>
-	Dr. Wolfram Horstmann (Projektleitung) <br>
-	Platz der Göttinger Sieben 1 <br>
-	37073 Göttingen <br>
-	Tel.: +49 (0)551 - 39 33866 <br>
-	Fax: +49 (0)551 - 39 33856 <br>
-	E-Mail: horstmann@sub.uni-goettingen.de
-</p>
 
 
-<h3>Haftungsausschluss (Disclaimer)</h3>
-<h4>Haftung für Inhalte</h4>
-<p>
-	Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. 
-	Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, 
-	übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, 
-	die auf eine rechtswidrige Tätigkeit hinweisen. 
-	Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. 
-	Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. 
-	Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.
-</p>
-<h4>Haftung für Links</h4>
-<p>
-	Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. 
-	Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. 
-	Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. 
-	Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. 
-	Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. 
-	Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. 
-	Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.
-</p>
-<h4>Urheberrecht</h4>
-<p>
-	Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. 
-	Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes 
-	bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. 
-	Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. 
-	Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. 
-	Insbesondere werden Inhalte Dritter als solche gekennzeichnet. 
-	Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. 
-	Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.
+<h2>Impressum</h2>
+
+<p class="strong">
+	Offenlegung gemäß §§ 24, 25 Mediengesetz und § 5 E-Commerce-Gesetz
 </p>
 
-<p>Quelle Disclaimer: <?php echo $this->Html->link('eRecht24', 'http://www.e-recht24.de/muster-disclaimer.htm', array('target' => '_blank')); ?></p>
+<h3>Medieninhaberin, Herausgeberin, Dienstanbieterin:</h3>
 
- 
+<p>
+	Österreichische Akademie der Wissenschaften <br>
+	Juristische Person öffentlichen Rechts (BGBl 569/1921 idF BGBl I 130/2003)<br>
+	Austrian Centre for Digital Humanities (ACDH)<br>
+	Sonnenfelsgasse 19, 1010 Wien, Österreich <br>
+	E-Mail: <?php echo $this->Html->link('acdh-tech@oeaw.ac.at', 'mailto:acdh-tech@oeaw.ac.at'); ?>
+</p>
+<h3>Unternehmensgegenstand:</h3>
+<p>
+	Die Österreichische Akademie der Wissenschaften (ÖAW) hat den gesetzlichen Auftrag, 
+	die Wissenschaft in jeder Hinsicht zu fördern. Als Gelehrtengesellschaft pflegt 
+	die ÖAW den Diskurs und die Zusammenarbeit der Wissenschaft mit Öffentlichkeit, 
+	Politik und Wirtschaft. <br>
+	Das Austrian Centre for Digital Humanities (ACDH) ist ein Institut der ÖAW, das mit dem 
+	Ziel gegründet wurde, digitale Methoden und Ansätze in den geisteswissenschaftlichen 
+	Disziplinen zu fördern. Das ACDH unterstützt digitale Forschung in vielfältiger Weise. 
+	Das Projekt DH Course Registry wird auf den Servern des ACDH gehostet und ist aus einer 
+	Kooperation der europäischen Forschungsinfrastrukturen 
+	<a href="https://www.clarin.eu/" target="_blank">CLARIN-ERIC</a> und 
+	<a href="http://dariah.eu/" target="_blank">DARIAH-EU</a> entstanden.
+</p>
+<h3>Vertretungsbefugte Organe:</h3>
+<p>
+	Präsident: o. Univ.-Prof. Dr. Anton Zeilinger<br>
+	Vizepräsident: Univ.-Doz. Dr. phil. Michael Alram<br>
+	Klassenpräsidentin: o. Univ.-Prof. Dr. Brigitte Mazohl<br>
+	Klassenpräsident: Univ.-Prof. Dipl.-Ing. Dr.techn. Georg Brasseur<br>
+	Als Aufsichtsorgan besteht der Akademierat. 
+	Siehe mehr dazu unter 
+	<a href="http://www.oeaw.ac.at/die-oeaw/gremien-der-oeaw/akademierat/" target="_blank">
+		http://www.oeaw.ac.at/die-oeaw/gremien-der-oeaw/akademierat/
+	</a> 
+</p>
+<h3>Inhaltliche und redaktionelle Verantwortung und Urheberrecht:</h3>
+<p>
+	Die DH Course Registry wird von Hendrik Schmeer seit 2014 für 
+	CLARIN-ERIC und DARIAH-EU entwickelt. 
+</p>
+<p>
+	Erstellt von einem Konsortium von DARIAH-VCC2 “Research and Education”: <br>
+	Royal Netherlands Academy of Arts and Sciences (KNAW), <br>
+	the eHumanities Group, <br>
+	Data Archiving and Networked Services (DANS), <br>
+	Erasmus University Rotterdam, <br>
+	University of Cologne, <br>
+	Pôle Informatique de Recherche et d'Enseignement en Histoire (PIREH) / University Paris 1,<br>
+	Georg-August-Universität Göttingen,<br>
+	University of Graz.
+</p>
+	
+<h3>Grundlegende Intention:</h3>
+<p>
+	Diese Website dient der Information über das Projekt DH Course Registry und der 
+	Bereitstellung der in diesem Projekt gesammelten Daten. Das DH Course Registry 
+	ist ein offenes Onlineportal von digital humanities Modulen, Kursen und Programmen 
+	in Europa. Es unterstützt Studierende, Forschende, Unterrichtende und Institutionen 
+	dabei, Lehr- und Ausbildungsmöglichkeiten in den digital humanities zu finden, 
+	verbinden und bekannt zu machen. Dieses Portal ist aus einer Kooperation der europäischen 
+	Forschungsinfrastrukturen CLARIN-ERIC und DARIAH-EU entstanden.
+</p>
+<h3>Haftungsausschluss:</h3>
+<p>	
+	Die Österreichische Akademie der Wissenschaften übernimmt keinerlei Gewähr für die Aktualität, Korrektheit, Vollständigkeit oder Qualität der bereitgestellten Informationen.
+	Im Falle des Bestehens von Links auf Webseiten anderer Medieninhaber, für deren Inhalt die ÖAW weder direkt oder indirekt mitverantwortlich ist, übernimmt die ÖAW keine Haftung für deren Inhalte und schließt jegliche Haftung hierfür aus.
+</p>
+<h3>Lizenzierung:</h3>
+<p>	
+	Die Software des DH Course registry ist lizenziert unter einer Apache License, 
+	Version 2.0 (the "License"). 
+	Diese Daten dürfen nur bei gegebener Kompatibilität mit dieser Lizenz verwendet werden.
+	Die Lizenz ist verfügbar unter 
+	<a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">
+		http://www.apache.org/licenses/LICENSE-2.0
+	</a>.  
+	Der Code ist frei verfügbar unter
+	<a href="https://github.com/hashmich/DH-Registry" target="_blank">
+		https://github.com/hashmich/DH-Registry
+	</a>
+</p>
+<p>
+	Alle Metadaten und Inhalte werden unter einer Creative Commons CC-BY Namensnennung 
+	4.0 International Lizenz zur Verfügung gestellt.
+	Die Lizenz ist verfügbar unter
+	<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">
+		https://creativecommons.org/licenses/by/4.0/
+	</a>.
+</p>
+	
+<h3>Datenschutzrechtlicher Hinweis:</h3>
+<p>
+	Wir weisen darauf hin, dass zum Zwecke der Systemsicherheit und der Übersicht über das 
+	Nutzungsverhalten der Besuchenden im Rahmen von Cookies diverse personenbezogene Daten 
+	(Besuchszeitraum, Betriebssystem, Browserversion, innere Auflösung des Browserfensters, 
+	Herkunft nach Land, wievielter Besuch seit Beginn der Aufzeichnung) mittels Piwik-Tracking 
+	gespeichert werden. Die Daten werden bis auf weiteres gespeichert. Soweit dies erfolgt, 
+	werden diese Daten nicht ohne Ihre ausdrückliche Zustimmung an Dritte weitergegeben. 
+	Durch die Nutzung der Website erklären Sie sich mit der Art und Weise sowie dem Zweck 
+	der Datenverarbeitung einverstanden. Durch eine entsprechende Einstellung in Ihrem Browser 
+	können Sie die Speicherung der Cookies verhindern. In diesem Fall stehen Ihnen aber 
+	gegebenenfalls nicht alle Funktionen der Website zur Verfügung. 
+	Die im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten dürfen von Dritten nicht 
+	zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien 
+	verwendet werden. Einer derartigen Verwendung wird hiermit ausdrücklich widersprochen.<br>
+	[Dieser Text wurde zuletzt am 16 März 2017 bearbeitet]
+</p>
+
+
+
+

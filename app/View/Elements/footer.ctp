@@ -20,7 +20,7 @@
  
 
 <p>
-	Copyright 2016 
+	&copy; 2014 - <?php echo date("Y"); ?>
 	<?php echo $this->Html->link('Hendrik Schmeer', 'http://hendrikschmeer.de', array('target' => '_blank')); ?>
 	on behalf of
 	<?php
@@ -37,7 +37,7 @@
 <?php
 if(!Configure::read('App.DODH')) {
 	?>
-	<p><?php echo $this->Html->link('Impressum', '/pages/about#impressum'); ?></p>
+	<p><?php echo $this->Html->link('Impressum', '/pages/imprint'); ?></p>
 	<?php
 }
 ?>

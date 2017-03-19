@@ -83,7 +83,7 @@ $this->start('header');
 			?>
 			<p>
 				Courseregistry <strong>BETA</strong> |
-				<?php echo $this->Html->link('About', '/pages/about'); ?>
+				<?php echo $this->Html->link('About', '/pages/imprint'); ?>
 			</p>
 			<?php
 			if(!$DODH AND $this->request->params['controller'] == 'projects') {
