@@ -18,7 +18,12 @@
 ?>
 <div class="users_form">
 	<h2>Approve User</h2>
-
+	
+	<?php 
+	if(empty($this->Auth->user())) {
+		echo '<p>You need to log in to add missing institutions or promote the new user to advanced roles.</p>';
+	}
+	?>
 
 	<?php
 	echo $this->element('Utils.validation_errors');
