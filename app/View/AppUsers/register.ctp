@@ -31,6 +31,8 @@
 	
 	echo $this->Form->create($modelName, array('novalidate' => true));
 	
+	echo '<fieldset>';
+	
 	echo $this->Form->input('email', array(
 		'label' => 'E-mail',
 		'autocomplete' => 'off'
@@ -42,6 +44,9 @@
 		'autocomplete' => 'off'
 	));
 	
+	echo '</fieldset>';
+	echo '<fieldset>';
+	
 	echo $this->Form->input('institution_id', array(
 		'label' => 'Institution',
 		'empty' => '-- choose institution --'
@@ -49,14 +54,12 @@
 	
 	echo $this->Form->input('university', array(
 		'label' => 'Other Institution',
-		'type' => 'text',
-		'title' => 'Only fill in if you cannot find your institution in the dropdown list above.'
+		'type' => 'textarea',
+		'placeholder' => 'If you cannot find your institution in the dropdown list above, please provide country, city and name of your institution.'
 	));
 	
-	echo $this->Form->input('country_id', array(
-		'empty' => '-- choose country --',
-		'title' => 'If available, your registration request will be assigned to your country\'s moderator.'
-	));
+	echo '</fieldset>';
+	echo '<fieldset>';
 	
 	echo $this->Form->input('academic_title');
 	
@@ -70,8 +73,10 @@
 	
 	echo $this->Form->input('about', array(
 		'type' => 'textarea',
-		'placeholder' => 'Please provide some details of your involvement into Digital Humanities. So our moderators have an idea, why you should be allowed to add entries to the Digital Humanities Course Registry.',
+		'placeholder' => 'Please provide some details of your involvement into Digital Humanities, so that our moderators have an idea, why you want to add entries to the Digital Humanities Course Registry.',
 	));
+	
+	echo '</fieldset>';
 	
 	echo $this->Form->end('Submit');
 	?>

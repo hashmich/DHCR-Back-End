@@ -1,5 +1,10 @@
 <?php
-if(!empty($errors)) {
+if(!empty($errors) OR ($modelName AND !empty($this->validationErrors[$modelName]))) {
+	if(	empty($errors)) {
+		$errors = array();
+		if($modelName AND !empty($this->validationErrors))
+			$errors = $this->validationErrors[$modelName];
+	}
 	?>
 	<div class="validation-errors">
 		<h3>Validation Errors</h3>

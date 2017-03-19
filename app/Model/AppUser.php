@@ -46,7 +46,7 @@ class AppUser extends User {
 		'telephone' => array(
 			'required' => array(
 				'rule' => 'notBlank',
-				'message' => 'For verification of your involvement, please enter your telephone number.'
+				'message' => 'Please enter your telephone number.'
 			)
 		),
 		'about' => array(
@@ -100,6 +100,8 @@ class AppUser extends User {
 		if(	!empty($this->data[$this->alias]['institution_id'])
 		AND	isset($universities[$this->data[$this->alias]['institution_id']])
 		) {
+			$this->Institution->id = $this->data[$this->alias]['institution_id'];
+			$this->data[$this->alias]['country_id'] = $this->Institution->field('country_id');
 			$result = true;
 		}
 		elseif(!empty($this->data[$this->alias]['university'])) {
@@ -109,6 +111,8 @@ class AppUser extends User {
 			$pos = array_search(strtolower($this->data[$this->alias]['university']), $universities);
 			if($pos !== false) {
 				$this->data[$this->alias]['institution_id'] = $pos;
+				$this->Institution->id = $pos;
+				$this->data[$this->alias]['country_id'] = $this->Institution->field('country_id');
 			}
 			$result = true;
 		}
