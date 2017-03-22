@@ -38,7 +38,7 @@
 </p>
 <h3>Credits:</h3>
 <p>
-	The DH Course Registry is developed by Hendrik Schmeer since 2014 
+	The DH Course Registry has been developed by Hendrik Schmeer since 2014 
 	on behalf of CLARIN-ERIC and DARIAH-EU.
 </p>
 <p>
@@ -156,7 +156,7 @@
 </p>
 <h3>Inhaltliche und redaktionelle Verantwortung und Urheberrecht:</h3>
 <p>
-	Die DH Course Registry wird von Hendrik Schmeer seit 2014 für 
+	Die DH Course Registry wird seit 2014 von Hendrik Schmeer für 
 	CLARIN-ERIC und DARIAH-EU entwickelt. 
 </p>
 <p>
