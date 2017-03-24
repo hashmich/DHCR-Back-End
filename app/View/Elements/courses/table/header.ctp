@@ -34,27 +34,29 @@ echo '<tr>';
 			$fieldDef['label'] = Inflector::camelize($fieldname);
 		}
 		echo '<th>';
-			if(!empty($this->request->params['paging'][$modelName])) {
-				$named = array();
-				if(!empty($this->request->params['named'])) $named = $this->request->params['named'];
-				if(	!empty($named['sort']) AND $named['sort'] == $fieldModelName . '.' . $fieldname
-				AND	!empty($named['direction']) AND strtolower($named['direction']) == 'desc'
-				) {
-					// build a link to reset sorting
-					unset($named['sort']);
-					unset($named['direction']);
-					$url = array(
-						'action' => $this->request->params['action'],
-						'controller' => $this->request->params['controller']
-					);
-					$url = array_merge($url, $this->request->params['pass'], $named);
-					echo $this->Html->link($fieldDef['label'], $url, array('class' => 'desc'));
-					
-				}else{
-					echo $this->Paginator->sort($fieldModelName . '.' . $fieldname, $fieldDef['label']);
-				}
-			}else{
+			$haystack = array('Course.name','CourseType.name','Institution.name','Course.department');
+			if(!in_array($fieldModelName . '.' . $fieldname, $haystack)) {
 				echo $fieldDef['label'];
+				continue;
+			}
+		
+			$named = array();
+			if(!empty($this->request->params['named'])) $named = $this->request->params['named'];
+			if(	!empty($named['sort']) AND $named['sort'] == $fieldModelName . '.' . $fieldname
+			AND	!empty($named['direction']) AND strtolower($named['direction']) == 'desc'
+			) {
+				// build a link to reset sorting
+				unset($named['sort']);
+				unset($named['direction']);
+				$url = array(
+					'action' => $this->request->params['action'],
+					'controller' => $this->request->params['controller']
+				);
+				$url = array_merge($url, $this->request->params['pass'], $named);
+				echo $this->Html->link($fieldDef['label'], $url, array('class' => 'desc'));
+				
+			}else{
+				echo $this->Paginator->sort($fieldModelName . '.' . $fieldname, $fieldDef['label']);
 			}
 		echo '</th>';
 	}

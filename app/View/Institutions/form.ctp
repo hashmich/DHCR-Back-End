@@ -2,7 +2,9 @@
 unset($crudFieldlist['Institution.parent_id']);
 unset($crudFieldlist['Institution.country_id']);
 unset($crudFieldlist['Institution.course_count']);
+
 $crudFieldlist['Institution.can_have_course']['formoptions']['type'] = 'hidden';
+if($this->action == 'add') $crudFieldlist['Institution.can_have_course']['formoptions']['value'] = 1;
 
 if(!empty($title_for_layout)) echo '<h2>'.$title_for_layout.'</h2>';
 

@@ -188,7 +188,11 @@ class UsersController extends UsersAppController {
 			$this->request->data[$this->modelClass]['id'] = $user[$this->modelClass]['id'];
 			$result = $this->{$this->modelClass}->saveProfile($this->request->data, $admin);
 			if($result) {
-				$this->Session->setFlash('Please log out and in again to let the changes take effect.');
+				if(empty($id)) {
+					$this->Session->setFlash('Please log out and in again to let the changes take effect.');
+				}else{
+					$this->Session->setFlash('Profile updated');
+				}
 				$this->redirect(array(
 					'plugin' => null,
 					'controller' => 'users',

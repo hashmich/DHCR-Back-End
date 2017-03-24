@@ -709,6 +709,7 @@ class CrudComponent extends Component {
 		if(!empty($this->controller->request->data[$modelName])) {
 			$this->controller->{$modelName}->crud = 'add';
 			if($this->controller->$modelName->save($this->controller->request->data)) {
+				$this->controller->Session->setFlash('Record added');
 				$this->controller->redirect($this->getReferer($this->defaultRedirect));
 			}
 		}else{
@@ -726,6 +727,7 @@ class CrudComponent extends Component {
 			$this->controller->$modelName->id = $id;
 			$this->controller->request->data[$modelName]['id'] = $id;
 			if($result = $this->controller->$modelName->save($this->controller->request->data)) {
+				$this->controller->Session->setFlash('Record updated');
 				$this->controller->redirect($this->getReferer($this->defaultRedirect));
 			}
 		}else{
@@ -760,6 +762,7 @@ class CrudComponent extends Component {
 				$return = $this->controller->$modelName->delete($id, true);
 			}
 		}
+		if($return) $this->controller->Session->setFlash('Record deleted');
 		if($redirect) $this->controller->redirect($this->getReferer($this->defaultRedirect));
 		return $return;
 	}

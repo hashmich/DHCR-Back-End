@@ -83,9 +83,19 @@ class CoursesController extends AppController {
 	
 	
 	public function index() {
-        $courses = $this->Course->find('all', array(
-			'conditions' => $this->_getFilter()
-		));
+        // we need to keep this line in order to maintain the functionality of sorting 
+        // with PaginatorHelper sort links
+		$this->paginate();
+		
+		$findoptions = array('conditions' => $this->_getFilter());
+		
+		if(!empty($this->request->params['named'])) {
+			$named = $this->request->params['named'];
+			if(!empty($named['sort']) AND !empty($named['direction'])) 
+				$findoptions['order'] = array($named['sort'] => $named['direction']);
+		}
+		
+		$courses = $this->Course->find('all', $findoptions);
 		
 		if($this->Auth->user('is_admin')) $this->set('edit', true);
 		

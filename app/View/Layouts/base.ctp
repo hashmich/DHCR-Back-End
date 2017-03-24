@@ -69,7 +69,7 @@
 		<div class="columns">
 			<div id="menu">
 				<?php
-				echo $this->element('Users.login_info');
+				echo $this->element('login_info');
 				?>
 				<ul>
 				<?php
