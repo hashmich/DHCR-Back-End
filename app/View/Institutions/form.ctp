@@ -26,7 +26,10 @@ echo $this->element('Cakeclient.crud/form', array('crudFieldlist' => $crudFieldl
 
 
 // picker is rendered using javascript, hiding the underlying lat,lon fields
-echo $this->element('locationpicker');
+echo $this->element('locationpicker', array(
+	'lonId' => '#InstitutionLon',
+	'latId' => '#InstitutionLat'
+));
 ?>
 
 

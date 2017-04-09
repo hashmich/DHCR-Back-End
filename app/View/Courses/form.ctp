@@ -135,11 +135,16 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 		$opts = array('selected' => $auth_user['institution_id']);
 	echo $this->Form->input('institution_id', $opts);
 	echo $this->Form->input('department');
-
-	echo $this->Html->para(null, 'Coordinates can be drawn in from the institution selector above. To adjust if not applicable, you can make use of '.$this->Html->link('this tool', 'http://dbsgeo.com/latlon/').'or similar to figure out proper coordinates. Changing your selection from the institutions list above will override your edits made in the fields longitude &amp; latitude beyond.');
-
-	$this->Html->scriptStart(array('inline' => false));
 	?>
+	<p>
+		Coordinates can be drawn in from the institution selector above. 
+		If not applicable, adjust using the location picker. 
+		Changing your selection from the institutions list above will 
+		overwrite the current coordinate value.
+	</p>
+	
+	<?php $this->Html->scriptStart(array('inline' => false)); ?>
+	
 	var selector = $('#CourseInstitutionId');
 	var lon = $('#CourseLon');
 	var lat = $('#CourseLat');
@@ -151,13 +156,16 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 		if(institution_id != '' && typeof(institution_id) != 'undefined') {
 			lon.val(locations[institution_id].lon);
 			lat.val(locations[institution_id].lat);
+			
+			// TODO: check if function exists 
+			setMarker(locationMap);
 		}
 	});
 	<?php
 	$this->Html->scriptEnd();
 
-	echo $this->Form->input('lat', array('label' => 'Latitude', 'title' => 'Lookup coordinates of the university or department in Google maps.'));
-	echo $this->Form->input('lon', array('label' => 'Longitude', 'title' => 'Lookup coordinates of the university or department in Google maps.'));
+	echo $this->Form->input('lat', array('label' => 'Latitude'));
+	echo $this->Form->input('lon', array('label' => 'Longitude'));
 	?>
 </fieldset>
 <fieldset>
@@ -168,7 +176,16 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 	?>
 </fieldset>
 
-<?php echo $this->Form->end('submit'); ?>
+<?php
+echo $this->Form->end('submit');
+
+
+// picker is rendered using javascript, hiding the underlying lat,lon fields
+echo $this->element('locationpicker', array(
+	'lonId' => '#CourseLon',
+	'latId' => '#CourseLat'
+));
+?>
 
 
 
