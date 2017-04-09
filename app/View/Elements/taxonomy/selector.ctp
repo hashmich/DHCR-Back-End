@@ -20,13 +20,18 @@ if(!function_exists('getOpts')) {
 	function getOpts($modelName, $habtmModel, $record, $request, $level = null) {
 		if(!empty($level)) $level = ' ' . $level;
 		$crossModel = Inflector::pluralize($modelName).$habtmModel;
+		$label = array();
+		if(!empty($record[$habtmModel]['description'])) 
+			$label['title'] = $record[$habtmModel]['description'];
+		if(!empty($record[$habtmModel]['name']))
+			$label['text'] = $record[$habtmModel]['name'];
 		$opts = array(
 			'empty' => false,
 			'required' => false,
 			'onchange' => false,
 			'type' => 'checkbox',
 			'value' => $record[$habtmModel]['id'],
-			'label' => array('text' => $record[$habtmModel]['name'], 'title' => $record[$habtmModel]['description']),
+			'label' => $label,
 			'name' => "data[$habtmModel][$habtmModel][]",
 			'div' => array('class' => "checkbox$level"),
 			'hiddenField' => false,
