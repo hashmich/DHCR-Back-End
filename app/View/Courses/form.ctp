@@ -162,7 +162,7 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 </fieldset>
 <fieldset>
 	<?php
-	echo $this->element('taxonomy/selector', array('habtmModel' => 'NwoDiscipline', 'dropdown' => true, 'label' => 'Disciplines'));
+	echo $this->element('taxonomy/selector', array('habtmModel' => 'Discipline', 'dropdown' => true, 'label' => 'Disciplines'));
 	echo $this->element('taxonomy/selector', array('habtmModel' => 'TadirahTechnique', 'dropdown' => true));
 	echo $this->element('taxonomy/selector', array('habtmModel' => 'TadirahObject', 'dropdown' => true));
 	?>

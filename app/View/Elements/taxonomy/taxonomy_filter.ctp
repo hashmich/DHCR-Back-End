@@ -24,7 +24,7 @@ if(empty($dropdownChecklist)) $dropdownChecklist = false;
 </noscript>
 <?php 
 echo $this->element('taxonomy/selector', array(
-	'habtmModel' => 'NwoDiscipline',
+	'habtmModel' => 'Discipline',
 	'label' => 'Disciplines',
 	'dropdown' => $dropdownChecklist,
 	'buttons' => true

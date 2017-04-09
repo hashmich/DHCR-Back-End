@@ -16,9 +16,69 @@
  * limitations under the License.
  */
 ?>
+
+<h2>Contact</h2>
+<p>Contact us if you have questions or problems.</p>
+<p>
+	Please use our contact form to automatically address 
+	your responsible moderator or admin. 
+</p>
+
+
+
+<div style="margin-bottom: 2em;" class="clearfix">
+	<h3>Board of Moderators</h3>
+	
+	<div class="left half">
+		<h4>National Coordinators</h4>
+		<dl>
+			<?php
+			$last_country = null;
+			foreach($moderators as $i => $mod) {
+				if(empty($mod['AppUser']['country_id'])) continue;
+				if($mod['AppUser']['country_id'] == $last_country) {
+					echo ', ';
+				}else{
+					if($i > 0) echo '</dd>'; 
+					echo '<dt>' . $mod['Country']['name'] . '</dt>';
+					echo '<dd>';
+				}
+				$last_country = $mod['AppUser']['country_id'];
+				
+					echo $this->Html->link(
+							$mod['AppUser']['first_name'] . ' ' . $mod['AppUser']['last_name'],
+							'mailto:' . $mod['AppUser']['email']);
+				
+			}
+			echo '</dd>';
+			?>
+		</dl>
+	</div>
+	
+	
+	<div class="left half">
+		<h4>User Administrators</h4>
+		<p>Responsible for general user inquiries and not yet moderated countries.</p>
+		<p>
+			<?php
+			foreach($userAdmins as $i => $mod) {
+				echo $this->Html->link(
+						$mod['AppUser']['first_name'] . ' ' . $mod['AppUser']['last_name'],
+						'mailto:' . $mod['AppUser']['email']);
+				echo '<br>';
+			}
+			?>
+		</p>
+	</div>
+	
+</div>
+
+<br>
+
+
 <div class="users_form">
-	<h2>Contact</h2>
-	<p>Contact us if you have questions or problems. Please check the manual and FAQ first.</p>
+	<h3>Contact Form</h3>
+	
 	<?php
 	echo $this->Form->create('Contact', array('novalidate' => true));
 	
@@ -46,5 +106,7 @@
 	
 	echo $this->Form->end('Submit');
 	?>
+	
+	
 	
 </div>

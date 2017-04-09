@@ -82,7 +82,7 @@
 				echo $this->fetch('menu');
 				?><li><hr></li><?php
 //echo '<li>' . $this->Html->link('Manual', array('controller' => 'pages', 'action' => 'manual', 'plugin' => null)) . '</li>';
-				echo '<li>' . $this->Html->link('Contact us', array('controller' => 'contacts', 'action' => 'send', 'plugin' => null)) . '</li>';
+				echo '<li>' . $this->Html->link('Contact us', array('controller' => 'contact', 'action' => 'us', 'plugin' => null)) . '</li>';
 				?>
 				</ul>
 			</div>

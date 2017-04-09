@@ -378,10 +378,10 @@ class CoursesController extends AppController {
 					$this->filter['CoursesTadirahActivity.tadirah_activity_id'] = $this->request->data['TadirahActivity']['TadirahActivity'];
 				else unset($this->filter['CoursesTadirahActivity.tadirah_activity_id']);
 			}
-			if(!empty($this->request->data['NwoDiscipline'])) {
-				if(!empty($this->request->data['NwoDiscipline']['NwoDiscipline']))
-					$this->filter['CoursesNwoDiscipline.nwo_discipline_id'] = $this->request->data['NwoDiscipline']['NwoDiscipline'];
-				else unset($this->filter['CoursesNwoDiscipline.nwo_discipline_id']);
+			if(!empty($this->request->data['Discipline'])) {
+				if(!empty($this->request->data['Discipline']['Discipline']))
+					$this->filter['CoursesDiscipline.discipline_id'] = $this->request->data['Discipline']['Discipline'];
+				else unset($this->filter['CoursesDiscipline.discipline_id']);
 			}
 		}
 	}
@@ -408,8 +408,8 @@ class CoursesController extends AppController {
 					case 'CoursesTadirahTechnique':
 						$model = $field = 'TadirahTechnique';
 						break;
-					case 'CoursesNwoDiscipline':
-						$model = $field = 'NwoDiscipline';
+					case 'CoursesDiscipline':
+						$model = $field = 'Discipline';
 						break;
 				}
 				$this->request->data[$model][$field] = $value;
@@ -476,24 +476,24 @@ class CoursesController extends AppController {
 			$this->filter['Course.id'] = Set::extract('/CoursesTadirahActivity/ids_filtered', $subquery);
 			unset($this->filter['CoursesTadirahActivity.tadirah_activity_id']);
 		}
-		if(!empty($this->filter['CoursesNwoDiscipline.nwo_discipline_id'])) {
+		if(!empty($this->filter['CoursesDiscipline.discipline_id'])) {
 			$subquery = $this->Course->find('all', array(
 				'joins' => array(
 					array(
-						'alias' => 'CoursesNwoDiscipline',
-						'table' => 'courses_nwo_disciplines',
+						'alias' => 'CoursesDiscipline',
+						'table' => 'courses_disciplines',
 						'type' => 'INNER',
-						'conditions' => 'CoursesNwoDiscipline.course_id = Course.id'
+						'conditions' => 'CoursesDiscipline.course_id = Course.id'
 					)
 				),
 				'conditions' => array(
-					'CoursesNwoDiscipline.nwo_discipline_id' => $this->filter['CoursesNwoDiscipline.nwo_discipline_id']
+					'CoursesDiscipline.discipline_id' => $this->filter['CoursesDiscipline.discipline_id']
 				),
-				'fields' => array('DISTINCT (CoursesNwoDiscipline.course_id) AS ids_filtered'),
-				'contain' => array('CoursesNwoDiscipline')
+				'fields' => array('DISTINCT (CoursesDiscipline.course_id) AS ids_filtered'),
+				'contain' => array('CoursesDiscipline')
 			));
-			$this->filter['Course.id'] = Set::extract('/CoursesNwoDiscipline/ids_filtered', $subquery);
-			unset($this->filter['CoursesNwoDiscipline.nwo_discipline_id']);
+			$this->filter['Course.id'] = Set::extract('/CoursesDiscipline/ids_filtered', $subquery);
+			unset($this->filter['CoursesDiscipline.discipline_id']);
 		}
 	}
 	
@@ -564,15 +564,15 @@ class CoursesController extends AppController {
 	protected function _setTaxonomy() {
 		$tadirahObjects = $this->Course->TadirahObject->find('all', array('contain' => array()));
 		$tadirahTechniques = $this->Course->TadirahTechnique->find('all', array('contain' => array()));
-		$nwoDisciplines = $this->Course->NwoDiscipline->find('all', array(
+		$disciplines = $this->Course->Discipline->find('all', array(
 			'contain' => array(),
-			'order' => 'NwoDiscipline.name ASC'
+			'order' => 'Discipline.name ASC'
 		));
 		
 		$this->set(compact(
 			'tadirahObjects',
 			'tadirahTechniques',
-			'nwoDisciplines'
+			'disciplines'
 		));
 	}
 	

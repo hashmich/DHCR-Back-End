@@ -17,11 +17,11 @@
  */
 App::uses('AppModel', 'Model');
 /**
- * NwoDiscipline Model
+ * Discipline Model
  *
  * @property Course $Course
  */
-class NwoDiscipline extends AppModel {
+class Discipline extends AppModel {
 
 /**
  * Display field
@@ -32,35 +32,21 @@ class NwoDiscipline extends AppModel {
 
 
 	var $validate = array(
-		'NwoDiscipline' => array(
+		'Discipline' => array(
 			'rule' => 'checkTags',
-			'message' => 'Please provide at least one of NWO disciplines.',
+			'message' => 'Please provide at least one discipline.',
 			'required' => true
 		)
 	);
 	
 	function checkTags() {
-		if(!empty($this->data['NwoDiscipline']['NwoDiscipline'])) return true;
+		if(!empty($this->data['Discipline']['Discipline'])) return true;
 		return false;
 	}
 	
 	
 
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
-
-/**
- * hasAndBelongsToMany associations
- *
- * @var array
- */
-	public $hasAndBelongsToMany = array(
-		'Project' => array(
-			'className' => 'Project',
-			'joinTable' => 'projects_nwo_disciplines',
-			'foreignKey' => 'nwo_discipline_id',
-			'associationForeignKey' => 'project_id',
-			'unique' => 'keepExisting'
-		)
-	);
+	
+	
 
 }

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-class ContactsController extends AppController {
+class ContactController extends AppController {
 	
 	
 	public $uses = array(
@@ -29,11 +29,11 @@ class ContactsController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		
-		$this->Auth->allow(array('send'));
+		$this->Auth->allow(array('us'));
 		$this->set('title_for_layout', 'Contact');
 	}
 	
-	public function send() {
+	public function us() {
 		if(!empty($this->request->data['Contact'])) {
 			$data = $this->request->data['Contact'];
 			$admins = array();
@@ -85,12 +85,17 @@ class ContactsController extends AppController {
 			}
 		}
 		
-		$mods = $this->AppUser->find('all', array(
-			'contain' => array(),
-			'conditions' => array('AppUser.user_role_id' => 2)
+		$moderators = $this->AppUser->find('all', array(
+			'contain' => array('Country'),
+			'conditions' => array('AppUser.user_role_id' => 2),
+			'order' => array('country_id' => 'asc')
+		));
+		$userAdmins = $this->AppUser->find('all', array(
+				'contain' => array(),
+				'conditions' => array('AppUser.user_admin' => 1)
 		));
 		$country_ids = array();
-		if($mods) foreach($mods as $mod) {
+		if($moderators) foreach($moderators as $mod) {
 			if(!empty($mod['AppUser']['country_id']))
 				$country_ids[] = $mod['AppUser']['country_id'];
 		}
@@ -98,7 +103,7 @@ class ContactsController extends AppController {
 			'order' => 'Country.name ASC',
 			'conditions' => array('Country.id' => $country_ids)
 		));
-		$this->set('countries', $countries);
+		$this->set(compact('countries', 'moderators', 'userAdmins'));
 	}
 }
 ?>

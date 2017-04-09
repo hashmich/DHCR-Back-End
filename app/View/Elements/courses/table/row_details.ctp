@@ -123,8 +123,8 @@ if($state !== 'Green' AND !empty($edit))
 					<dd><?php echo (!empty($record['Course']['access_requirements'])) ? $record['Course']['access_requirements'] : ' - '; ?></dd>
 					<?php
 					$keywords = array();
-					if(!empty($record['NwoDiscipline'])) {
-						foreach($record['NwoDiscipline'] as $tag) $cat[] = trim($tag['name']);
+					if(!empty($record['Discipline'])) {
+						foreach($record['Discipline'] as $tag) $cat[] = trim($tag['name']);
 						$keywords['Disciplines'] = $cat;
 					}
 					if(!empty($record['TadirahTechnique'])) {

@@ -85,12 +85,6 @@ $this->start('header');
 				Courseregistry <strong>2.0</strong> |
 				<?php echo $this->Html->link('About', '/pages/imprint'); ?>
 			</p>
-			<p>
-				<strong>Test Instance.</strong>
-				All entered data will be lost after final migration of the official 
-				DH-Courseregistry to this server.
-				Go <?php echo $this->Html->link('here', 'http://dh-registry.de.dariah.eu/'); ?> to visit the official instance.
-			</p>
 			<?php
 			if(!$DODH AND $this->request->params['controller'] == 'projects') {
 				?>
