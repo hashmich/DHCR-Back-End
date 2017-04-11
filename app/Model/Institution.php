@@ -113,6 +113,15 @@ class Institution extends AppModel {
 		$this->data['Institution']['lon'] = floatval($lon);
 		$this->data['Institution']['lat'] = floatval($lat);
 		
+		if(!empty($this->data['Institution']['city_id'])) {
+			$city = $this->City->find('first', array(
+					'contain' => array(),
+					'conditions' => array('City.id' => $this->data['Institution']['city_id'])
+			));
+			if(!empty($city))
+				$this->data['Institution']['country_id'] = $city['City']['country_id'];
+		}
+		
 		return true;
 	}
 	

@@ -190,10 +190,15 @@ class AppUsersController extends UsersController {
 					'email' => $user[$this->modelClass]['email'],
 					'data' => $user
 				));
-				$this->Session->setFlash('The account has been successfully approved.');
+				$this->Session->setFlash('The account has been approved successfully.');
 				$success = true;
 			}else{
-				$this->Session->setFlash('Error: the user data did not pass validation. Please check the details.');
+				$this->Session->setFlash('The user data did not pass validation. Please check the details.');
+				if(empty($this->Auth->user())) {
+					$this->Session->setFlash('Further user details need to be amended. Please log in first.');
+				}
+				$this->Auth->redirectUrl('/' . $this->request->url);
+				$this->redirect('/users/login');
 			}
 			
 			if($success) {

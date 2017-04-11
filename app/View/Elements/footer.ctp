@@ -24,9 +24,11 @@
 	<?php echo $this->Html->link('Hendrik Schmeer', 'http://hendrikschmeer.de', array('target' => '_blank')); ?>
 </p>
 <p>
-	Created by a consortium of partners in
-	<?php echo $this->Html->link('DARIAH-VCC2', 'https://dariah.eu/activities/general-vcc-meetings/2nd-general-vcc-meeting.html', array('target' => '_blank')); ?>
+	Created on behalf of a consortium of partners in
+	<?php echo $this->Html->link('DARIAH-RE VCC2', 'https://dariahre.hypotheses.org/about/dariah_vcc2', array('target' => '_blank')); ?>
 	“Research and Education”: <br>
+	European Research Infrastructure for Language Resources and Technology
+	<?php echo $this->Html->link('CLARIN ERIC', 'https://www.clarin.eu/', array('target' => '_blank')); ?>, <br>
 	Royal Netherlands Academy of Arts and Sciences
 	(<?php echo $this->Html->link('KNAW', 'https://www.knaw.nl', array('target' => '_blank')); ?>), <br>
 	the <?php echo $this->Html->link('eHumanities Group', 'http://www.ehumanities.nl/', array('target' => '_blank')); ?>, <br>
