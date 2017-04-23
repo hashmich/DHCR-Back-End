@@ -1,11 +1,9 @@
 <?php
 	if(!empty($crudFieldlist)) {
-		$model = null;
-		if(isset($modelName)) {
-			$model = $modelName;
-		}
+		if(!isset($modelName))
+			$modelName = null;
 		
-		echo $this->Form->create($model, array('novalidate' => 'novalidate'));
+		echo $this->Form->create($modelName, array('novalidate' => 'novalidate'));
 		
 		foreach($crudFieldlist as $key => $fieldDef) {
 			$options = array();

@@ -31,11 +31,6 @@ if($DODH) {
 ?>
 
 <li class="filter">Filters:</li>
-<?php
-$location_fixed = false;
-if(!empty($filter['Course.lon']) OR !empty($filter['Course.lat'])) $location_fixed = 'geolocation';
-if(!empty($filter['Course.id']) AND !is_array($filter['Course.id'])) $location_fixed = 'Course.id';
-?>
 
 <li class="filter">
 	<?php
@@ -49,11 +44,11 @@ if(!empty($filter['Course.id']) AND !is_array($filter['Course.id'])) $location_f
 		'required' => false,		// as the validation scheme in the model has this field mandatory, the formHelper sets this attribute to true, thus triggering HTML 5 browser-validation!
 		'onchange' => 'this.form.submit()'
 	));
-	if(!$location_fixed) {
-		echo $this->Form->input('country_id');
-		echo $this->Form->input('city_id');
-		echo $this->Form->input('institution_id');
-	}
+	
+	echo $this->Form->input('country_id');
+	echo $this->Form->input('city_id');
+	echo $this->Form->input('institution_id');
+	
 	echo $this->Form->input('course_parent_type_id', array(
 		'label' => 'Type I'
 	));

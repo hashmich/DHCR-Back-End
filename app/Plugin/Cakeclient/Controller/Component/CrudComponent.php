@@ -583,19 +583,31 @@ class CrudComponent extends Component {
 		// don't set a view if non-CRUD
 		if(!empty($view)) {
 			// check for an override view
+			$path = $this->virtualController . DS;
 			if(	Configure::read('Cakeclient.allowViewOverride')
-			AND (is_file(APP . 'View' . DS . $this->virtualController . DS . $view . '.ctp')
-				OR	is_file(APP . 'View' . DS . $this->virtualController . DS . $action . '.ctp'))
+			AND (is_file(APP . 'View' . DS . $path . $view . '.ctp')
+				OR	is_file(APP . 'View' . DS. $path . $action . '.ctp'))
 			) {
-				$this->controller->view = $this->virtualController . DS . $view;
+				$this->controller->view = $path . $view;
 				// use the action-named view over a view called "form"
 				if(	$view != $action
-				AND	is_file(APP . 'View' . DS . $this->virtualController . DS . $action . '.ctp')) {
-					$this->controller->view = $this->virtualController . DS . $action;
+				AND	is_file(APP . 'View' . DS . $path . $action . '.ctp')) {
+					$this->controller->view = $path . $action;
 				}
 			}else{
 				// use the plugin's generic view
 				$this->controller->view = 'Cakeclient.Crud' . DS . $view;
+				// otherwise any view provided in a special plugin folder on app level
+				$path = 'Plugin'.DS.'Cakeclient'.DS.$this->virtualController.DS;
+				if(	is_file(APP.'View'.DS.$path.$view.'.ctp')
+				OR	is_file(APP.'View'.DS.$path.$action.'.ctp')
+				) {
+					$this->controller->view = $path . $view;
+					if(	$view != $action
+					AND	is_file(APP . 'View' . DS . $path . $action . '.ctp')) {
+						$this->controller->view = $path . $action;
+					}
+				}
 			}
 		}
 	}
@@ -666,30 +678,93 @@ class CrudComponent extends Component {
 		return $return;
 	}
 	
+	function _getFilter() {
+		$conditions = $filter = array();
+		$operator = ' =';
+		$leadingWildcard = $trailingWildcard = "";
+		$columns = $this->controller->{$this->modelName}->schema();
+		
+		if(!empty($named = $this->controller->request->params['named'])) {
+			// do some sanitization, prevent SQL injection on the filter keys - Cake takes care of escaping the filter values
+			$namedKeys = preg_replace('/[^a-zA-Z0-9_-]/', '', array_keys($named));
+			
+			if(!empty($named['operator'])) {
+				$operator = $named['operator'];
+				$this->_getOperator($operator, $leadingWildcard, $trailingWildcard);
+			}
+			
+			foreach($namedKeys as $namedField) {
+				if(!isset($named[$namedField])) continue;
+				// don't pull in the pagination sort keys
+				if(in_array(strtolower($namedField), array('sort','direction','operator'))) continue;
+				// if a named parameter is present, check if it is a valid fieldname
+				if(isset($columns[$namedField]))
+					$conditions[$this->modelName.'.'.$namedField.$operator] = $leadingWildcard.$named[$namedField].$trailingWildcard;
+			}
+			
+			if(!empty($this->controller->request->params['named']['sort'])) {
+				// TODO: required?
+				$this->controller->{$this->modelName}->Behaviors->disable('Sortable');
+			}
+		}
+		if(!empty($this->controller->request->data['Filter'])) {
+			$filter = $this->controller->request->data['Filter'];
+			$conditions = array();
+			if(!empty($this->controller->request->params['named'])) {
+				// TODO
+			}
+			if(!empty($filter['operator'])) {
+				$operator = $filter['operator'];
+				$this->_getOperator($operator, $leadingWildcard, $trailingWildcard);
+			}
+			$expl = explode('.', $filter['field']);
+			if(isset($expl[1])) $field = $expl[1];
+			else				$field = $expl[0];
+			if(!empty($filter['field']) AND isset($columns[$field])) {
+				$conditions[$filter['field'].$operator] = $leadingWildcard.$filter['value'].$trailingWildcard;
+			}
+		}
+		
+		return $conditions;
+	}
+	
+	function _getOperator(&$_operator = null, &$leadingWildcard = "", &$trailingWildcard = "") {
+		$operator = ' =';
+		if(!empty($_operator)) {
+			switch($_operator) {
+				case 'is not': 		$operator = ' !='; 		break;
+				case 'starts with':
+					$operator = ' like';
+					$trailingWildcard = '%'; 
+					break;
+				case 'ends with':
+					$operator = " like";
+					$leadingWildcard = '%';
+					break;
+				case 'contains':
+					$operator = " like";
+					$leadingWildcard = $trailingWildcard = '%';
+					break;
+				case 'greater than':$operator = " >";		break;
+				case 'less than': 	$operator = " <";		break;
+				default: $operator = ' =';
+			}
+		}
+		$_operator = $operator;
+	}
+	
+	
+	
 	function index() {
 		$relations = false;
-		$conditions = $order = array();
+		$order = array();
 		$modelName = $this->controller->modelClass;
 		
 		if(!empty($this->controller->request->data['BulkProcessor'])) $this->bulkProcessor($redirect = false);
 		
 		// result filter
-		if(!empty($named = $this->controller->request->params['named'])) {
-			// do some sanitization, prevent SQL injection on the filter keys - Cake takes care of escaping the filter values
-			$namedKeys = preg_replace('/[^a-zA-Z0-9_-]/', '', array_keys($named));
-			$columns = $this->controller->{$modelName}->schema();
-			foreach($namedKeys as $namedField) {
-				if(!isset($named[$namedField])) continue;
-				// don't pull in the pagination sort keys
-				if(in_array(strtolower($namedField), array('sort','direction'))) continue;
-				// if a named parameter is present, check if it is a valid fieldname
-				if(isset($columns[$namedField]))
-					$conditions[$modelName . '.' . $namedField] = $named[$namedField];
-			}
-			if(!empty($this->controller->request->params['named']['sort'])) {
-				$this->controller->{$modelName}->Behaviors->disable('Sortable');
-			}
-		}
+		$conditions = $this->_getFilter();
+		
 		// tell the model which CRUD method is working
 		$this->controller->{$modelName}->crud = 'index';
 		

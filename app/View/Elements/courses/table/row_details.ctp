@@ -141,7 +141,7 @@ if($state !== 'Green' AND !empty($edit))
 						<dd>
 							<?php
 							foreach($keywords as $cat => &$entries)
-								$entries = $cat . ': ' . implode(', ', $entries);
+								$entries = '<u>'.$cat.'</u>: ' . implode(', ', $entries);
 							echo implode('<br />', $keywords);
 							?>
 						</dd>

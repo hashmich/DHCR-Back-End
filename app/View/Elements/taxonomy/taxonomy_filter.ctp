@@ -20,7 +20,7 @@
 if(empty($dropdownChecklist)) $dropdownChecklist = false;
 ?>
 <noscript>
-	<p class="note">Enable Javascript to make use of the taxonomy filter. </p>
+	<p class="note">Enable Javascript to make use of the taxonomy filters. </p>
 </noscript>
 <?php 
 echo $this->element('taxonomy/selector', array(
@@ -30,7 +30,7 @@ echo $this->element('taxonomy/selector', array(
 	'buttons' => true
 ));
 
-echo '<p>TaDiRAH keywords</p>';
+echo '<p style="font-style:italic; font-size:15px">TaDiRAH keywords:</p>';
 
 echo $this->element('taxonomy/selector', array(
 	'habtmModel' => 'TadirahTechnique',

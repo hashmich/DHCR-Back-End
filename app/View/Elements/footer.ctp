@@ -30,8 +30,8 @@
 	European Research Infrastructure for Language Resources and Technology
 	<?php echo $this->Html->link('CLARIN ERIC', 'https://www.clarin.eu/', array('target' => '_blank')); ?>, <br>
 	Royal Netherlands Academy of Arts and Sciences
-	(<?php echo $this->Html->link('KNAW', 'https://www.knaw.nl', array('target' => '_blank')); ?>), <br>
-	the <?php echo $this->Html->link('eHumanities Group', 'http://www.ehumanities.nl/', array('target' => '_blank')); ?>, <br>
+	(<?php echo $this->Html->link('KNAW', 'https://www.knaw.nl', array('target' => '_blank')); ?>): <br>
+	<?php echo $this->Html->link('eHumanities Group', 'http://www.ehumanities.nl/', array('target' => '_blank')); ?>, 
 	Data Archiving and Networked Services
 	(<?php echo $this->Html->link('DANS', 'https://dans.knaw.nl', array('target' => '_blank')); ?>),<br> 
 	<?php echo $this->Html->link('Erasmus University Rotterdam', 'https://www.eur.nl/', array('target' => '_blank')); ?>, <br>

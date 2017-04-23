@@ -6,7 +6,7 @@ echo $this->element('relations/parent_classes', array(), array('plugin' => 'Cake
 echo $this->element('relations/child_classes', array(), array('plugin' => 'Cakeclient'));
 echo $this->element('relations/habtm_classes', array(), array('plugin' => 'Cakeclient'));
 
-echo $this->element('index/active_filters', array(), array('plugin' => 'Cakeclient'));
+echo $this->element('index/filter', array(), array('plugin' => 'Cakeclient'));
 
 echo $this->element('index/bulkprocessor', array(), array('plugin' => 'Cakeclient'));
 echo $this->element('index/pager', array(), array('plugin' => 'Cakeclient'));

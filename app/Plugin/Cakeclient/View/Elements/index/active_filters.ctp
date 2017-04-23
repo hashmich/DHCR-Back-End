@@ -11,4 +11,4 @@ if(!empty($filter)) {
 		echo '</ul>';
 	echo '</div>';
 }
-?>	
+?>
