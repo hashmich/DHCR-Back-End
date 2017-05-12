@@ -26,17 +26,19 @@ class CronShell extends AppShell {
         Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
 		
 		$this->out("Available tasks: \n\t CheckUrls [C]\n\t SendReminders[S]");
-		$this->out("Please note: \nperforming these tasks will send out emails to recipients, \nif the application is not in debug-mode./nYou can enter an alternative debug-mail recipient.");
+		$this->out("Please note: \nperforming these tasks will send out emails to recipients, \nif the application is not in debug-mode.\nYou can enter an alternative debug-mail recipient.");
 		$this->hr();
 		$task = $this->in('Choose an action', array('C','S','Q'), 'Q');
-		$to = $this->in('All Emails to (alternative debug-mail): ', null, 'recipients');
-		if($to == 'recipients') $to = null;
-		$emails = $this->in('Send Emails?', array('Y','N'), 'N');
-		
-		if(strtolower($emails) == 'y') $emails = true;
-		elseif(strtolower($emails) == 'n') $emails = false;
-		if(strtolower($task) == 'c') $this->CheckUrls->execute($emails, $to);
-		elseif(strtolower($task) == 's') $this->SendReminders->execute($emails, $to);
+		if(strtolower($task) != 'q') {
+			$to = $this->in('All Emails to (alternative debug-mail): ', null, 'recipients');
+			if($to == 'recipients') $to = null;
+			$emails = $this->in('Send Emails?', array('Y','N'), 'N');
+			
+			if(strtolower($emails) == 'y') $emails = true;
+			elseif(strtolower($emails) == 'n') $emails = false;
+			if(strtolower($task) == 'c') $this->CheckUrls->execute($emails, $to);
+			elseif(strtolower($task) == 's') $this->SendReminders->execute($emails, $to);
+		}
     }
 }
 

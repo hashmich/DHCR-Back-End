@@ -22,6 +22,7 @@ class CheckUrlsTask extends Shell {
 	
 	public function execute($out = null, $to = null) {
 		$collection = $this->Course->checkUrls();
+		if(Configure::read('debug') > 0) $out = false;
 		if(!empty($collection)) {
 			if($out !== null) {
 				$this->out('I found errors with the following records: ');

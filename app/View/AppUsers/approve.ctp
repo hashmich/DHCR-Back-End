@@ -20,7 +20,7 @@
 	<h2>Approve User</h2>
 	
 	<?php 
-	if(empty($this->Auth->user())) {
+	if(empty($auth_user)) {
 		echo '<p>You need to log in to add missing institutions or promote the new user to advanced roles.</p>';
 	}
 	?>

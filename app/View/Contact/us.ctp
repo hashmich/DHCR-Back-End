@@ -20,6 +20,11 @@
 <h2>Contact</h2>
 <p>Contact us if you have questions or problems.</p>
 <p>
+	Found a bug or error?<br>
+	Please file a bug report
+	<?php echo $this->Html->link('here', 'https://github.com/hashmich/DH-Registry/issues'); ?>.
+</p>
+<p>
 	Please use our contact form to automatically address 
 	your responsible moderator or admin. 
 </p>

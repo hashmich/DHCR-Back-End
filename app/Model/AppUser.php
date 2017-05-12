@@ -141,7 +141,9 @@ class AppUser extends User {
 	
 	
 	public function approve($data = array()) {
-		$this->data = $data;
+		if(isset($data[$this->alias])) $data = $data[$this->alias];
+		$this->data[$this->alias] = $data;
+		
 		$validator = $this->validator();
 		unset($validator['email']);
 		unset($validator['new_email']);
@@ -177,6 +179,42 @@ class AppUser extends User {
 	}
 	
 	
+	function getModerators($country_id = null, $user_admin = true) {
+		$admins = array();
+		// try fetching the moderator in charge of the user's country,
+		if(!empty($data['country_id'])) {
+			$admins = $this->find('all', array(
+					'contain' => array(),
+					'conditions' => array(
+							'AppUser.country_id' => $country_id,
+							'AppUser.user_role_id' => 2,	// moderators
+							'AppUser.active' => 1
+					)
+			));
+		}
+		// then user_admin
+		if(empty($admins) AND $user_admin) {
+			$admins = $this->find('all', array(
+					'contain' => array(),
+					'conditions' => array(
+							'AppUser.user_admin' => 1,
+							'AppUser.active' => 1
+					)
+			));
+		}
+		// then admin
+		if(empty($admins)) {
+			$admins = $this->find('all', array(
+					'contain' => array(),
+					'conditions' => array(
+							'AppUser.user_role_id' => 1,	// admins - do not check for the 'is_admin' flag, as it is currently also set for the mods
+							'AppUser.active' => 1
+					)
+			));
+		}
+		
+		return $admins;
+	}
 	
 	
 }

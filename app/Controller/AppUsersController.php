@@ -197,8 +197,10 @@ class AppUsersController extends UsersController {
 				if(empty($this->Auth->user())) {
 					$this->Session->setFlash('Further user details need to be amended. Please log in first.');
 				}
-				$this->Auth->redirectUrl('/' . $this->request->url);
-				$this->redirect('/users/login');
+				if(!$this->Auth->user()) {
+					$this->Auth->redirectUrl('/' . $this->request->url);
+					$this->redirect('/users/login');
+				}
 			}
 			
 			if($success) {
@@ -244,16 +246,16 @@ class AppUsersController extends UsersController {
 			'conditions' => array(
 				'Course.country_id' => $this->Auth->user('country_id'),
 				'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
+			),
+			'order' => array(
+					'Course.updated' => 'ASC'
 			)
 		));
 		}
 		$this->set(compact('courses', 'moderated'));
 		
 		if($this->DefaultAuth->isAdmin() OR $this->Auth->user('user_role_id') == 2) {
-			$conditionsUnapproved = array(
-				$this->modelClass . '.active' => 0,
-				$this->modelClass . '.approved' => 0
-			);
+			$conditionsUnapproved = array($this->modelClass . '.approved' => 0);
 			$conditionsInvited = array(
 				'OR' => array(
 					$this->modelClass . '.password IS NULL',

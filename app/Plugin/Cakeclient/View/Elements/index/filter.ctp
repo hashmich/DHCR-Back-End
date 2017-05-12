@@ -30,7 +30,7 @@ if(!empty($crudFieldlist)) {
 	
 	echo $this->Form->input('value');
 	
-	echo $this->Form->submit();
+	echo $this->Form->end();
 }
 
 if(!empty($filter)) {

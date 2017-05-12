@@ -36,38 +36,11 @@ class ContactController extends AppController {
 	public function us() {
 		if(!empty($this->request->data['Contact'])) {
 			$data = $this->request->data['Contact'];
-			$admins = array();
-			// try fetching the moderator in charge of the user's country, 
-			if(!empty($data['country_id'])) {
-				$admins = $this->AppUser->find('all', array(
-					'contain' => array(),
-					'conditions' => array(
-						'AppUser.country_id' => $data['country_id'],
-						'AppUser.user_role_id' => 2,	// moderators
-						'AppUser.active' => 1
-					)
-				));
-			}
-			// then user_admin
-			if(empty($admins)) {
-				$admins = $this->AppUser->find('all', array(
-					'contain' => array(),
-					'conditions' => array(
-						'AppUser.user_admin' => 1,
-						'AppUser.active' => 1
-					)
-				));
-			}
-			// then admin
-			if(empty($admins)) {
-				$admins = $this->AppUser->find('all', array(
-					'contain' => array(),
-					'conditions' => array(
-						'AppUser.role_id' => 1,	// admins - do not check for the 'is_admin' flag, as it is currently also set for the mods
-						'AppUser.active' => 1
-					)
-				));
-			}
+			
+			// try fetching the moderator in charge of the user's country
+			$country_id = (empty($data['country_id'])) ? null : $data['country_id'];
+			$admins = $this->AppUser->getModerators($data['country_id'], $user_admin = true);
+			
 			if($admins) {
 				foreach($admins as $admin) {
 					// email logic

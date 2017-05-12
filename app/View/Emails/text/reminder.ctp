@@ -30,7 +30,7 @@ This will update the 'last-modification-date' of your record.
 Information older than <?php echo Configure::read('App.CourseExpirationPeriod') / (60*60*24*365); ?> years will be removed 
 from the registry automatically. 
 
-Log in before to find a handy edit link ("review") next to the linked course descriptions.
+Please review the linked courses:
 <?php
 echo Router::url(array(
 	'admin' => false,
@@ -46,7 +46,7 @@ foreach($data as $id => $record) {
 		'admin' => false,
 		'plugin' => null,
 		'controller' => 'courses',
-		'action' => 'index',
+		'action' => 'edit',
 		'id' => $id
 	), $full = true);
 	echo "\n";

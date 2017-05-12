@@ -390,11 +390,19 @@ class Course extends AppModel {
 					$errors = $this->validationErrors;
 					if(!empty($record['AppUser']) AND !empty($record['AppUser']['email'])) {
 						$email = $record['AppUser']['email'];
+						$collection[$email][$record['Course']['id']] = $errors;
+						$collection[$email]['name'] = $record['AppUser']['name'];
 					}else{
-						$email = 'no_owner';
+						//$email = 'no_owner';
+						$mods = $this->AppUser->getModerators($record['Course']['country_id'], $user_admin = false);
+						if($mods) {
+							foreach($mods as $mod) {
+								$email = $mod['AppUser']['email'];
+								$collection[$email][$record['Course']['id']] = $errors;
+								$collection[$email]['name'] = $mod['AppUser']['name'];
+							}
+						}
 					}
-					$collection[$email][$record['Course']['id']] = $errors;
-					$collection[$email]['name'] = $record['AppUser']['name'];
 				}
 			}
 			
@@ -408,6 +416,7 @@ class Course extends AppModel {
 			'contain' => array('AppUser'),
 			'conditions' => array(
 				'Course.updated <' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')),
+				'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod')),
 				'Course.active' => 1
 			)
 		));
@@ -416,10 +425,19 @@ class Course extends AppModel {
 			foreach($courses as $k => $record) {
 				if(!empty($record['AppUser']) AND !empty($record['AppUser']['email'])) {
 					$email = $record['AppUser']['email'];
+					$collection[$email][$record['Course']['id']] = $record;
+					$collection[$email]['name'] = $record['AppUser']['name'];
 				}else{
-					$email = 'no_owner';
+					//$email = 'no_owner';
+					$mods = $this->AppUser->getModerators($record['Course']['country_id'], $user_admin = false);
+					if($mods) {
+						foreach($mods as $mod) {
+							$email = $mod['AppUser']['email'];
+							$collection[$email][$record['Course']['id']] = $errors;
+							$collection[$email]['name'] = $mod['AppUser']['name'];
+						}
+					}
 				}
-				$collection[$email][$record['Course']['id']] = $record;
 			}
 			
 		}

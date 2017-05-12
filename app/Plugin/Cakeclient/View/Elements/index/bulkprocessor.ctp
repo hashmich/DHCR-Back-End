@@ -49,6 +49,7 @@
 		<noscript>
 			You have to enable Javascript to collect items from the list for bulk processing. <br />
 		</noscript>
+
 		<?php
 		echo $this->Form->create('BulkProcessor', array(
 			'class' => 'bulk_processor',
@@ -62,9 +63,7 @@
 			'options' => $bulk_options,
 			'empty' => '-- choose action --'
 		));
-		echo $this->Form->end(array(
-			'label' => 'apply'
-		));
+		echo $this->Form->end(array('label' => 'apply'));
 		
 		$this->set('bulkprocessing', ++$bulkprocessing);
 	}

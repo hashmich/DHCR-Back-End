@@ -124,14 +124,17 @@ if($state !== 'Green' AND !empty($edit))
 					<?php
 					$keywords = array();
 					if(!empty($record['Discipline'])) {
+						$cat = array();
 						foreach($record['Discipline'] as $tag) $cat[] = trim($tag['name']);
 						$keywords['Disciplines'] = $cat;
 					}
 					if(!empty($record['TadirahTechnique'])) {
+						$cat = array();
 						foreach($record['TadirahTechnique'] as $tag) $cat[] = trim($tag['name']);
 						$keywords['Techniques'] = $cat;
 					}
 					if(!empty($record['TadirahObject'])) {
+						$cat = array();
 						foreach($record['TadirahObject'] as $tag) $cat[] = trim($tag['name']);
 						$keywords['Objects'] = $cat;
 					}
@@ -140,9 +143,10 @@ if($state !== 'Green' AND !empty($edit))
 						<dt>Keywords</dt>
 						<dd>
 							<?php
-							foreach($keywords as $cat => &$entries)
-								$entries = '<u>'.$cat.'</u>: ' . implode(', ', $entries);
-							echo implode('<br />', $keywords);
+							$kwlist = array();
+							foreach($keywords as $cat => $entries)
+								$kwlist[] = '<u>'.$cat.'</u>: ' . implode(', ', $entries);
+							echo implode('<br />', $kwlist);
 							?>
 						</dd>
 						<?php
