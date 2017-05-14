@@ -361,6 +361,8 @@ class Course extends AppModel {
 	
 	
 	public function validateAll($data) {
+		$this->Discipline->set($data);
+		$errors1 = $this->Discipline->invalidFields();
 		$this->TadirahTechnique->set($data);
 		$errors2 = $this->TadirahTechnique->invalidFields();
 		$this->TadirahObject->set($data);
