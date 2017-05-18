@@ -27,10 +27,10 @@ class UsersAppController extends AppController {
 	protected function _getMailInstance() {
 		App::uses('CakeEmail', 'Network/Email');
 		$emailConfig = Configure::read('Users.emailConfig');
-		if($emailConfig) {
+		if($emailConfig AND $emailConfig != 'default') {
 			return new CakeEmail($emailConfig);
 		}else{
-			return new CakeEmail('default');
+			return new CakeEmail();
 		}
 	}
 	

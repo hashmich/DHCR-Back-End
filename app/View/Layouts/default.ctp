@@ -36,7 +36,7 @@ $this->start('header');
 	$logo2 = array(
 		'file' => 'dariah-small.png',
 		'alt' => 'DARIAH Logo',
-		'url' => 'https://dariah.eu/',
+		'url' => 'http://dariah.eu/',
 		'width' => 133,
 		'height' => 55,
 		'style' => 'margin-left: 10px;'
@@ -55,11 +55,20 @@ $this->start('header');
 		echo $this->Html->image($file, $logo);
 	}else{
 		$file = '/img/logos/' . $logo1['file'];
+		$url = $logo1['url'];
 		unset($logo1['file']);
-		echo $this->Html->image($file, $logo1);
+		unset($logo1['url']);
+		echo $this->Html->link($this->Html->image($file, $logo1), $url, array(
+				'target' => '_blank',
+				'escape' => false));
+		
 		$file = '/img/logos/' . $logo2['file'];
+		$url = $logo2['url'];
+		unset($logo2['url']);
 		unset($logo2['file']);
-		echo $this->Html->image($file, $logo2);
+		echo $this->Html->link($this->Html->image($file, $logo2), $url, array(
+				'target' => '_blank',
+				'escape' => false));
 	}
 	
 	?>
