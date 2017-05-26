@@ -32,10 +32,10 @@
 
 
 <div style="margin-bottom: 2em;" class="clearfix">
-	<h3>Board of Moderators</h3>
+	
 	
 	<div class="left half">
-		<h4>National Coordinators</h4>
+		<h3>National Moderators</h3>
 		<dl>
 			<?php
 			$last_country = null;
@@ -62,7 +62,7 @@
 	
 	
 	<div class="left half">
-		<h4>User Administrators</h4>
+		<h3>User Administrators</h3>
 		<p>Responsible for general user inquiries and not yet moderated countries.</p>
 		<p>
 			<?php

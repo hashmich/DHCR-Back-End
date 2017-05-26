@@ -42,9 +42,9 @@ class ContactController extends AppController {
 			$admins = $this->AppUser->getModerators($data['country_id'], $user_admin = true);
 			
 			if($admins) {
+				App::uses('CakeEmail', 'Network/Email');
 				foreach($admins as $admin) {
 					// email logic
-					App::uses('CakeEmail', 'Network/Email');
 					$Email = new CakeEmail();
 					$Email->from($this->request->data['Contact']['email'])
 					->to($admin['AppUser']['email'])

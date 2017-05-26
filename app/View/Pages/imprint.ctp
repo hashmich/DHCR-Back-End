@@ -19,8 +19,9 @@
 	The Austrian Centre for Digital Humanities (ACDH) is an OEAW institute founded with the goal 
 	to support digital methods in arts and humanities disciplines. 
 	The ACDH supports digital research in manifold ways.
-	The project DH course registry is hosted on the servers of the ACDH and was built as a joint 
-	effort of the European research infrastructures 
+	The project DH Course Registry is hosted on the servers of the ACDH. 
+	It was built by the European research infrastructure DARIAH-EU and 
+	is maintained as a joint effort of the European research infrastructures 
 	<a href="https://www.clarin.eu/" target="_blank">CLARIN-ERIC</a> and 
 	<a href="http://dariah.eu/" target="_blank">DARIAH-EU</a>.
 </p>
@@ -137,10 +138,11 @@
 	Das Austrian Centre for Digital Humanities (ACDH) ist ein Institut der ÖAW, das mit dem 
 	Ziel gegründet wurde, digitale Methoden und Ansätze in den geisteswissenschaftlichen 
 	Disziplinen zu fördern. Das ACDH unterstützt digitale Forschung in vielfältiger Weise. 
-	Das Projekt DH Course Registry wird auf den Servern des ACDH gehostet und ist aus einer 
-	Kooperation der europäischen Forschungsinfrastrukturen 
+	Das Projekt DH Course Registry wird auf den Servern des ACDH gehostet.
+	Es ist als Ifrastrukturprojekt in DARIAH-EU entstanden und 
+	wird seither gemeinsam in einer Kooperation der europäischen Forschungsinfrastrukturen 
 	<a href="https://www.clarin.eu/" target="_blank">CLARIN-ERIC</a> und 
-	<a href="http://dariah.eu/" target="_blank">DARIAH-EU</a> entstanden.
+	<a href="http://dariah.eu/" target="_blank">DARIAH-EU</a> betrieben.
 </p>
 <h3>Vertretungsbefugte Organe:</h3>
 <p>
