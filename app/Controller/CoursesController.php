@@ -29,7 +29,7 @@ class CoursesController extends AppController {
 		$this->Auth->allow(array('index', 'view', 'reset', 'statistic'));
 		
 		if($this->Auth->user()) {
-			$this->Auth->allow(array('edit', 'add', 'delete'));
+			$this->Auth->allow(array('edit', 'add', 'delete', 'revalidate'));
 		}
 	}
 
@@ -111,6 +111,37 @@ class CoursesController extends AppController {
 		));
 		$this->set(compact('courses'));
 		$this->render('index');
+	}
+	
+	
+	public function revalidate($id = null) {
+		if(empty($id)) $this->redirect(array(
+				'controller' => 'users',
+				'action' => 'dashboard'
+		));
+		
+		$admin = false;
+		$conditions = array('Course.id' => $id);
+		if($this->Auth->user('is_admin') OR $this->Auth->user('user_role_id') < 3) $admin = true;
+		else $conditions['Course.user_id'] = $this->Auth->user('id');
+		
+		// check autorisation beforehand
+		$course = $this->Course->find('first', array('conditions' => $conditions));
+		
+		if(!empty($course)) {
+			// update timestamp
+			unset($course['Course']['updated']);
+			$this->Course->set($course);
+			$this->Course->save();
+			$this->Course->read();
+			$this->Session->setFlash('The record has been revalidated with the current timestamp: '
+					. $this->Course->data['Course']['updated']);
+		}
+		
+		$this->redirect(array(
+			'controller' => 'users',
+			'action' => 'dashboard'
+		));
 	}
 	
 	
