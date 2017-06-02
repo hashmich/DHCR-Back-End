@@ -32,8 +32,8 @@ echo '<div class="scroll_wrapper">';
 						AND	(!empty($crudRelations['hasMany']) OR !empty($crudRelations['hasAndBelongsToMany']))
 						) {
 							/*/echo '<td class="children">';
-								echo $this->element('index/child_models', array('record' => $record));
-								echo $this->element('index/habtm_models', array('record' => $record));
+								echo $this->element('relations/child_classes', array('record' => $record));
+								echo $this->element('relations/habtm_classes', array('record' => $record));
 							echo '</td>';*/
 						}
 						foreach($crudFieldlist as $key => $fieldDef) {
