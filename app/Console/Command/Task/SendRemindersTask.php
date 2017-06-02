@@ -38,7 +38,7 @@ class SendRemindersTask extends Shell {
 					$subject_prefix = (Configure::read('App.EmailSubjectPrefix'))
 						? trim(Configure::read('App.EmailSubjectPrefix')) . ' '
 						: '';
-					$transport = (Configure::read('debug') > 0 AND empty($to)) ? 'Debug' : 'Mail';
+					
 					if(!empty($to)) $email = $to;
 					$options = array(
 						'subject_prefix' => $subject_prefix,
@@ -46,10 +46,13 @@ class SendRemindersTask extends Shell {
 						'emailFormat' => 'text',
 						'template' => 'reminder',
 						'layout' => 'default',
-						'transport' => $transport,
 						'email' => $email,
 						'data' => $data
 					);
+					if(Configure::read('debug') > 0 AND empty($to)) {
+						$options['transport'] = 'Debug';
+					}
+					
 					if(is_string($options['email'])) {
 						$Email->to($options['email']);
 						$Email->emailFormat($options['emailFormat']);

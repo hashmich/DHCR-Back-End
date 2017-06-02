@@ -20,15 +20,15 @@ class CheckUrlsTask extends Shell {
 	public $uses = array('Course');
 	
 	
-	public function execute($out = null, $to = null) {
+	public function execute($sendMails = null, $to = null) {
 		$collection = $this->Course->checkUrls();
-		if(Configure::read('debug') > 0) $out = false;
+		if(Configure::read('debug') > 0) $sendMails = false;
 		if(!empty($collection)) {
-			if($out !== null) {
+			if($sendMails !== null) {
 				$this->out('I found errors with the following records: ');
 				print_r($collection);
 			}
-			if($out !== false) {
+			if($sendMails !== false) {
 				App::uses('CakeEmail', 'Network/Email');
 				
 				foreach($collection as $email => $data) {
@@ -38,7 +38,7 @@ class CheckUrlsTask extends Shell {
 					$subject_prefix = (Configure::read('App.EmailSubjectPrefix'))
 						? trim(Configure::read('App.EmailSubjectPrefix')) . ' '
 						: '';
-					$transport = (Configure::read('debug') > 0 AND empty($to)) ? 'Debug' : 'Mail';
+					
 					if(!empty($to)) $email = $to;
 					$options = array(
 						'subject_prefix' => $subject_prefix,
@@ -46,10 +46,12 @@ class CheckUrlsTask extends Shell {
 						'emailFormat' => 'text',
 						'template' => 'invalid_urls',
 						'layout' => 'default',
-						'transport' => $transport,
 						'email' => $email,
 						'data' => $data
 					);
+					if(Configure::read('debug') > 0 AND empty($to)) {
+						$options['transport'] = 'Debug';
+					}
 					if(is_string($options['email'])) {
 						$Email->to($options['email']);
 						$Email->emailFormat($options['emailFormat']);
