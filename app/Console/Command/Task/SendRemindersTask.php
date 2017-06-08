@@ -49,10 +49,6 @@ class SendRemindersTask extends Shell {
 						'email' => $email,
 						'data' => $data
 					);
-					if(Configure::read('debug') > 0 AND empty($to)) {
-						$options['transport'] = 'Debug';
-					}
-					
 					if(is_string($options['email'])) {
 						$Email->to($options['email']);
 						$Email->emailFormat($options['emailFormat']);
@@ -61,7 +57,9 @@ class SendRemindersTask extends Shell {
 						$Email->viewVars(array(
 							'data' => $options['data']
 						));
-						$Email->transport($options['transport']);
+						if(Configure::read('debug') > 0 AND empty($to)) {
+							$Email->transport('Debug');
+						}
 						$Email->send();
 					}
 					unset($Email);

@@ -109,6 +109,9 @@ class CoursesController extends AppController {
 		$courses = $this->Course->find('all', array(
 			'conditions' => array('Course.id' => $id)
 		));
+		if(	$this->Auth->user('id') == $courses[0]['Course']['user_id']
+		||	$this->Auth->user('is_admin'))
+			$this->set('edit', true);
 		$this->set(compact('courses'));
 		$this->render('index');
 	}

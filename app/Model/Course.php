@@ -392,7 +392,8 @@ class Course extends AppModel {
 					$errors = $this->validationErrors;
 					if(!empty($record['AppUser']) AND !empty($record['AppUser']['email'])) {
 						$email = $record['AppUser']['email'];
-						$collection[$email][$record['Course']['id']] = $errors;
+						$collection[$email][$record['Course']['id']]['errors'] = $errors;
+						$collection[$email][$record['Course']['id']]['name'] = $record['Course']['name'];
 						$collection[$email]['name'] = $record['AppUser']['name'];
 					}else{
 						//$email = 'no_owner';
@@ -400,7 +401,8 @@ class Course extends AppModel {
 						if($mods) {
 							foreach($mods as $mod) {
 								$email = $mod['AppUser']['email'];
-								$collection[$email][$record['Course']['id']] = $errors;
+								$collection[$email][$record['Course']['id']]['errors'] = $errors;
+								$collection[$email][$record['Course']['id']]['name'] = $record['Course']['name'];
 								$collection[$email]['name'] = $mod['AppUser']['name'];
 							}
 						}

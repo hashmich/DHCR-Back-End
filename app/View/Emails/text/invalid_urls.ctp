@@ -36,16 +36,16 @@ echo "\n\n";
 foreach($data as $id => $fields) {
 	if($id == 'name') continue;
 	
-	echo "Course: ";
+	echo "Course: \n".$fields['name']."\n";
 	echo Router::url(array(
 		'admin' => false,
 		'plugin' => null,
 		'controller' => 'courses',
-		'action' => 'index',
-		'id' => $id
+		'action' => 'view',
+		$id
 	), $full = true);
 	echo "\n";
-	foreach($fields as $field => $errors) {
+	foreach($fields['errors'] as $field => $errors) {
 		$field = ($field == 'url') ? 'Information URL' : $field;
 		$field = ($field == 'guide_url') ? 'Curriculum URL' : $field;
 		echo $field . ": \n";
@@ -56,6 +56,14 @@ foreach($data as $id => $fields) {
 	}
 }
 ?>
+
+In rare cases, this checking algorithm reports errors where 
+humanoid users can successfully visit the reported URLs. 
+If you happen to find your carefully checked URL marked invalid by this 
+email or by the form validation during review, please check the tickbox 
+'Skip URL Validation', to let the form pass validation on submit. 
+In case your course information has not changed and the data is still up to date, 
+(state green) you may also ignore this email.    
 
 Many thanks! 
 

@@ -21,7 +21,7 @@ class TestTask extends Shell {
 		);
 		if(is_string($options['email'])) {
 			$Email->to($options['email']);
-			$Email->emailFormat($options['emailFormat']);
+			$Email->emailFormat('text');
 			$Email->subject($options['subject_prefix'] . $options['subject']);
 			$Email->send('If you recieve this mail, the CronShell successfully executed task "Test".');
 		}

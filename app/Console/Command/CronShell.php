@@ -66,7 +66,7 @@ class CronShell extends AppShell {
     	if($this->to == 'recipients') $this->to = null;
     	$this->sendMails = $this->in('Send Emails?', array('Y','N'), 'N');
     	if(strtolower($this->sendMails) == 'y') $this->sendMails = true;
-    	elseif(strtolower($emails) == 'n') $this->sendMails = false;
+    	elseif(strtolower($this->sendMails) == 'n') $this->sendMails = false;
     }
     
     
