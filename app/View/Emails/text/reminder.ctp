@@ -19,35 +19,32 @@
 <?php $name = (!empty($data[key($data)]['AppUser']['name'])) ? $data[key($data)]['AppUser']['name'] : 'User'; ?>
 Dear <?php echo $name; ?>!
 
-We found, that one or more entries you maintain in 
-the Digital Humanities Course Registry has not been updated for a year or more. 
+We noticed, that one or more of your entries in 
+the Digital Humanities Course Registry have not been updated for a longer time. 
 
 To prevent the registry from showing outdated information, 
 please review the listed records. 
 Please note, that you must submit the edit form, even if the information does not change.  
 This will update the 'last-modification-date' of your record. 
 
-Information older than <?php echo Configure::read('App.CourseExpirationPeriod') / (60*60*24*365); ?> years will be removed 
-from the registry automatically. 
+If you have many courses whose information definitely did not change, you may alternatively 
+make use of the 'revalidate' button on each course row on your dashboard. 
+Using this feature saves you from unneccessarily loading the course edit form, if 
+your data remains the same.  
+
+Information older than <?php echo Configure::read('App.CourseExpirationPeriod') / (60*60*24*365); ?> years will be automatically removed 
+from the registry. 
 
 Please review the linked courses:
 <?php
-echo Router::url(array(
-	'admin' => false,
-	'plugin' => null,
-	'controller' => 'users',
-	'action' => 'login'
-), $full = true);
-echo "\n\n";
-
 foreach($data as $id => $record) {
-	echo "Course: " . $record['Course']['name'] . "\n";
+	echo "Course: \n" . $record['Course']['name'] . "\n";
 	echo Router::url(array(
 		'admin' => false,
 		'plugin' => null,
 		'controller' => 'courses',
 		'action' => 'edit',
-		'id' => $id
+		$id
 	), $full = true);
 	echo "\n";
 }
