@@ -36,7 +36,7 @@ echo "\n\n";
 foreach($data as $id => $course) {
 	if($id == 'maintainer') continue;
 	
-	echo "Course: \n".$course['name']."\n";
+	echo "Course: \n".$course['Course']['name']."\n";
 	echo Router::url(array(
 		'admin' => false,
 		'plugin' => null,
@@ -52,6 +52,8 @@ foreach($data as $id => $course) {
 		foreach($errors as $error) {
 			echo "\t" . $error . "\n";
 		}
+		echo "\tvalue: ".$course['Course'][$field]."\n";
+		
 	}
 	echo "\n";
 }

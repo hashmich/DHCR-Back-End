@@ -393,7 +393,7 @@ class Course extends AppModel {
 					if(!empty($record['AppUser']) AND !empty($record['AppUser']['email'])) {
 						$email = $record['AppUser']['email'];
 						$collection[$email][$record['Course']['id']]['errors'] = $errors;
-						$collection[$email][$record['Course']['id']]['name'] = $record['Course']['name'];
+						$collection[$email][$record['Course']['id']] = $record;
 						$collection[$email]['maintainer'] = $record['AppUser']['name'];
 					}else{
 						//$email = 'no_owner';
@@ -402,7 +402,7 @@ class Course extends AppModel {
 							foreach($mods as $mod) {
 								$email = $mod['AppUser']['email'];
 								$collection[$email][$record['Course']['id']]['errors'] = $errors;
-								$collection[$email][$record['Course']['id']]['name'] = $record['Course']['name'];
+								$collection[$email][$record['Course']['id']] = $record;
 								$collection[$email]['maintainer'] = $mod['AppUser']['name'];
 							}
 						}
