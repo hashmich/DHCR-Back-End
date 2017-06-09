@@ -53,7 +53,6 @@ foreach($data as $id => $course) {
 			echo "\t" . $error . "\n";
 		}
 		echo "\tvalue: ".$course['Course'][$field]."\n";
-		
 	}
 	echo "\n";
 }
