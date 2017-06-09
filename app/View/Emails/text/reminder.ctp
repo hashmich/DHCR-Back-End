@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 ?>
-<?php $name = (!empty($data[key($data)]['AppUser']['name'])) ? $data[key($data)]['AppUser']['name'] : 'User'; ?>
+<?php $name = (!empty($data['maintainer'])) ? $data['maintainer'] : 'User'; ?>
 Dear <?php echo $name; ?>!
 
 We noticed, that one or more of your entries in 
@@ -32,7 +32,7 @@ make use of the 'revalidate' button on each course row on your dashboard.
 Using this feature saves you from unneccessarily loading the course edit form, if 
 your data remains the same.  
 
-Information older than <?php echo Configure::read('App.CourseExpirationPeriod') / (60*60*24*365); ?> years will be automatically removed 
+Information older than <?php echo round(Configure::read('App.CourseExpirationPeriod') / (60*60*24*365), 1); ?> years will be automatically removed 
 from the registry. 
 
 Please review the linked courses:
@@ -40,11 +40,11 @@ Please review the linked courses:
 foreach($data as $id => $record) {
 	echo "Course: \n" . $record['Course']['name'] . "\n";
 	echo Router::url(array(
-		'admin' => false,
-		'plugin' => null,
-		'controller' => 'courses',
-		'action' => 'edit',
-		$id
+			'admin' => false,
+			'plugin' => null,
+			'controller' => 'courses',
+			'action' => 'edit',
+			$id
 	), $full = true);
 	echo "\n";
 }

@@ -30,8 +30,6 @@ echo $this->element('taxonomy/selector', array(
 	'buttons' => true
 ));
 
-echo '<p style="font-style:italic; font-size:15px">TaDiRAH keywords:</p>';
-
 echo $this->element('taxonomy/selector', array(
 	'habtmModel' => 'TadirahTechnique',
 	'label' => 'Techniques',

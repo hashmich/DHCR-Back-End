@@ -394,7 +394,7 @@ class Course extends AppModel {
 						$email = $record['AppUser']['email'];
 						$collection[$email][$record['Course']['id']]['errors'] = $errors;
 						$collection[$email][$record['Course']['id']]['name'] = $record['Course']['name'];
-						$collection[$email]['name'] = $record['AppUser']['name'];
+						$collection[$email]['maintainer'] = $record['AppUser']['name'];
 					}else{
 						//$email = 'no_owner';
 						$mods = $this->AppUser->getModerators($record['Course']['country_id'], $user_admin = false);
@@ -403,7 +403,7 @@ class Course extends AppModel {
 								$email = $mod['AppUser']['email'];
 								$collection[$email][$record['Course']['id']]['errors'] = $errors;
 								$collection[$email][$record['Course']['id']]['name'] = $record['Course']['name'];
-								$collection[$email]['name'] = $mod['AppUser']['name'];
+								$collection[$email]['maintainer'] = $mod['AppUser']['name'];
 							}
 						}
 					}
@@ -425,25 +425,28 @@ class Course extends AppModel {
 			)
 		));
 		$collection = array();
+		$userName = 'User';
 		if(!empty($courses)) {
 			foreach($courses as $k => $record) {
 				if(!empty($record['AppUser']) AND !empty($record['AppUser']['email'])) {
 					$email = $record['AppUser']['email'];
 					$collection[$email][$record['Course']['id']] = $record;
-					$collection[$email]['name'] = $record['AppUser']['name'];
+					$collection[$email][$record['Course']['id']]['name'] = $record['Course']['name'];
+					$collection[$email]['maintainer'] = $record['AppUser']['name'];
 				}else{
 					//$email = 'no_owner';
 					$mods = $this->AppUser->getModerators($record['Course']['country_id'], $user_admin = false);
 					if($mods) {
+						
 						foreach($mods as $mod) {
 							$email = $mod['AppUser']['email'];
 							$collection[$email][$record['Course']['id']] = $errors;
-							$collection[$email]['name'] = $mod['AppUser']['name'];
+							$collection[$email][$record['Course']['id']]['name'] = $record['Course']['name'];
+							$collection[$email]['maintainer'] = $mod['AppUser']['name'];
 						}
 					}
 				}
 			}
-			
 		}
 		return $collection;
 	}

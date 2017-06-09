@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 ?>
-<?php $name = (!empty($data['name'])) ? $data['name'] : 'User'; ?>
+<?php $name = (!empty($data['maintainer'])) ? $data['maintainer'] : 'User'; ?>
 Dear <?php echo $name; ?>!
 
 We have noticed, that information URLs of one or more entries you maintain in 
@@ -33,10 +33,10 @@ echo Router::url(array(
 ), $full = true);
 echo "\n\n";
 
-foreach($data as $id => $fields) {
+foreach($data as $id => $course) {
 	if($id == 'name') continue;
 	
-	echo "Course: \n".$fields['name']."\n";
+	echo "Course: \n".$course['name']."\n";
 	echo Router::url(array(
 		'admin' => false,
 		'plugin' => null,
@@ -45,7 +45,7 @@ foreach($data as $id => $fields) {
 		$id
 	), $full = true);
 	echo "\n";
-	foreach($fields['errors'] as $field => $errors) {
+	foreach($course['errors'] as $field => $errors) {
 		$field = ($field == 'url') ? 'Information URL' : $field;
 		$field = ($field == 'guide_url') ? 'Curriculum URL' : $field;
 		echo $field . ": \n";
