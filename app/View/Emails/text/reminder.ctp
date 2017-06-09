@@ -47,7 +47,7 @@ foreach($data as $id => $record) {
 			'action' => 'edit',
 			$id
 	), $full = true);
-	echo "\n";
+	echo "\n\n";
 }
 ?>
 
