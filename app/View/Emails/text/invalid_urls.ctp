@@ -46,13 +46,14 @@ foreach($data as $id => $course) {
 	), $full = true);
 	echo "\n";
 	foreach($course['errors'] as $field => $errors) {
+		$fieldname = $field;
 		$field = ($field == 'url') ? 'Information URL' : $field;
 		$field = ($field == 'guide_url') ? 'Curriculum URL' : $field;
 		echo $field . ": \n";
 		foreach($errors as $error) {
 			echo "\t" . $error . "\n";
 		}
-		echo "\tvalue: ".$course['Course'][$field]."\n";
+		echo "\tvalue: ".$course['Course'][$fieldname]."\n";
 	}
 	echo "\n";
 }
