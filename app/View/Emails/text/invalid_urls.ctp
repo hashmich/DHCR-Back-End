@@ -34,7 +34,7 @@ echo Router::url(array(
 echo "\n\n";
 
 foreach($data as $id => $course) {
-	if($id == 'name') continue;
+	if($id == 'maintainer') continue;
 	
 	echo "Course: \n".$course['name']."\n";
 	echo Router::url(array(
@@ -52,8 +52,8 @@ foreach($data as $id => $course) {
 		foreach($errors as $error) {
 			echo "\t" . $error . "\n";
 		}
-		echo "\n";
 	}
+	echo "\n";
 }
 ?>
 

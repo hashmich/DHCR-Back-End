@@ -38,6 +38,7 @@ from the registry.
 Please review the linked courses:
 <?php
 foreach($data as $id => $record) {
+	if($id == 'maintainer') continue;
 	echo "Course: \n" . $record['Course']['name'] . "\n";
 	echo Router::url(array(
 			'admin' => false,

@@ -81,7 +81,7 @@ function initializeMap() {
 	}
 	
 	mymap.addLayer(cluster);
-	mymap.fitBounds(cluster.getBounds(), {padding: [10, 10]});
+	fitBounds(10)
 }
 
 function openMarker(id) {
@@ -98,10 +98,16 @@ function closeMarker(id) {
 	for(var k in markers) {
 		if(id == markers[k].id) {
 			markers[k].marker.closePopup();
-			mymap.fitBounds(cluster.getBounds());
+			fitBounds(12);
 			break;
 		}
 	}
+}
+
+function fitBounds(maxZoom) {
+	mymap.options.maxZoom = maxZoom;
+	mymap.fitBounds(cluster.getBounds(), {padding: [10, 10]});
+	mymap.options.maxZoom = 18;
 }
 
 
