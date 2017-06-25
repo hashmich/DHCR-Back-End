@@ -8,7 +8,7 @@ class TestTask extends Shell {
 	public function execute($to = null) {
 		$this->out("Executing TestTask...");
 		
-		if($to == null) $to = 'hendrik.schmeer@yahoo.de';
+		if($to == null) $to = 'mail@hendrikschmeer.de';
 		App::uses('CakeEmail', 'Network/Email');
 		$Email = new CakeEmail('default');
 		$subject_prefix = (Configure::read('App.EmailSubjectPrefix'))
