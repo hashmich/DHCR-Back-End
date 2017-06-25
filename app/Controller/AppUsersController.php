@@ -302,7 +302,7 @@ class AppUsersController extends UsersController {
 			'template' => 'invite_user',
 			'subject' => 'Join the Digital Humanities Course Registry',
 			'bcc' => $this->Auth->user('email'),
-			'sender' => $this->Auth->user('email'),
+			'sender' => Configure::read('App.defaultEmail'),
 			'replyTo' => $this->Auth->user('email'),
 			'returnPath' => $this->Auth->user('email')
 		);
