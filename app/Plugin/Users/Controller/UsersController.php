@@ -250,6 +250,11 @@ class UsersController extends UsersAppController {
 			'layout' => 'default',
 			'content' => ''
 		);
+		
+		// provide the full path for proper URL construction, 
+		// as sometimes server name and domain name may differ 
+		Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
+		
 		$options = array_merge($defaults, $options);
 		$result = false;
 		if(empty($options['data']) AND !empty($this->{$this->modelClass}->data))
@@ -259,14 +264,9 @@ class UsersController extends UsersAppController {
 			$Email = $this->_getMailInstance();
 			$Email->to($options['email']);
 			if(!empty($options['from'])) $Email->from($options['from']);	// set default in email config on app level
-			if(!empty($options['sender'])) {
-				$Email->sender($options['sender']);
-				if(!empty($options['returnPath'])) $Email->returnPath($options['returnPath']);
-			}
-			if(!empty($options['replyTo'])) {
-				$Email->replyTo($options['replyTo']);
-				if(!empty($options['returnPath'])) $Email->returnPath($options['returnPath']);
-			}
+			if(!empty($options['sender'])) $Email->sender($options['sender']);
+			if(!empty($options['replyTo'])) $Email->replyTo($options['replyTo']);
+			if(!empty($options['returnPath'])) $Email->returnPath($options['returnPath']);
 			if(!empty($options['cc'])) $Email->cc($options['cc']);
 			if(!empty($options['bcc'])) $Email->bcc($options['bcc']);
 			$Email->emailFormat($options['emailFormat']);
@@ -281,6 +281,10 @@ class UsersController extends UsersAppController {
 			
 			$result = $Email->send();
 		}
+		
+		// reset base URL setting
+		Configure::write('App.fullBaseUrl', FULL_BASE_URL);
+		
 		return $result;
 	}
 	
