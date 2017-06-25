@@ -123,12 +123,16 @@ class UsersController extends UsersAppController {
 						'contain' => array(),
 						'conditions' => array(
 							$this->modelClass.'.'.Configure::read('Users.loginName') => $loginName,
-							$this->modelClass.'.active' => true
 						)
 					));
 					if($user AND !$user[$this->modelClass]['email_verified']) {
 						$msg = 'Your email address has not yet been verified. Please check your spamfilters or send the verification mail again.';
 						$this->set('usersVerification', true);
+					}
+					if(	$user AND Configure::read('Users.adminConfirmRegistration')
+					AND	!$user[$this->modelClass]['approved']
+					) {
+						$msg = 'Your email address has not yet been approved by an administrator. Please wait until you recieve a notification about approval of your account.';
 					}
 				}
 				$this->Auth->flash($msg);
