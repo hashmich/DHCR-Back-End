@@ -227,14 +227,15 @@ class User extends UsersAppModel {
 					'message' => 'Please enter a valid email address.'
 				)
 			);
+			// On resending the verification email, the new email will be the old one, therefore do not perform the unique check in those cases. 
 			if($new_email != $user['email']) {
 				$validate['isUnique'] = array(
 					'rule' => array('newMailIsUnique'),
 					'message' => 'An account with that email already exists.'
 				);
 			}
-			$validator = $this->validate();
-			$validator['new_email'] = $validate;
+			
+			$this->validate['new_email'] = $validate;
 			
 			if($this->validates(array('fieldlist' => array('new_email')))) {
 				$result = $this->save($this->data, array('validate' => false));
