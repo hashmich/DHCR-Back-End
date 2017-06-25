@@ -40,6 +40,9 @@ class Course extends AppModel {
 	public $order = 'Course.updated DESC';
 	
 	
+	private $maxHttpCode = 400;
+	
+	
 	
 
 /**
@@ -246,10 +249,16 @@ class Course extends AppModel {
 			if($headers AND isset($headers[0])) {
 				$code = array();
 				if(preg_match('/[2-5][0-9]{2}/', $headers[0], $code) === 1) {
-					if(!empty($code[0]) AND $code[0] < 400) {
+					if(!empty($code[0]) AND $code[0] < $this->maxHttpCode) {
 						return true;
 					}
+					if(!empty($code[0])) {
+						$this->validator()
+							->getField(key($check))->getRule('status_ok')
+							->message = 'The server response code of the provided URL is not okay. HTTP status code: '.$code[0];
+					}
 				}
+				
 			}
 		}
 		return false;
@@ -386,6 +395,7 @@ class Course extends AppModel {
 		// collect email addresses of owners of courses with invalid URLs
 		$collection = array();
 		if(!empty($courses)) {
+			$this->maxHttpCode = 300;
 			foreach($courses as $k => $record) {
 				$this->set($record);
 				if(!$this->validates(array('fieldList' => array('url','guide_url')))) {
