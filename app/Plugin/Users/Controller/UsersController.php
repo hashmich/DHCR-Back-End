@@ -132,7 +132,10 @@ class UsersController extends UsersAppController {
 					if(	$user AND Configure::read('Users.adminConfirmRegistration')
 					AND	!$user[$this->modelClass]['approved']
 					) {
-						$msg = 'Your email address has not yet been approved by an administrator. Please wait until you recieve a notification about approval of your account.';
+						$msg = 'Your account has not yet been approved by an administrator. Please wait until you recieve a notification about approval of your account.';
+					}
+					elseif($user AND !$user[$this->modelClass]['active']) {
+						$msg = 'This account is blocked.';
 					}
 				}
 				$this->Auth->flash($msg);
@@ -257,7 +260,7 @@ class UsersController extends UsersAppController {
 		
 		// provide the full path for proper URL construction, 
 		// as sometimes server name and domain name may differ 
-		Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
+		//Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
 		
 		$options = array_merge($defaults, $options);
 		$result = false;
@@ -287,7 +290,7 @@ class UsersController extends UsersAppController {
 		}
 		
 		// reset base URL setting
-		Configure::write('App.fullBaseUrl', FULL_BASE_URL);
+		//Configure::write('App.fullBaseUrl', FULL_BASE_URL);
 		
 		return $result;
 	}
@@ -438,11 +441,14 @@ class UsersController extends UsersAppController {
 				}
 				if($this->{$this->modelClass}->validates('new_email') AND $pwd) {
 					$new_email = $this->request->data[$this->modelClass]['new_email'];
+					$this->_send_verification_mail($new_email, $user);
 				}
 			}
 		}
 		
-		$this->_send_verification_mail($new_email, $user);
+		if(empty($user_id)) {
+			$this->redirect('/');
+		}
 	}
 	
 	
