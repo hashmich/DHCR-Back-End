@@ -73,8 +73,7 @@ class User extends UsersAppModel {
 		return $this->find('first', array(
 			'contain' => array(),
 			'conditions' => array(
-				$this->alias . '.email' => $email,
-				$this->alias . '.active' => 1
+				$this->alias . '.email' => $email
 			)
 		));
 	}
@@ -82,7 +81,7 @@ class User extends UsersAppModel {
 	
 	public function requestNewPassword($email = null) {
 		$user = $this->findByEmail($email);
-		if(!empty($user)) {
+		if(!empty($user) AND $user[$this->alias]['active']) {
 			$expiry = date('Y-m-d H:i:s', time() + $this->tokenExpirationTime);
 			$token = $this->generateToken('password_token');
 			$data = array();
@@ -97,6 +96,13 @@ class User extends UsersAppModel {
 			}
 		}else{
 			$this->invalidate('email', 'This Email Address does not exist in the system.');
+			if(!$user[$this->alias]['active']) {
+				$this->invalidate('email', 'This account is blocked. Please contact an administrator.');
+			}
+			if(Configure::read('Users.adminConfirmRegistration')
+			AND !$user[$this->alias]['approved']) {
+				$this->invalidate('email', 'This account has not yet been approved. Please wait for approval by an administrator.');
+			}
 		}
 		return false;
 	}
