@@ -90,12 +90,14 @@ $classes .= (!empty($dropdown)) ? ' dropdown_checklist' : '';
 			
 			<?php
 			if(!empty($buttons)) {
+				/*
 				echo $this->Form->button('Ok', array(
 					'type' => 'submit',
 					'style' => 'margin-bottom:8px;'
 				));
-				echo $this->Form->button('Cancel', array(
-					'onclick' => "closeList('#".$habtmModel."_checklist');",
+				*/
+				echo $this->Form->button('Deselect all', array(
+					'onclick' => "deselectList('#".$habtmModel."_checklist');",
 					'type' => 'button',
 					'style' => 'margin-bottom:8px;'
 				));
@@ -134,6 +136,7 @@ if(!empty($dropdown) AND empty($dropdownScript)) {
 	?>
 	if(!dropdownScript) {
 		var dropdownScript = 1;
+		
 		jQuery(document).ready(function() {
 			var toggle = $('.checklist_toggle');
 			var checklist = $('.checklist');
@@ -152,7 +155,8 @@ if(!empty($dropdown) AND empty($dropdownScript)) {
 				var inputlist = checklist.find('input[type=checkbox]');
 				inputlist.each(function(key) {
 					$(this).on('change', function() {
-						dc_writeDisplay(currentToggle, checklist);
+						//dc_writeDisplay(currentToggle, checklist);
+						$(this).closest('form').submit();
 					});
 				});
 			});
@@ -170,8 +174,14 @@ if(!empty($dropdown) AND empty($dropdownScript)) {
 			$(toggle).find('.display').text(display);
 		}
 		
-		function closeList(id) {
-			$(id).toggle();
+		function closeList(selector) {
+			$(selector).toggle();
+		}
+		
+		function deselectList(selector) {
+			$(selector + ' :checkbox').prop('checked', false);
+			//dc_writeDisplay($(selector).prev('.checklist_toggle'), $(selector));
+			$(selector + ' :checkbox').closest('form').submit();
 		}
 	}
 	<?php
