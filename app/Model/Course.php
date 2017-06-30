@@ -244,40 +244,16 @@ class Course extends AppModel {
 	
 	public function urlCheckStatus($check) {
 		$url = (is_array($check)) ? $check[key($check)] : $check;
-		if(is_string($url)) {
-			
-			$status = $this->http_status($url);
-			if(!empty($status)) {
-				$code = array();
-				if(preg_match('/[2-5][0-9]{2}/', $headers[0], $code) === 1) {
-					if(!empty($code[0]) AND $code[0] < $this->maxHttpCode) {
-						return true;
-					}
-					if(!empty($code[0])) {
-						$this->validator()
-						->getField(key($check))->getRule('status_ok')
-						->message = 'The server response code of the provided URL is not okay. HTTP status code: '.$code[0];
-					}
-				}
-			} 
-			/*
-			$headers = @get_headers($url);
-			if($headers AND isset($headers[0])) {
-				$code = array();
-				if(preg_match('/[2-5][0-9]{2}/', $headers[0], $code) === 1) {
-					if(!empty($code[0]) AND $code[0] < $this->maxHttpCode) {
-						return true;
-					}
-					if(!empty($code[0])) {
-						$this->validator()
-							->getField(key($check))->getRule('status_ok')
-							->message = 'The server response code of the provided URL is not okay. HTTP status code: '.$code[0];
-					}
-				}
-				
-			}
-			*/
+		$status = $this->http_status($url);
+		if(!empty($status) AND $status < $this->maxHttpCode) {
+			return true;
 		}
+		elseif(!empty($status)) {
+			$this->validator()
+			->getField(key($check))->getRule('status_ok')
+			->message = 'The server response code of the provided URL is not okay. HTTP status code: '.$status;
+		}
+		
 		return false;
 	}
 	
@@ -288,7 +264,11 @@ class Course extends AppModel {
 	    curl_setopt($ch, CURLOPT_NOBODY, true);
 	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	    curl_setopt($ch, CURLOPT_HEADER, true);
-	
+	    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+	    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+	    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:54.0) Gecko/20100101 Firefox/54.0');
+	    curl_exec($ch);
+	    
 	    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	    curl_close($ch);
 	    return $status;
