@@ -124,3 +124,24 @@ dl {
 	}
 }
 
+.form-button { 
+	clear: none;
+	font: bold 11px Arial, Sans-serif;
+	text-align: center;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #999;
+	background: $header_background_color; 
+	padding: 2px 3px; 
+	color: #fff !important;
+	width: auto;
+	&:hover {
+		border: 1px solid #999;
+		background: #ccc; 
+		color: #666 !important;
+		outline: none;
+		cursor:pointer;
+	}
+}
+

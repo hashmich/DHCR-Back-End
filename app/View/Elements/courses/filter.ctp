@@ -67,10 +67,11 @@ if($DODH) {
 
 <?php
 if(!empty($filter))
-	echo '<li class="filter">' . $this->Html->link('>> Reset all Filters', array(
+	echo '<li class="filter">' . $this->Html->link('Reset all Filters', array(
 		'controller' => 'courses',
 		'action' => 'reset'
-	)) . '</li>';
+	),
+	array('class' => 'form-button')) . '</li>';
 ?>
 
 <?php $this->append('onload', 'document.getElementById("submit_filter").style.display = "none";'); ?>

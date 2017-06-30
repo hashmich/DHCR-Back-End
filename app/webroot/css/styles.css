@@ -990,6 +990,25 @@ dl {
   .narrow:last-child, .half:last-child, .wide:last-child {
     margin-right: 0; }
 
+.form-button {
+  clear: none;
+  font: bold 11px Arial, Sans-serif;
+  text-align: center;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  border: 1px solid #999;
+  background: #203a6b;
+  padding: 2px 3px;
+  color: #fff !important;
+  width: auto; }
+  .form-button:hover {
+    border: 1px solid #999;
+    background: #ccc;
+    color: #666 !important;
+    outline: none;
+    cursor: pointer; }
+
 /* Users plugin */
 /* defined as a mixin to possibly include it somewhere else, where !important is not strong enough */
 div.login_link {
@@ -1292,6 +1311,24 @@ div.auth {
               width: 130px;
               font-size: 10px;
               font-weight: normal; }
+          .columns #menu li.filter form .input.taxonomy.select.dropdown_checklist .wrapper .checklist button {
+            clear: none;
+            font: bold 11px Arial, Sans-serif;
+            text-align: center;
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+            border: 1px solid #999;
+            background: #203a6b;
+            padding: 2px 3px;
+            color: #fff;
+            width: auto; }
+            .columns #menu li.filter form .input.taxonomy.select.dropdown_checklist .wrapper .checklist button:hover {
+              border: 1px solid #999;
+              background: #ccc;
+              color: #666;
+              outline: none;
+              cursor: pointer; }
           .columns #menu li.filter form .input.taxonomy.select.dropdown_checklist .wrapper .checklist div.checkbox {
             margin-bottom: 0.5em; }
             .columns #menu li.filter form .input.taxonomy.select.dropdown_checklist .wrapper .checklist div.checkbox label {
