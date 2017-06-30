@@ -452,6 +452,8 @@ class CoursesController extends AppController {
 	}
 	
 	protected function _setJoins() {
+		$order = $this->Course->order;
+		$this->Course->order = null;
 		// set joins for HABTM queries during pagination
 		if(!empty($this->filter['CoursesTadirahObject.tadirah_object_id'])) {
 			$subquery = $this->Course->find('all', array(
@@ -491,25 +493,6 @@ class CoursesController extends AppController {
 			$this->filter['Course.id'] = Set::extract('/CoursesTadirahTechnique/ids_filtered', $subquery);
 			unset($this->filter['CoursesTadirahTechnique.tadirah_technique_id']);
 		}
-		if(!empty($this->filter['CoursesTadirahActivity.tadirah_activity_id'])) {
-			$subquery = $this->Course->find('all', array(
-				'joins' => array(
-					array(
-						'alias' => 'CoursesTadirahActivity',
-						'table' => 'courses_tadirah_activities',
-						'type' => 'INNER',
-						'conditions' => 'CoursesTadirahActivity.course_id = Course.id'
-					)
-				),
-				'conditions' => array(
-					'CoursesTadirahActivity.tadirah_activity_id' => $this->filter['CoursesTadirahActivity.tadirah_activity_id']
-				),
-				'fields' => array('DISTINCT (CoursesTadirahActivity.course_id) AS ids_filtered'),
-				'contain' => array('CoursesTadirahActivity')
-			));
-			$this->filter['Course.id'] = Set::extract('/CoursesTadirahActivity/ids_filtered', $subquery);
-			unset($this->filter['CoursesTadirahActivity.tadirah_activity_id']);
-		}
 		if(!empty($this->filter['CoursesDiscipline.discipline_id'])) {
 			$subquery = $this->Course->find('all', array(
 				'joins' => array(
@@ -529,6 +512,8 @@ class CoursesController extends AppController {
 			$this->filter['Course.id'] = Set::extract('/CoursesDiscipline/ids_filtered', $subquery);
 			unset($this->filter['CoursesDiscipline.discipline_id']);
 		}
+		// reset ordering
+		$this->Course->order = $order;
 	}
 	
 	protected function _getFilterOptions_validateFilters() {
