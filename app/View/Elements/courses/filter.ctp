@@ -17,17 +17,6 @@
  */
  
 $filter = $this->Session->read('filter');
-
-$DODH = false;
-if(stristr($_SERVER['HTTP_HOST'], 'dh-projectregistry.org') !== false) $DODH = true;
-if($DODH) {
-	?>
-	<li class="notification">
-		Courses not in sync with the Course-Registry (state ~2016).<br>
-		Visit the <?php echo $this->Html->link('DARIAH Course-Registry.', 'https://dh-registry.de.dariah.eu/', array('target' => 'blank')); ?>
-	</li>
-	<?php
-}
 ?>
 
 <li class="filter">Filters:</li>

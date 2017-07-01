@@ -19,7 +19,6 @@
 $this->extend('/Layouts/base');
 
 $DODH = false;
-if(stristr($_SERVER['HTTP_HOST'], 'dh-projectregistry.org') !== false) $DODH = true;
 
 $this->start('header');
 ?>
@@ -41,35 +40,23 @@ $this->start('header');
 		'height' => 55,
 		'style' => 'margin-left: 10px;'
 	);
-	if($this->request->params['controller'] == 'projects' OR $DODH) {
-		$logo = array(
-			'file' => '3logos.png',
-			'alt' => 'The eHumanities Group, Erasmus Studio and CLARIAH',
-			'url' => 'https://www.knaw.nl/en/institutes/e-humanities-group',
-			'width' => 236,
-			'height' => 100,
-			'style' => 'margin-top: 8px;'
-		);
-		$file = '/img/logos/' . $logo['file'];
-		unset($logo['file']);
-		echo $this->Html->image($file, $logo);
-	}else{
-		$file = '/img/logos/' . $logo1['file'];
-		$url = $logo1['url'];
-		unset($logo1['file']);
-		unset($logo1['url']);
-		echo $this->Html->link($this->Html->image($file, $logo1), $url, array(
-				'target' => '_blank',
-				'escape' => false));
-		
-		$file = '/img/logos/' . $logo2['file'];
-		$url = $logo2['url'];
-		unset($logo2['url']);
-		unset($logo2['file']);
-		echo $this->Html->link($this->Html->image($file, $logo2), $url, array(
-				'target' => '_blank',
-				'escape' => false));
-	}
+	
+	$file = '/img/logos/' . $logo1['file'];
+	$url = $logo1['url'];
+	unset($logo1['file']);
+	unset($logo1['url']);
+	echo $this->Html->link($this->Html->image($file, $logo1), $url, array(
+			'target' => '_blank',
+			'escape' => false));
+	
+	$file = '/img/logos/' . $logo2['file'];
+	$url = $logo2['url'];
+	unset($logo2['url']);
+	unset($logo2['file']);
+	echo $this->Html->link($this->Html->image($file, $logo2), $url, array(
+			'target' => '_blank',
+			'escape' => false));
+	
 	
 	?>
 	<div>
@@ -80,33 +67,12 @@ $this->start('header');
 			if(!empty($title)) echo ' - ' . $title;
 			?>
 		</h1>
-		<?php
-		if($DODH) {
-			?>
-			<p>
-				Projectregistry <strong>BETA</strong> |
-				<?php echo $this->Html->link('About', '/pages/projectregistry'); ?>
-			</p>
-			<?php
-		}else{
-			?>
-			<p>
-				Courseregistry <strong>2.0</strong> |
-				<?php echo $this->Html->link('About', '/pages/imprint'); ?>
-			</p>
-			<?php
-			if(!$DODH AND $this->request->params['controller'] == 'projects') {
-				?>
-				<p>
-					<strong>This Project-Registry is a copy of</strong>
-					<?php echo $this->Html->link('DODH', 'http://dh-projectregistry.org'); ?> 
-					(Dutch Overview Digital Humanities) and not actively maintained. 
-					Please visit their page to see the most recent data. 
-				</p>
-				<?php
-			}
-		}
-		?>
+		
+		<p>
+			Courseregistry <strong>2.1</strong> |
+			<?php echo $this->Html->link('About', '/pages/about'); ?>
+		</p>
+			
 	</div>
 </div>
 <?php

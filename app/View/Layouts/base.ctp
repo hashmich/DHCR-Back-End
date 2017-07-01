@@ -71,18 +71,20 @@
 				<?php
 				echo $this->element('login_info');
 				?>
+				<div class="login_link">
+					<ul>
+						<li>
+							<?php echo $this->Html->link('Contact us', '/contact/us'); ?>
+						</li><li>
+							<?php echo $this->Html->link('About', '/pages/about'); ?>
+						</li>
+					</ul>
+				</div>
 				<ul>
 				<?php
-				if(Configure::read('App.DODH')) {
-					echo '<li>' . $this->Html->link('Projects', array('controller' => 'projects', 'action' => 'index', 'plugin' => null)) . '</li>';
-				}else{
-					echo '<li>' . $this->Html->link('Courses', array('controller' => 'courses', 'action' => 'index', 'plugin' => null)) . '</li>';
-				}
+				echo '<li>' . $this->Html->link('Courses', array('controller' => 'courses', 'action' => 'index', 'plugin' => null)) . '</li>';
 				
 				echo $this->fetch('menu');
-				?><li><hr></li><?php
-//echo '<li>' . $this->Html->link('Manual', array('controller' => 'pages', 'action' => 'manual', 'plugin' => null)) . '</li>';
-				echo '<li>' . $this->Html->link('Contact us', array('controller' => 'contact', 'action' => 'us', 'plugin' => null)) . '</li>';
 				?>
 				</ul>
 			</div>
