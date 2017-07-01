@@ -27,9 +27,7 @@ class CronShell extends AppShell {
 	private $sendMails = false;
 	
 	public function main() {
-        Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
-		
-		$this->out("Available tasks: \n\t ");
+        $this->out("Available tasks: \n\t ");
 		foreach($this->tasks as $task) {
 			$this->out($task . " \n\t");
 		}

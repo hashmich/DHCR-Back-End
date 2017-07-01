@@ -21,6 +21,8 @@ class SendRemindersTask extends Shell {
 	
 	
 	public function execute($out = null, $to = null) {
+		Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
+		
 		$collection = $this->Course->getReminderCollection();
 		if(Configure::read('debug') > 0) $out = false;
 		if(!empty($collection)) {

@@ -6,6 +6,8 @@ class TestTask extends Shell {
 	
 	
 	public function execute() {
+		Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
+		
 		$collection = $this->Course->checkUrls();
 		if(!empty($collection)) {
 			

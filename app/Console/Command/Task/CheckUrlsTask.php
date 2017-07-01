@@ -21,6 +21,8 @@ class CheckUrlsTask extends Shell {
 	
 	
 	public function execute($sendMails = null, $to = null) {
+		Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
+		
 		$collection = $this->Course->checkUrls();
 		if(Configure::read('debug') > 0) $sendMails = false;
 		if(!empty($collection)) {
