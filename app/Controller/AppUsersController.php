@@ -96,7 +96,8 @@ class AppUsersController extends UsersController {
 		$mailOpts = array(
 			'template' => 'Users.admin_new_user',
 			'subject' => 'New Account Request',
-			'data' => $user
+			'data' => $user,
+			'cc' => Configure::read('App.defaultCc')
 		);
 		
 		// try fetching the moderator in charge of the user's country, 
@@ -302,9 +303,9 @@ class AppUsersController extends UsersController {
 			'template' => 'invite_user',
 			'subject' => 'Join the Digital Humanities Course Registry',
 			'bcc' => $this->Auth->user('email'),
+			'cc' => Configure::read('App.defaultCc'),
 			'sender' => Configure::read('App.defaultEmail'),
-			'replyTo' => $this->Auth->user('email'),
-			'returnPath' => $this->Auth->user('email')
+			'replyTo' => $this->Auth->user('email')
 		);
 		if(Configure::read('debug') > 0) $mailOpts['transport'] = 'Debug';
 		

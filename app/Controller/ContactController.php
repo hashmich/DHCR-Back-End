@@ -46,8 +46,12 @@ class ContactController extends AppController {
 				foreach($admins as $admin) {
 					// email logic
 					$Email = new CakeEmail();
-					$Email->from($this->request->data['Contact']['email'])
+					$Email->replyTo($this->request->data['Contact']['email'])
+					->sender($this->request->data['Contact']['email'], trim(
+							$this->request->data['Contact']['first_name'].' '
+							.$this->request->data['Contact']['last_name']))
 					->to($admin['AppUser']['email'])
+					->cc(Configure::read('App.defaultCc'))
 					->subject('[DH-Registry Contact-Form] New Question')
 					->send($this->request->data['Contact']['message']);
 				}
