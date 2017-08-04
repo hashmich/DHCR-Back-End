@@ -82,7 +82,8 @@
 				</div>
 				<ul>
 				<?php
-				echo '<li>' . $this->Html->link('Courses', array('controller' => 'courses', 'action' => 'index', 'plugin' => null)) . '</li>';
+				if($this->request->params['controller'] != 'courses')
+					echo '<li>' . $this->Html->link('Courses', array('controller' => 'courses', 'action' => 'index', 'plugin' => null)) . '</li>';
 				
 				echo $this->fetch('menu');
 				?>

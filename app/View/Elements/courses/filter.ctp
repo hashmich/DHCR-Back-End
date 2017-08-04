@@ -19,7 +19,7 @@
 $filter = $this->Session->read('filter');
 ?>
 
-<li class="filter">Filters:</li>
+<li class="filter">Searchoptions:</li>
 
 <li class="filter">
 	<?php
