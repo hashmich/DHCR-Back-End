@@ -1078,6 +1078,11 @@ div.auth {
   clear: both;
   margin: 0 0 1.5em; }
 
+.statistic dt {
+  width: 350px; }
+.statistic h3 {
+  cursor: pointer; }
+
 /* layout */
 #container {
   position: relative; }
@@ -1554,6 +1559,9 @@ div.auth {
             top: 0;
             left: 0;
             background-color: #6ab81f; }
+            .columns #content table tr td.state .ribbon span {
+              margin-top: 3px;
+              display: block; }
           .columns #content table tr td.state.yellow .ribbon {
             background: #FFDF2B;
             color: #666; }

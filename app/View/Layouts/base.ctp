@@ -74,9 +74,13 @@
 				<div class="login_link">
 					<ul>
 						<li>
-							<?php echo $this->Html->link('Contact us', '/contact/us'); ?>
+							<?php echo $this->Html->link('Home', '/'); ?>
+						</li><li>
+							<?php echo $this->Html->link('Contact', '/contact/us'); ?>
 						</li><li>
 							<?php echo $this->Html->link('About', '/pages/about'); ?>
+						</li><li>
+							<?php echo $this->Html->link('Statistic', '/statistic'); ?>
 						</li>
 					</ul>
 				</div>

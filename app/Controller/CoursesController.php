@@ -54,12 +54,13 @@ class CoursesController extends AppController {
 					'Course.institution_id' => $id
 				)
 			));
-			$institutions[] = array(
-				'label' => $label,
-				'count' => $c
-			);
-			//array_sort_by_key count
+			if($c > 0)
+				$institutions[] = array(
+					'label' => $label,
+					'count' => $c
+				);
 		}
+		uasort($institutions, array('CoursesController', '_cmp'));
 
 		$countriesList = $this->Course->Country->find('list');
 		$countries = array();
@@ -71,14 +72,105 @@ class CoursesController extends AppController {
 					'Course.country_id' => $id
 				)
 			));
-			$countries[] = array(
-				'label' => $label,
-				'count' => $c
-			);
-			//array_sort_by_key count
+			if($c > 0)
+				$countries[] = array(
+					'label' => $label,
+					'count' => $c
+				);
 		}
+		uasort($countries, array('CoursesController', '_cmp'));
 		
-		$this->set(compact('count', 'institutions', 'countries'));
+		$disciplinesList = $this->Course->Discipline->find('list');
+		$disciplines = array();
+		foreach($disciplinesList as $id => $label) {
+			$c = $this->Course->find('count', array(
+				'conditions' => array(
+					'Course.active' => 1,
+					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod')),
+					'CoursesDiscipline.discipline_id' => $id
+				),
+				'joins' => array(
+					array(
+						'alias' => 'CoursesDiscipline',
+						'table' => 'courses_disciplines',
+						'type' => 'INNER',
+						'conditions' => 'CoursesDiscipline.course_id = Course.id'
+					)
+				)
+			));
+			if($c > 0)
+				$disciplines[] = array(
+					'label' => $label,
+					'count' => $c
+				);
+		}
+		uasort($disciplines, array('CoursesController', '_cmp'));
+		
+		$techniquesList = $this->Course->TadirahTechnique->find('list');
+		$techniques = array();
+		foreach($techniquesList as $id => $label) {
+			$c = $this->Course->find('count', array(
+				'conditions' => array(
+					'Course.active' => 1,
+					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod')),
+					'CoursesTadirahTechnique.tadirah_technique_id' => $id
+				),
+				'joins' => array(
+					array(
+						'alias' => 'CoursesTadirahTechnique',
+						'table' => 'courses_tadirah_techniques',
+						'type' => 'INNER',
+						'conditions' => 'CoursesTadirahTechnique.course_id = Course.id'
+					)
+				)
+			));
+			if($c > 0)
+				$techniques[] = array(
+					'label' => $label,
+					'count' => $c
+				);
+		}
+		uasort($techniques, array('CoursesController', '_cmp'));
+		
+		$objectsList = $this->Course->TadirahObject->find('list');
+		$objects = array();
+		foreach($objectsList as $id => $label) {
+			$c = $this->Course->find('count', array(
+				'conditions' => array(
+					'Course.active' => 1,
+					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod')),
+					'CoursesTadirahObject.tadirah_object_id' => $id
+				),
+				'joins' => array(
+					array(
+						'alias' => 'CoursesTadirahObject',
+						'table' => 'courses_tadirah_objects',
+						'type' => 'INNER',
+						'conditions' => 'CoursesTadirahObject.course_id = Course.id'
+					)
+				)
+			));
+			if($c > 0)
+				$objects[] = array(
+					'label' => $label,
+					'count' => $c
+				);
+		}
+		uasort($objects, array('CoursesController', '_cmp'));
+		
+		$this->set(compact(
+			'count',
+			'institutions',
+			'countries',
+			'disciplines',
+			'techniques',
+			'objects'
+		));
+	}
+	
+	private static function _cmp($a, $b) {
+		if ($a['count'] == $b['count']) return 0;
+		return ($a['count'] < $b['count']) ? 1 : -1;
 	}
 	
 	
