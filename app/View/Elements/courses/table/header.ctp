@@ -20,7 +20,7 @@ echo '<tr>';
 	
 	if(!empty($edit)) echo '<th>Actions</th>';
 	
-	echo '<th>State</th>';
+	echo '<th>Status</th>';
 	
 	foreach($fieldlist as $key => $fieldDef) {
 		$expl = explode('.', $key);

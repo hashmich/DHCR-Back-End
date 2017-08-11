@@ -50,8 +50,8 @@ OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() 
 	?>
 	<td class="state<?php echo $outdated; ?>">
 		<div class="ribbon">
-			last revised<br>
-			<?php echo substr($record['Course']['updated'], 0, 10); ?>
+			<span>last revised<br>
+			<?php echo substr($record['Course']['updated'], 0, 10); ?></span>
 		</div>
 	</td>
 	<?php

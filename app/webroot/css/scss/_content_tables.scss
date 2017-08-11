@@ -107,6 +107,11 @@ table {
 				top: 0;
 				left: 0;
 				background-color: #6ab81f;
+				
+				span {
+					margin-top: 3px;
+					display: block;
+				}
 			}
 			&.yellow {
 				.ribbon {
