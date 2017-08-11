@@ -74,22 +74,7 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 	?>
 	<p>If you leave this box unchecked, the course will not appear in the public listing. </p>
 	<?php
-	echo $this->Form->input('active', array('label' => 'Publish'));
-	?>
-
-	<p>
-		Validation has been set up to assist you entering valid content. <br />
-		However, sometimes technology plays tricks on us (especially with the URL fields). 
-	</p>
-	<p>Please check this box if you have trouble to pass URLs you otherwise experience being valid.</p>
-
-	<?php
-	echo $this->Form->input('skip_validation', array(
-		'label' => 'Skip URL Validation',
-		'type' => 'checkbox',
-		'checked' => false,
-		'value' => 1
-	));
+	echo $this->Form->input('active', array('label' => 'Publish'));	
 	
 	if(!empty($admin)) {
 		echo $this->Form->input('user_id', array(
@@ -114,7 +99,18 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 	?>
 </fieldset>
 <fieldset>
+	<p>
+		Validation has been set up to assist you entering valid content. <br />
+		But sometimes you may have trouble to pass URLs you otherwise experience being valid. (http status codes > 400) 
+	</p>
+	<p>Please check this box if you keep getting validation errors regarding URLs for information and curriculum.</p>
 	<?php
+	echo $this->Form->input('skip_validation', array(
+		'label' => 'Skip URL Validation',
+		'type' => 'checkbox',
+		'checked' => false,
+		'value' => 1
+	));
 	echo $this->Form->input('url', array(
 		'label' => 'Information URL',
 		'title' => 'Course information URL.'
@@ -132,7 +128,7 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 	<?php
 	$opts = array('empty' => ' -- none -- ');
 	if($this->action === 'add' AND !empty($auth_user) AND !empty($auth_user['institution_id']))
-		$opts = array('selected' => $auth_user['institution_id']);
+		$opts = array('default' => $auth_user['institution_id']);
 	echo $this->Form->input('institution_id', $opts);
 	echo $this->Form->input('department');
 	?>
