@@ -24,7 +24,7 @@ class CheckUrlsTask extends Shell {
 		Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
 		
 		$collection = $this->Course->checkUrls();
-		if(Configure::read('debug') > 0) $sendMails = false;
+		if(Configure::read('debug') > 0) $to = 'mail@hendrikschmeer.de';
 		if(!empty($collection)) {
 			if($sendMails !== null) {
 				$this->out('I found errors with the following records: ');

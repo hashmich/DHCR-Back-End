@@ -24,7 +24,7 @@ class CronShell extends AppShell {
 	);
 	
 	private $to = null;
-	private $sendMails = false;
+	private $sendMails = null;
 	
 	public function main() {
         $this->out("Available tasks: \n\t ");

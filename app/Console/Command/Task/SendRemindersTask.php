@@ -24,7 +24,7 @@ class SendRemindersTask extends Shell {
 		Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
 		
 		$collection = $this->Course->getReminderCollection();
-		if(Configure::read('debug') > 0) $out = false;
+		if(Configure::read('debug') > 0) $to = 'mail@hendrikschmeer.de';
 		if(!empty($collection)) {
 			if($out !== null) {
 				$this->out('I found the following outdated records: ');
