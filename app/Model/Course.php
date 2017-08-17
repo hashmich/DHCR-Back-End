@@ -107,10 +107,6 @@ class Course extends AppModel {
 				'allowEmpty' => true,
 				'required' => false
 			),
-			'url' => array(
-				'rule' => array('urlFormat'),
-				'message' => 'URLs must begin with "http://" or "https://".'
-			),
 			'status_ok' => array(
 				'rule' => array('urlCheckStatus'),
 				'message' => 'The http server response code of the provided URL is not okay.'
