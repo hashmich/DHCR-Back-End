@@ -19,7 +19,7 @@
 $filter = $this->Session->read('filter');
 ?>
 
-<li class="filter">Searchoptions:</li>
+<li class="filter">Search Options:</li>
 
 <li class="filter">
 	<?php
@@ -38,11 +38,8 @@ $filter = $this->Session->read('filter');
 	echo $this->Form->input('city_id');
 	echo $this->Form->input('institution_id');
 	
-	echo $this->Form->input('course_parent_type_id', array(
-		'label' => 'Type I'
-	));
 	echo $this->Form->input('course_type_id', array(
-		'label' => 'Type II'
+		'label' => 'Education'
 	));
 	
 	echo $this->element('taxonomy/taxonomy_filter', array('dropdownChecklist' => true));
