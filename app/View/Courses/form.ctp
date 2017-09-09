@@ -88,7 +88,10 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 	<?php
 	echo $this->Form->input('name');
 	echo $this->Form->input('description', array('type' => 'textarea'));
-	echo $this->Form->input('course_type_id', array('empty' => ' -- none -- '));
+	echo $this->Form->input('course_type_id', array(
+			'empty' => ' -- none -- ',
+			'label' => 'Education'
+	));
 	echo $this->Form->input('language_id', array('empty' => ' -- none -- '));
 	echo $this->Form->input('access_requirements');
 	echo $this->Form->input('start_date', array('title' => 'One or many course start dates, format YYYY-MM-DD, separated by ";".'));
@@ -152,8 +155,6 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 		if(institution_id != '' && typeof(institution_id) != 'undefined') {
 			lon.val(locations[institution_id].lon);
 			lat.val(locations[institution_id].lat);
-			
-			// TODO: check if function exists 
 			setMarker(locationMap);
 		}
 	});
