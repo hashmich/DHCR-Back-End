@@ -380,8 +380,7 @@ class CoursesController extends AppController {
 		}
 		$institutions = $this->Course->Institution->find('list', array(
 			'contain' => array('Country'),
-			'fields' => array('Institution.id', 'Institution.name', 'Country.name'),
-			'conditions' => array('Institution.can_have_course' => 1)
+			'fields' => array('Institution.id', 'Institution.name', 'Country.name')
 		));
 		ksort($institutions);
 		$institutionsLocations = $this->Course->Institution->find('all', array(
@@ -639,9 +638,7 @@ class CoursesController extends AppController {
 		if(!empty($this->filter['Course.course_type_id'])) unset($this->filter['Course.course_parent_type_id']);
 		
 		// child of country & city: university
-		$conditions = array(
-			'Institution.can_have_course' => true
-		);
+		$conditions = array();
 		if(!empty($this->filter['Course.country_id']))
 			$conditions['Institution.country_id'] = $this->filter['Course.country_id'];
 		if(!empty($this->filter['Course.city_id']))

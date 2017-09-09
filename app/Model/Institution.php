@@ -159,10 +159,6 @@ class Institution extends AppModel {
 			'className' => 'User',
 			'foreignKey' => 'institution_id',
 			'dependent' => false
-		),
-		'InstitutionExternalIdentifier' => array(
-			'className' => 'InstitutionExternalIdentifier',
-			'foreignKey' => 'institution_id'
 		)
 	);
 	
