@@ -1,5 +1,5 @@
 <?php
-if(!empty($auth_user['shib_eppn'])){
+if(empty($auth_user['shib_eppn'])){
 	$url = urlencode(Router::url('/users/dashboard', $full = true));
 	?>
 	<div class="notice">

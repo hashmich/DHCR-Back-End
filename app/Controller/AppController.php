@@ -34,6 +34,7 @@ class AppController extends Controller {
 		'DebugKit.Toolbar',
 		'Paginator',
 		'Session',
+		'Flash',
 		'Cakeclient.Crud',
 		'RequestHandler'
 	);

@@ -53,10 +53,7 @@ class AppUsersController extends UsersController {
 				'HTTP_GIVENNAME' => 'first_name',
 				'HTTP_SN' => 'last_name',
 				'HTTP_EMAIL' => 'email');
-			//$skip = array("PATH", "REMOTE_ADDR", "DOCUMENT_ROOT", "HTTPS", "GATEWAY_INTERFACE", "QUERY_STRING");
-			//$skipRegEx = "#^SSL_|^SERVER|^PHP_|^HTTP__|^SCRIPT_|^REQUEST_|^CONTEXT_|^REMOTE_|^HTTP_|^REDIRECT_#";
 			foreach($_SERVER as $k => $v) {
-				//if(!preg_match($skipRegEx, $k) && !in_array($k, $skip)){
 				if(isset($shibVars[$k]) AND !empty($v) AND $v != '(null)') {
 					$this->shibUser[$shibVars[$k]] = $v;
 				}
@@ -66,15 +63,24 @@ class AppUsersController extends UsersController {
 			$this->set('shibUser', $this->shibUser);
 		}
 		
-		
-		if($this->Auth->user() AND empty($this->Auth->user('shib_eppn')) AND $this->shibUser) {
+		if(	$this->Auth->user()
+		AND	empty($this->Auth->user('shib_eppn'))
+		AND	$this->shibUser
+		AND	(!$this->Session->read('Users.block_eppn') 
+			|| $this->Session->read('Users.block_eppn') != $this->shibUser['shib_eppn'])
+		) {
 			// make connection, if not already set
 			$this->{$this->modelClass}->recursive = 0;
 			$this->{$this->modelClass}->id = $this->Auth->user('id');
-			$user = $this->{$this->modelClass}->read();
 			$this->{$this->modelClass}->saveField('shib_eppn', $this->shibUser['shib_eppn'], false);
-			
-			//TODO: collect all other information, check for changes and get confirmation 
+			$this->Auth->login($this->{$this->modelClass}->read()[$this->modelClass]);
+		}
+		
+		if($this->Auth->user()) {
+			if($this->DefaultAuth->isAdmin()) {
+				$this->Auth->allow(array('delete'));
+			}
+			$this->Auth->allow(array('delete_identity'));
 		}
 		
 		$this->set('title_for_layout', 'User Management');
@@ -100,6 +106,7 @@ class AppUsersController extends UsersController {
 						$user = $user[$this->modelClass];
 					if($this->Auth->login($user)) {
 						$this->Flash->set('You successfully logged in via external identity.');
+						$this->redirect($this->Auth->loginRedirect);
 					}
 					// else: handle every other login errors in parent login method
 				}else{
@@ -136,8 +143,7 @@ class AppUsersController extends UsersController {
 	protected function _setOptions() {
 		$institutions = $this->AppUser->Institution->find('list', array(
 			'contain' => array('Country'),
-			'fields' => array('Institution.id', 'Institution.name', 'Country.name'),
-			'conditions' => array('Institution.can_have_course' => 1)
+			'fields' => array('Institution.id', 'Institution.name', 'Country.name')
 		));
 		ksort($institutions);
 		$countries = $this->AppUser->Country->find('list', array('order' => 'Country.name ASC'));
@@ -155,13 +161,17 @@ class AppUsersController extends UsersController {
 		$this->_setOptions();
 	}
 	
+	
 	public function delete_identity() {
+		$eppn = $this->Auth->user('shib_eppn');
 		$this->{$this->modelClass}->id = $this->Auth->user('id');
-		$this->{$this->modelClass}->saveField('shib_eppn', null);
+		$this->{$this->modelClass}->saveField('shib_eppn', null, false);
+		$this->Auth->login($this->{$this->modelClass}->read()[$this->modelClass]);
+		$this->Session->write('Users.block_eppn', $eppn);
 		$this->redirect('/users/profile');
 	}
 	
-	// @Override
+	
 	protected function _newUserAdminNotification($user = array()) {
 		if(empty($user)) return false;
 		$result = true;

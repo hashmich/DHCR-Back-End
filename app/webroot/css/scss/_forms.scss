@@ -47,6 +47,7 @@ form {
 	
 	fieldset {
 		border: 1px solid $border_color;
+		border-radius: 2px;
 		margin-bottom: 10px;
 		max-width: 500px;
 		padding: 20px;
@@ -99,6 +100,7 @@ form {
 		display: block;
 		padding: 2px 4px;
 		border:1px solid #999;
+		border-radius: 2px;
 		color:#666;
 		width: 277px;
 		margin-bottom: 5px;
@@ -111,6 +113,7 @@ form {
 		vertical-align: middle;
 		width: 287px;
 		border:1px solid #999;
+		border-radius: 2px;
 		display: block;
 	}
 	

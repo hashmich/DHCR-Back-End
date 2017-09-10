@@ -960,6 +960,14 @@ dl {
 .toggle {
   cursor: pointer; }
 
+div.notice {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+  border: 1px solid;
+  margin: 10px 0px;
+  padding: 15px 10px 15px 50px;
+  border-radius: 2px; }
+
 /* A flexible, but simple columns layout (up to 3) */
 /* One can include the following classes in a container (div.col) with fixed width to fix the columns width as well. */
 /* With 30px margin this will work down to 375px width (8% => 30px) */
@@ -1054,7 +1062,7 @@ div.auth {
     height: 0; }
   div.auth ul {
     list-style: none;
-    margin-left: 207px; }
+    margin-left: 50px; }
     div.auth ul li {
       float: left;
       border-left: 2px solid #203a6b;
@@ -1402,59 +1410,8 @@ div.auth {
     .columns #content div#coursesMap {
       margin-bottom: 1.5em;
       width: 100%;
-      height: 400px; }
-    .columns #content p.caption {
-      position: absolute;
-      top: 40px;
-      left: 10%;
-      font-weight: bold;
-      padding: 10px;
-      border: 1px solid #666;
-      text-decoration: underline;
-      font-size: 11px; }
-    .columns #content .barchart, .columns #content .barchart-x-rule {
-      margin-bottom: 0;
-      width: 100%;
-      height: 350px;
-      background-color: #f4f4f4;
-      display: flex;
-      align-items: flex-end; }
-      .columns #content .barchart .bar, .columns #content .barchart-x-rule .bar {
-        background-color: #009fd6;
-        flex-grow: 1;
-        flex-basis: 0;
-        margin: 10px 2px 2px 0;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column-reverse;
-        justify-content: space-between;
-        text-align: center;
-        min-height: 22px;
-        font-size: 10px;
-        color: #333; }
-        .columns #content .barchart .bar:first-child, .columns #content .barchart-x-rule .bar:first-child {
-          margin-left: 10px; }
-        .columns #content .barchart .bar:last-child, .columns #content .barchart-x-rule .bar:last-child {
-          margin-right: 10px; }
-        .columns #content .barchart .bar .count, .columns #content .barchart-x-rule .bar .count {
-          color: white;
-          margin: 9px 0 5px; }
-        .columns #content .barchart .bar .year, .columns #content .barchart .bar .count, .columns #content .barchart-x-rule .bar .year, .columns #content .barchart-x-rule .bar .count {
-          -ms-transform: rotate(270deg);
-          /* IE 9 */
-          -webkit-transform: rotate(270deg);
-          /* Chrome, Safari, Opera */
-          transform: rotate(270deg); }
-    .columns #content .barchart-x-rule {
-      margin-bottom: 1.5em;
-      height: 50px;
-      align-items: stretch; }
-      .columns #content .barchart-x-rule .bar {
-        background-color: #ccc;
-        margin: 0 2px 10px 0;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center; }
+      height: 400px;
+      border-radius: 2px; }
     .columns #content .associations,
     .columns #content .filter,
     .columns #content .actions {
@@ -1487,6 +1444,7 @@ div.auth {
       /* aka "cellspacing" */
       border-collapse: collapse;
       /* cellspacing for IE <= 7 */
+      border-radius: 2px;
       margin-bottom: 0; }
       .columns #content table th {
         border: 0;
@@ -1800,6 +1758,7 @@ div.auth {
       /* a leaflet map as an interface to lon|lat inputs */ }
       .columns #content form fieldset {
         border: 1px solid #ccc;
+        border-radius: 2px;
         margin-bottom: 10px;
         max-width: 500px;
         padding: 20px; }
@@ -1842,6 +1801,7 @@ div.auth {
         display: block;
         padding: 2px 4px;
         border: 1px solid #999;
+        border-radius: 2px;
         color: #666;
         width: 277px;
         margin-bottom: 5px; }
@@ -1853,6 +1813,7 @@ div.auth {
         vertical-align: middle;
         width: 287px;
         border: 1px solid #999;
+        border-radius: 2px;
         display: block; }
       .columns #content form.full input[type=text],
       .columns #content form.full input[type=tel],
@@ -2117,6 +2078,7 @@ div.auth {
             width: 256px; }
     .columns #content .record_details {
       border: 1px solid #ccc;
+      border-radius: 2px;
       padding: 8px;
       font-size: 90%; }
       .columns #content .record_details:after {
@@ -2130,41 +2092,6 @@ div.auth {
         border: none; }
       .columns #content .record_details .top {
         margin-bottom: 10px; }
-    .columns #content form.review .validation-errors {
-      max-width: 500px;
-      padding: 20px; }
-    .columns #content form.review .required > label:after {
-      content: ""; }
-    .columns #content form.review .required > label[for=ProjectReviewEmail]:after {
-      content: " *"; }
-    .columns #content form.review .rightpane {
-      position: fixed;
-      left: 840px;
-      top: 130px; }
-      .columns #content form.review .rightpane textarea {
-        width: 400px;
-        height: 500px; }
-    .columns #content form.review .button {
-      width: 155px; }
-      .columns #content form.review .button.add {
-        margin-left: 20px;
-        margin-top: 20px; }
-      .columns #content form.review .button.remove {
-        background-color: #912C2C; }
-        .columns #content form.review .button.remove:hover {
-          background-color: #c8a4a4; }
-    .columns #content form.review input[type=submit] {
-      clear: none;
-      font: bold 14px Arial, Sans-serif;
-      -moz-border-radius: 4px;
-      -webkit-border-radius: 4px;
-      border-radius: 4px;
-      border: 1px solid #999;
-      background: #203a6b;
-      padding: 10px 80px;
-      color: #fff;
-      width: auto;
-      float: right; }
 
 #footer {
   text-align: left;
