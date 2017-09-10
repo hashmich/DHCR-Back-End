@@ -4,7 +4,7 @@ a new user has registered and is waiting for your approval of the new account!
 
 <?php
 if(!empty($data[$model])) {
-	echo "Details: \n\n";
+	echo "Details (database entry): \n\n";
 	foreach($data[$model] as $fieldname => $value) {
 		echo str_pad($fieldname . ':', 24, " ") . "			" . $value . "\n";
 	}
