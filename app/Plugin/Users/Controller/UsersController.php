@@ -14,16 +14,18 @@ class UsersController extends UsersAppController {
 	
 	
 	// render the plugin views by default, if no app-view exists
-	public function render($view = null, $layout = null) {
-		if(is_null($view)) {
-			$view = $this->action;
-		}
-		$viewPath = 'App' . substr(get_class($this), 0, strlen(get_class($this)) - 10);
-		clearstatcache();
-		if(!file_exists(APP . 'View' . DS . $viewPath . DS . $view . '.ctp')) {
-			$this->viewPath = $this->plugin = 'Users';
-		}else{
-			$this->viewPath = $viewPath;
+	public function render($view = null, $layout = null, $skip = false) {
+		if(!$skip) {
+			if(is_null($view)) {
+				$view = $this->action;
+			}
+			$viewPath = 'App' . substr(get_class($this), 0, strlen(get_class($this)) - 10);
+			clearstatcache();
+			if(!file_exists(APP . 'View' . DS . $viewPath . DS . $view . '.ctp')) {
+				$this->viewPath = $this->plugin = 'Users';
+			}else{
+				$this->viewPath = $viewPath;
+			}
 		}
 		return parent::render($view, $layout);
 	}
@@ -246,7 +248,12 @@ class UsersController extends UsersAppController {
 					'email' => $email,
 					'data' => $user
 				));
-				if($result) $this->Auth->flash('You should receive an email with further instructions shortly.');
+				if($result) {
+					if(!$this->Auth->user()) $this->Auth->flash('We have sent an email with further instructions to ' . $email . '.');
+					else $this->Session->setFlash('We have sent an email with further instructions to ' . $email . '.');
+				}else{
+					$this->Session->setFlash('Error while sending the password reset email.');
+				}
 				if($this->Auth->loggedIn()) $this->redirect(array(
 					'plugin' => null,
 					'controller' => 'users',
@@ -565,6 +572,8 @@ class UsersController extends UsersAppController {
 			if($user) {
 				$id = $user[$this->modelClass]['id'];
 				$proceed = true;
+			}else{
+				$this->Flash->set('The requested account has already been accepted.');
 			}
 		}
 		
@@ -576,7 +585,7 @@ class UsersController extends UsersAppController {
 					'email' => $user[$this->modelClass]['email'],
 					'data' => $user
 				));
-				$this->Session->setFlash('The account has been approved successfully.');
+				$this->Flash->set('The account has been approved successfully.');
 			}else{
 				$redirect = false;
 				$this->set('errors', $this->{$this->modelClass}->validationErrors);
