@@ -74,7 +74,7 @@ OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() 
 			case 'CourseType.name':
 				$value = $record['CourseParentType']['name'] . ': ' . $value;
 				break;
-			case 'Course.url':
+			case 'Course.info_url':
 				if($value != ' - ' AND !empty($value)) {
 					$value = $this->Html->link('Info', $record[$fieldModelName][$fieldname], array(
 						'target' => '_blank',

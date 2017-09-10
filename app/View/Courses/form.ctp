@@ -114,7 +114,7 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 		'checked' => false,
 		'value' => 1
 	));
-	echo $this->Form->input('url', array(
+	echo $this->Form->input('info_url', array(
 		'label' => 'Information URL',
 		'title' => 'Course information URL.'
 	));

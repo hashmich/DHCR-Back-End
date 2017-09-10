@@ -83,7 +83,7 @@ class Course extends AppModel {
 				'required' => true
 			),
 		),
-		'url' => array(
+		'info_url' => array(
 			'notEmpty' => array(
 				'rule' => array('notBlank'),
 				'message' => 'Provide an URL of further information on the course.',
@@ -223,12 +223,12 @@ class Course extends AppModel {
 	
 	
 	public function multiDate($check) {
-		$result = true;
 		$check = explode(';', $check[key($check)]);
 		foreach($check as $k => $date) {
-			if(!preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $date)) $result = false;
+			if(!preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $date))
+				return false;
 		}
-		return $result;
+		return true;
 	}
 	
 	
@@ -408,7 +408,7 @@ class Course extends AppModel {
 			$this->maxHttpCode = 300;
 			foreach($courses as $k => $record) {
 				$this->set($record);
-				if(!$this->validates(array('fieldList' => array('url','guide_url')))) {
+				if(!$this->validates(array('fieldList' => array('info_url','guide_url')))) {
 					$errors = $this->validationErrors;
 					if(!empty($record['AppUser']) AND !empty($record['AppUser']['email'])) {
 						$email = $record['AppUser']['email'];

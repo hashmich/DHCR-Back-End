@@ -277,7 +277,7 @@ class CoursesController extends AppController {
 			}
 			$this->request->data['Course']['id'] = $id;
 			if(!empty($this->request->data['Course']['skip_validation'])) {
-				$this->Course->validator()->remove('url', 'status_ok');
+				$this->Course->validator()->remove('info_url', 'status_ok');
 				$this->Course->validator()->remove('guide_url', 'status_ok');
 			}
 			if($this->Course->validateAll($this->request->data)) {
@@ -312,7 +312,7 @@ class CoursesController extends AppController {
 				unset($this->request->data['Course']['updated']);
 			}
 			if(!empty($this->request->data['Course']['skip_validation'])) {
-				$this->Course->validator()->remove('url', 'status_ok');
+				$this->Course->validator()->remove('info_url', 'status_ok');
 				$this->Course->validator()->remove('guide_url', 'status_ok');
 			}
 			if($this->Course->validateAll($this->request->data)) {
