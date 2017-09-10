@@ -40,13 +40,7 @@ Please review the linked courses:
 foreach($data as $id => $record) {
 	if($id == 'maintainer') continue;
 	echo "Course: \n" . $record['Course']['name'] . "\n";
-	echo Router::url(array(
-			'admin' => false,
-			'plugin' => null,
-			'controller' => 'courses',
-			'action' => 'edit',
-			$id
-	), $full = true);
+	echo Router::url('/edit/' . $id, $full = true);
 	echo "\n\n";
 }
 ?>

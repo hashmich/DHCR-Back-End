@@ -18,12 +18,10 @@
  
 
  
- if(!empty($notice)) {
-	echo '<h2>User Courses</h2>';
-	echo '<p class="notice">'.$notice.'</p>';
-}else{
-	echo '<h2>Your Courses</h2>';
-}
+echo '<h2>Your Courses</h2>';
+
+echo $this->element('dashboard/shibboleth_link');
+
 
 if(empty($courses)) {
 	echo '<p>There are no courses in the registry owned by you.</p>';

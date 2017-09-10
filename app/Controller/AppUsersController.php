@@ -37,20 +37,86 @@ class AppUsersController extends UsersController {
 	
 	public $uses = array('AppUser');
 	
+	public $shibUser = array();
+	
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
 		
 		if($this->Auth->user('user_role_id') < 3) $this->Auth->allow(array('invite'));
 		
+		$shibLogin = !empty($_SERVER['HTTP_EPPN']);
+		if($shibLogin) {
+			// eppn: shib-'ID' (Matej said), givenName, surname, mail
+			$shibVars = array(
+				'HTTP_EPPN' => 'shib_eppn',
+				'HTTP_GIVENNAME' => 'first_name',
+				'HTTP_SN' => 'last_name',
+				'HTTP_EMAIL' => 'email');
+			//$skip = array("PATH", "REMOTE_ADDR", "DOCUMENT_ROOT", "HTTPS", "GATEWAY_INTERFACE", "QUERY_STRING");
+			//$skipRegEx = "#^SSL_|^SERVER|^PHP_|^HTTP__|^SCRIPT_|^REQUEST_|^CONTEXT_|^REMOTE_|^HTTP_|^REDIRECT_#";
+			foreach($_SERVER as $k => $v) {
+				//if(!preg_match($skipRegEx, $k) && !in_array($k, $skip)){
+				if(isset($shibVars[$k]) AND !empty($v) AND $v != '(null)') {
+					$this->shibUser[$shibVars[$k]] = $v;
+				}
+			}
+			if(empty($this->shibUser['shib_eppn']) OR $this->shibUser['shib_eppn'] == '(null)')
+				$this->shibUser = array();
+			$this->set('shibUser', $this->shibUser);
+		}
+		
+		
+		if($this->Auth->user() AND empty($this->Auth->user('shib_eppn')) AND $this->shibUser) {
+			// make connection, if not already set
+			$this->{$this->modelClass}->recursive = 0;
+			$this->{$this->modelClass}->id = $this->Auth->user('id');
+			$user = $this->{$this->modelClass}->read();
+			$this->{$this->modelClass}->saveField('shib_eppn', $this->shibUser['shib_eppn'], false);
+			
+			//TODO: collect all other information, check for changes and get confirmation 
+		}
+		
 		$this->set('title_for_layout', 'User Management');
 	}
 	
 	
+	public function login() {
+		if(!$this->request->is('post') AND !$this->Auth->user()) {
+			
+			if($this->shibUser) {
+				// find the matching user and log in
+				$user = $this->{$this->modelClass}->find('first', array(
+					'contain' => array(),
+					'conditions' => array(
+						'or' => array(
+							$this->modelClass . '.shib_eppn' => $this->shibUser['shib_eppn'],
+							$this->modelClass . '.email' => $this->shibUser['shib_eppn']),
+						$this->modelClass . '.active' => true
+					)
+				));
+				if(!empty($user)) {
+					if(!empty($user[$this->modelClass]))
+						$user = $user[$this->modelClass];
+					if($this->Auth->login($user)) {
+						$this->Flash->set('You successfully logged in via external identity.');
+					}
+					// else: handle every other login errors in parent login method
+				}else{
+					// account has not yet been linked to the DHCR
+					$this->Auth->flash('You have been successfully verified by your identity provider (IDP), 
+							but your Courseregistry account has not been linked to that external service, yet. 
+							Please login using your DH-Courseregistry account to connect.');
+				}
+			}
+		}
+		
+		parent::login();
+	}
 	
 	
-	
-	// render the plugin views by default, if no app-view exists
+	// when calling render from this controller, wee need to check for existing plugin views,
+	// which only partially are overridden on app level
 	public function render($view = null, $layout = null) {
 		if(is_null($view)) {
 			$view = $this->action;
@@ -64,6 +130,7 @@ class AppUsersController extends UsersController {
 		}
 		return parent::render($view, $layout);
 	}
+	
 	
 	
 	protected function _setOptions() {
@@ -88,7 +155,13 @@ class AppUsersController extends UsersController {
 		$this->_setOptions();
 	}
 	
+	public function delete_identity() {
+		$this->{$this->modelClass}->id = $this->Auth->user('id');
+		$this->{$this->modelClass}->saveField('shib_eppn', null);
+		$this->redirect('/users/profile');
+	}
 	
+	// @Override
 	protected function _newUserAdminNotification($user = array()) {
 		if(empty($user)) return false;
 		$result = true;
@@ -114,6 +187,8 @@ class AppUsersController extends UsersController {
 			if($institution AND !empty($institution['Institution']['country_id']))
 				$country_id = $institution['Institution']['country_id'];
 		}
+		
+		
 		// find the moderators in charge
 		if(!empty($country_id)) {
 			$admins = $this->{$this->modelClass}->find('all', array(
@@ -191,12 +266,12 @@ class AppUsersController extends UsersController {
 					'email' => $user[$this->modelClass]['email'],
 					'data' => $user
 				));
-				$this->Session->setFlash('The account has been approved successfully.');
+				$this->Flash->set('The account has been approved successfully.');
 				$success = true;
 			}else{
-				$this->Session->setFlash('The user data did not pass validation. Please check the details.');
+				$this->Flash->set('The user data did not pass validation. Please check the details.');
 				if(empty($this->Auth->user())) {
-					$this->Session->setFlash('Further user details need to be amended. Please log in first.');
+					$this->Flash->set('Further user details need to be amended. Please log in first.');
 				}
 				if(!$this->Auth->user()) {
 					$this->Auth->redirectUrl('/' . $this->request->url);
@@ -244,14 +319,14 @@ class AppUsersController extends UsersController {
 		// moderators
 		if($this->Auth->user('user_role_id') == 2 AND !empty($this->Auth->user('country_id'))) {
 			$moderated = $this->AppUser->Course->find('all', array(
-			'conditions' => array(
-				'Course.country_id' => $this->Auth->user('country_id'),
-				'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
-			),
-			'order' => array(
-					'Course.updated' => 'ASC'
-			)
-		));
+				'conditions' => array(
+					'Course.country_id' => $this->Auth->user('country_id'),
+					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
+				),
+				'order' => array(
+						'Course.updated' => 'ASC'
+				)
+			));
 		}
 		$this->set(compact('courses', 'moderated'));
 		
@@ -294,6 +369,8 @@ class AppUsersController extends UsersController {
 			// user dashboard
 			$this->render('user_dashboard');
 		}
+		
+		
 	}
 	
 	
@@ -323,7 +400,7 @@ class AppUsersController extends UsersController {
 					$mailOpts['email'] = $user[$this->modelClass]['email'];
 					$mailOpts['data'] = $user;
 					$this->_sendUserManagementMail($mailOpts);
-					$this->Session->setFlash('User will receive a reminder email.');
+					$this->Flash->set('User will receive a reminder email.');
 				}
 				
 			}elseif($param === 'all') {
@@ -342,7 +419,7 @@ class AppUsersController extends UsersController {
 							$this->_sendUserManagementMail($mailOpts);
 						}
 					}
-					$this->Session->setFlash('Users will receive a reminder email.');
+					$this->Flash->set('Users will receive a reminder email.');
 				}
 			}
 			$this->redirect('/users/dashboard');
@@ -355,7 +432,7 @@ class AppUsersController extends UsersController {
 						$mailOpts['email'] = $user[$this->modelClass]['email'];
 						$mailOpts['data'] = $user;
 						$this->_sendUserManagementMail($mailOpts);
-						$this->Session->setFlash('User successfully invited and emailed.');
+						$this->Flash->set('User successfully invited and emailed.');
 					}
 					$this->redirect('/users/dashboard');
 				}

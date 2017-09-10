@@ -18,12 +18,14 @@
 ?>
 <h2>Admin Dashboard</h2>
 
-<?php echo $this->element('dashboard/admin_account_requests'); ?>
-
-
-<?php echo $this->element('dashboard/admin_invited_users'); ?>
-
 <?php
+echo $this->element('dashboard/shibboleth_link');
+
+echo $this->element('dashboard/admin_account_requests');
+
+echo $this->element('dashboard/admin_invited_users');
+
+
 if(!empty($moderated)) {
 	?>
 	<h3>Moderated Courses</h3>

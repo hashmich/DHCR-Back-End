@@ -50,6 +50,27 @@
 	}
 	echo '</fieldset>';
 	
+	if(!empty($auth_user['shib_eppn'])) {
+		echo '<fieldset>';
+			?>
+			<p>
+				Your account is linked to a single sign-on identity:
+				<b><?php echo $auth_user['shib_eppn']?></b>.<br>
+				In case you want to unlink this identity from your DH-Course Registry 
+				account for any reason (eg. handing over your account to a new colleague 
+				responsible for maintenance of course entries), 
+				you may delete the connection to your institutional identity here.
+			</p>
+			<?php
+			echo '<div class="input text">';
+				echo $this->Html->link('Unlink IDP', array(
+					'controller' => 'users',
+					'action' => 'delete_identity'),
+					array('class' => 'label'));
+			echo '</div>';
+		echo '</fieldset>';
+	}
+	
 	if(	!empty($auth_user['is_admin'])
 	OR (!empty($auth_user['user_role_id']) AND $auth_user['user_role_id'] == 2)) {
 		echo '<fieldset>';

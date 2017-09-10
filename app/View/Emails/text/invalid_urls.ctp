@@ -20,10 +20,12 @@
 Dear <?php echo $name; ?>!
 
 We have noticed, that information URLs of one or more entries you maintain in 
-the Digital Humanities Course Registry are not valid any more. 
+the Digital Humanities Course Registry may not be valid any more.  
+Due to the returned http status code, we suspect there might be something wrong.  
 
-Please have a look at the listed erroneous courses and update the information soon.
-Log in before to find a handy edit link ("review") next to the linked course descriptions.
+As we want to prevent showing dead links to our audience, 
+please have a look at the listed erroneous records and update the information soon.
+Log in firstly to find a handy edit link ("review") next to the linked course descriptions.
 <?php
 echo Router::url(array(
 	'admin' => false,
@@ -37,13 +39,7 @@ foreach($data as $id => $course) {
 	if($id == 'maintainer') continue;
 	
 	echo "Course: \n".$course['Course']['name']."\n";
-	echo Router::url(array(
-		'admin' => false,
-		'plugin' => null,
-		'controller' => 'courses',
-		'action' => 'view',
-		$id
-	), $full = true);
+	echo Router::url('/view/' . $id, $full = true);
 	echo "\n";
 	foreach($course['errors'] as $field => $errors) {
 		$fieldname = $field;
@@ -60,12 +56,11 @@ foreach($data as $id => $course) {
 ?>
 
 In rare cases, this checking algorithm reports errors where 
-humanoid users can successfully visit the reported URLs. 
-If you happen to find your carefully checked URL marked invalid by this 
-email or by the form validation during review, please check the tickbox 
-'Skip URL Validation', to let the form pass validation on submit. 
+human users can still successfully visit the reported URLs. 
+If you happen to find your carefully checked URL reported invalid by this 
+email, we are sorry to bother you. 
 In case your course information has not changed and the data is still up to date, 
-(state green) you may also ignore this email.    
+(status green) you may ignore this email. 
 
 Many thanks! 
 

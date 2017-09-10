@@ -4,7 +4,6 @@
 	<?php
 	echo $this->Session->flash('auth');
 	
-	
 	echo $this->Form->create($modelName);
 	echo $this->Form->input(Configure::read('Users.loginName'), array('required' => false, 'autocomplete' => 'off'));
 	echo $this->Form->input('password', array('required' => false, 'autocomplete' => 'off'));
@@ -28,6 +27,21 @@
 			}
 			?>
 		</li>
+		
+		<?php
+		if(empty($shibUser)) {
+			$url = urlencode(Router::url('/users/login', $full = true));
+			?>
+			<li>
+				<a href="https://clarin.oeaw.ac.at/Shibboleth.sso/Login?target=<?php echo $url; ?>"
+				title="You will be redirected to an external service">
+					Login via DARIAH Single Sign-On
+				</a>	
+			</li>
+			<?php
+		}
+		?>
+		
 		<?php
 		if(is_null(Configure::read('Users.allowRegistration')) OR Configure::read('Users.allowRegistration')) {
 			?>

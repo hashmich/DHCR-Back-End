@@ -13,25 +13,6 @@ class UsersController extends UsersAppController {
 	
 	
 	
-	// render the plugin views by default, if no app-view exists
-	public function render($view = null, $layout = null, $skip = false) {
-		if(!$skip) {
-			if(is_null($view)) {
-				$view = $this->action;
-			}
-			$viewPath = 'App' . substr(get_class($this), 0, strlen(get_class($this)) - 10);
-			clearstatcache();
-			if(!file_exists(APP . 'View' . DS . $viewPath . DS . $view . '.ctp')) {
-				$this->viewPath = $this->plugin = 'Users';
-			}else{
-				$this->viewPath = $viewPath;
-			}
-		}
-		return parent::render($view, $layout);
-	}
-	
-	
-	
 	public function beforeFilter() {
 		$this->modelClass = Configure::read('Users.userModel');
 		$this->uses = array(Configure::read('Users.userModel'));
