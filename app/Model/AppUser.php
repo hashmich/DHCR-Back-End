@@ -62,6 +62,21 @@ class AppUser extends User {
 		$this->validate = array_merge($this->validate, $this->validationRules);
 	}
 	
+				
+	public function beforeSave($options = array()) {
+		// quietly remove the eppn value, if already connected to a different account
+		if(!empty($this->data[$this->alias]['shib_eppn'])) {
+			$temp = $this->find('first', array(
+				'contain' => array(),
+				'conditions' => array(
+					'shib_eppn' => $this->data[$this->alias]['shib_eppn'])));
+			if($temp) {
+				unset($this->data[$this->alias]['shib_eppn']);
+			}
+		}
+		return true;
+	}
+	
 	
 	public $virtualFields = array(
 		'name' => 'TRIM(CONCAT(AppUser.academic_title, " ", AppUser.first_name, " ", AppUser.last_name))'

@@ -72,8 +72,10 @@ class AppUsersController extends UsersController {
 			// make connection, if not already set
 			$this->{$this->modelClass}->recursive = 0;
 			$this->{$this->modelClass}->id = $this->Auth->user('id');
-			$this->{$this->modelClass}->saveField('shib_eppn', $this->shibUser['shib_eppn'], false);
-			$this->Auth->login($this->{$this->modelClass}->read()[$this->modelClass]);
+			$this->{$this->modelClass}->saveField('shib_eppn', $this->shibUser['shib_eppn'], true);
+			$user = $this->{$this->modelClass}->read()[$this->modelClass];
+			$this->Auth->login();
+			$this->set('auth_user', $user);
 		}
 		
 		if($this->Auth->user()) {
