@@ -25,10 +25,11 @@ if($this->action == 'edit') {
 	<?php
 	echo $this->Html->link('Delete this Course', '/courses/delete/' . $this->request->data['Course']['id'], array(
 		'confirm' => "Are you sure? /n
-			Courses not updated for " . Configure::read('App.CourseArchivalPeriod') / (60*60*24*365) . " years will be 
+			Courses not updated for " . round(Configure::read('App.CourseArchivalPeriod') / (60*60*24*365), 1) . " years will be 
 			archived for later research and disappear from your dashboard automatically. \n
-			Please only remove this entry, if it never will be or was a real course. \n\n
-			You can uncheck the 'publish' option if you do not want this entry to display in the registry any longer."
+			Please only remove this entry, if it was only created by mistake. \n\n
+			You can uncheck the 'publish' option if you do not want this entry to display in the registry any longer and 
+			stop the update reminder email service."
 	));
 	?>
 	</p>
@@ -102,18 +103,35 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 	?>
 </fieldset>
 <fieldset>
-	<p>
-		Validation has been set up to assist you entering valid content. <br />
-		But sometimes you may have trouble to pass URLs you otherwise experience being valid. (http status codes > 400) 
-	</p>
-	<p>Please check this box if you keep getting validation errors regarding URLs for information and curriculum.</p>
 	<?php
-	echo $this->Form->input('skip_validation', array(
-		'label' => 'Skip URL Validation',
-		'type' => 'checkbox',
-		'checked' => false,
-		'value' => 1
-	));
+	if(!empty($errors) OR ($modelName AND !empty($this->validationErrors[$modelName]))) {
+		?>
+		<div class="notice">
+			<p>
+				URL Validation has been set up to assist you providing valid content. <br />
+				But sometimes you may have trouble to get URLs past validation, due to weird 
+				http status codes (codes > 400) or restrictive server settings.
+			</p>
+			<p>
+				Please check these boxes, if you thoroughly checked the URLs, 
+				but repeatedly keep getting validation errors.
+			</p>
+			<?php
+			echo $this->Form->input('skip_info_validation', array(
+				'label' => 'Skip Info URL Validation',
+				'type' => 'checkbox',
+				'checked' => false,
+				'value' => 1
+			));
+			echo $this->Form->input('skip_guide_validation', array(
+					'label' => 'Skip Guide URL Validation',
+					'type' => 'checkbox',
+					'checked' => false,
+					'value' => 1
+			));
+		echo '</div>';
+	}
+	
 	echo $this->Form->input('info_url', array(
 		'label' => 'Information URL',
 		'title' => 'Course information URL.'
@@ -122,6 +140,10 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 		'label' => 'Curriculum URL',
 		'title' => 'URL of a course guide (eg a .pdf), that describes the course modules and structure.'
 	));
+	?>
+</fieldset>
+<fieldset>
+	<?php
 	echo $this->Form->input('ects', array('title' => 'Decimal numbers only. Optionally use the decimal point.'));
 	echo $this->Form->input('contact_name');
 	echo $this->Form->input('contact_mail');

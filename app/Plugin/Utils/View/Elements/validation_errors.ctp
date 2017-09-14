@@ -1,8 +1,8 @@
 <?php
 if(!empty($errors) OR ($modelName AND !empty($this->validationErrors[$modelName]))) {
-	if(	empty($errors)) {
+	if(empty($errors)) {
 		$errors = array();
-		if($modelName AND !empty($this->validationErrors))
+		if($modelName AND !empty($this->validationErrors[$modelName]))
 			$errors = $this->validationErrors[$modelName];
 	}
 	?>

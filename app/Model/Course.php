@@ -407,8 +407,14 @@ class Course extends AppModel {
 		if(!empty($courses)) {
 			$this->maxHttpCode = 300;
 			foreach($courses as $k => $record) {
+				$fieldlist = array();
+				if($record['Course']['skip_info_url'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
+					$fieldlist[] = 'info_url';
+				if($record['Course']['skip_guide_url'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
+						$fieldlist[] = 'guide_url';
+					
 				$this->set($record);
-				if(!$this->validates(array('fieldList' => array('info_url','guide_url')))) {
+				if(!$this->validates(array('fieldList' => $fieldlist))) {
 					$errors = $this->validationErrors;
 					if(!empty($record['AppUser']) AND !empty($record['AppUser']['email'])) {
 						$email = $record['AppUser']['email'];

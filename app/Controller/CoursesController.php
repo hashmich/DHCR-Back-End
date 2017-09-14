@@ -276,10 +276,18 @@ class CoursesController extends AppController {
 				}
 			}
 			$this->request->data['Course']['id'] = $id;
-			if(!empty($this->request->data['Course']['skip_validation'])) {
+
+			if(!empty($this->request->data['Course']['skip_info_validation'])) {
+				// TODO: check if correct input for DATETIME
+				$this->request->data['Course']['skip_info_url'] = date('Y-m-d H:i:s');
 				$this->Course->validator()->remove('info_url', 'status_ok');
+			}
+			if(!empty($this->request->data['Course']['skip_guide_validation'])) {
+				// TODO
+				$this->request->data['Course']['skip_guide_url'] = date('Y-m-d H:i:s');
 				$this->Course->validator()->remove('guide_url', 'status_ok');
 			}
+			
 			if($this->Course->validateAll($this->request->data)) {
 				$this->request->data = $this->Course->data;		// callback beforeValidate manipulates data
 				$this->request->data['Course']['id'] = $id;		// we need to set this again...
@@ -311,8 +319,14 @@ class CoursesController extends AppController {
 				unset($this->request->data['Course']['created']);
 				unset($this->request->data['Course']['updated']);
 			}
-			if(!empty($this->request->data['Course']['skip_validation'])) {
+			if(!empty($this->request->data['Course']['skip_info_validation'])) {
+				// TODO: check if correct input for DATETIME
+				$this->request->data['Course']['skip_info_url'] = date('Y-m-d H:i:s');
 				$this->Course->validator()->remove('info_url', 'status_ok');
+			}
+			if(!empty($this->request->data['Course']['skip_guide_validation'])) {
+				// TODO
+				$this->request->data['Course']['skip_guide_url'] = date('Y-m-d H:i:s');
 				$this->Course->validator()->remove('guide_url', 'status_ok');
 			}
 			if($this->Course->validateAll($this->request->data)) {
