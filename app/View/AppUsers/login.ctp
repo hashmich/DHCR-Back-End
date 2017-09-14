@@ -35,7 +35,7 @@
 			<li>
 				<a href="https://clarin.oeaw.ac.at/Shibboleth.sso/Login?target=<?php echo $url; ?>"
 				title="You will be redirected to an external service">
-					Login via DARIAH Single Sign-On
+					Login via Single Sign-On
 				</a>	
 			</li>
 			<?php
