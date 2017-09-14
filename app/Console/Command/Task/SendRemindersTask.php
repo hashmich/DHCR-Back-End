@@ -26,15 +26,29 @@ class SendRemindersTask extends Shell {
 		$collection = $this->Course->getReminderCollection();
 		if(Configure::read('debug') > 0) $to = 'mail@hendrikschmeer.de';
 		if(!empty($collection)) {
-			if($out !== null) {
-				$this->out('I found the following outdated records: ');
-				print_r($collection);
-			}
+			
 			if($out !== false) {
 				App::uses('CakeEmail', 'Network/Email');
 				
+				$this->out('Sending emails to:');
 				foreach($collection as $email => $data) {
 					if($email == 'no_owner') continue;
+					
+					$this->out($email . ': ' . $data['maintainer']);
+					
+					$ccMod = false;
+					$country_id = null;
+					foreach($data as $id => $record) {
+						if($id == 'maintainer') continue;
+						$this->Course->id = $id;
+						$this->Course->saveField('last_reminder', date('Y-m-d H:i:s'));
+						
+						if(	$record['Course']['last_reminder'] > $record['Course']['updated']
+						AND	$record['Course']['last_reminder'] < date('Y-m-d H:i:s', time() - 60*60*24*60)) {
+							$ccMod = true;
+							$country_id = $record['Course']['country_id'];
+						}
+					}
 					
 					$Email = new CakeEmail('default');
 					$subject_prefix = (Configure::read('App.EmailSubjectPrefix'))
@@ -59,6 +73,11 @@ class SendRemindersTask extends Shell {
 						$Email->viewVars(array(
 							'data' => $options['data']
 						));
+						if($ccMod) {
+							$mods = $this->Course->AppUser->getModerators($country_id);
+							if($mods)
+								$Email->cc($mods[0]['AppUser']['email']);
+						}
 						if(Configure::read('debug') > 0 AND empty($to)) {
 							$Email->transport('Debug');
 						}

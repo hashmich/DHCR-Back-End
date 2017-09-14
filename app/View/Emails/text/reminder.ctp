@@ -17,7 +17,7 @@
  */
 ?>
 <?php $name = (!empty($data['maintainer'])) ? $data['maintainer'] : 'User'; ?>
-Dear <?php echo $name; ?>!
+Dear <?php echo $name; ?>.
 
 We noticed, that one or more of your entries in 
 the Digital Humanities Course Registry have not been updated for a longer time. 

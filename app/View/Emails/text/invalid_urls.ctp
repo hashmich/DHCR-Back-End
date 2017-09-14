@@ -17,7 +17,7 @@
  */
 ?>
 <?php $name = (!empty($data['maintainer'])) ? $data['maintainer'] : 'User'; ?>
-Dear <?php echo $name; ?>!
+Dear <?php echo $name; ?>.
 
 We have noticed, that information URLs of one or more entries you maintain in 
 the Digital Humanities Course Registry may not be valid any more.  

@@ -26,15 +26,15 @@ class CheckUrlsTask extends Shell {
 		$collection = $this->Course->checkUrls();
 		if(Configure::read('debug') > 0) $to = 'mail@hendrikschmeer.de';
 		if(!empty($collection)) {
-			if($sendMails !== null) {
-				$this->out('I found errors with the following records: ');
-				print_r($collection);
-			}
+			
 			if($sendMails !== false) {
 				App::uses('CakeEmail', 'Network/Email');
 				
+				$this->out('Sending emails to:');
 				foreach($collection as $email => $data) {
 					if($email == 'no_owner') continue;
+					
+					$this->out($email . ': ' . $data['maintainer']);
 					
 					$Email = new CakeEmail('default');
 					$subject_prefix = (Configure::read('App.EmailSubjectPrefix'))
