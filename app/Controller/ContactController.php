@@ -39,6 +39,9 @@ class ContactController extends AppController {
 			
 			// try fetching the moderator in charge of the user's country
 			$country_id = (empty($data['country_id'])) ? null : $data['country_id'];
+			if($country_id == null) {
+				$country_id = $this->AppUser->Country->getCountryFromEmail($data['email']);
+			}
 			$admins = $this->AppUser->getModerators($data['country_id'], $user_admin = true);
 			
 			if($admins) {
@@ -55,10 +58,10 @@ class ContactController extends AppController {
 					->subject('[DH-Registry Contact-Form] New Question')
 					->send($this->request->data['Contact']['message']);
 				}
-				$this->Session->setFlash('Your message has been sent.');
+				$this->Flash->set('Your message has been sent.');
 				$this->redirect('/');
 			}else{
-				$this->Session->setFlash('Error: No Admin could be found!');
+				$this->Flahs->set('Error: No Admin could be found!');
 			}
 		}
 		

@@ -199,7 +199,12 @@ class AppUsersController extends UsersController {
 			if($institution AND !empty($institution['Institution']['country_id']))
 				$country_id = $institution['Institution']['country_id'];
 		}
-		
+		if(empty($country_id) AND !empty($user[$this->modelClass]['email'])) {
+			$country_id = $this->AppUser->Country->getCountryFromEmail($user[$this->modelClass]['email']);
+		}
+		if(empty($country_id) AND !empty($user[$this->modelClass]['university'])) {
+			$country_id = $this->AppUser->Country->getCountryFromText($user[$this->modelClass]['university']);
+		}
 		
 		// find the moderators in charge
 		if(!empty($country_id)) {

@@ -79,5 +79,40 @@ class Country extends AppModel {
 			'dependent' => false,
 		)
 	);
+	
+	
+	
+	public function getCountryFromEmail($email = null) {
+		if(!empty($email)) {
+			$split = explode('.', $email);
+			$domain = strtolower($split[count($split) - 1]);
+			
+			$countries = $this->find('all');
+			foreach($countries as $country) {
+				$domains = explode(',', strtolower($country['Country']['domain_name']));
+				if(in_array($domain, $domains))
+					return $country['Country']['id'];
+				
+			}
+		}
+		return null;
+	}
+	
+	public function getCountryFromText($text = null) {
+		if(!empty($text)) {
+			$countries = $this->find('all');
+			foreach($countries as $country) {
+				$stoppers = explode(',', $country['Country']['stop_words']);
+				$stoppers[] = strtolower($country['Country']['name']);
+				foreach($stoppers as $stopper) {
+					if(stripos($text, $stopper) !== false)
+						return $country['Country']['id'];
+				}
+			}
+		}
+		return null;
+	}
+	
+	
 
 }
