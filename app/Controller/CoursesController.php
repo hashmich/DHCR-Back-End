@@ -399,8 +399,7 @@ class CoursesController extends AppController {
 		ksort($institutions);
 		$institutionsLocations = $this->Course->Institution->find('all', array(
 			'contain' => array(),
-			'fields' => array('Institution.id', 'Institution.lon', 'Institution.lat'),
-			'conditions' => array('Institution.can_have_course' => 1)
+			'fields' => array('Institution.id', 'Institution.lon', 'Institution.lat')
 		));
 		$locations = array();
 		foreach($institutionsLocations as $record)

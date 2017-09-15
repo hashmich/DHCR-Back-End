@@ -7,5 +7,5 @@ CAKE_PATH='/var/www/html/courses/app'
 
 ### CAKE COMMANDS ###
 
-cd $CAKE_PATH && Console/cake cron sendReminders >> $CAKE_PATH/logs/log-for-$NOW-sendReminders.log 2>&1;
+cd $CAKE_PATH && Console/cake cron sendReminders >> $CAKE_PATH/logs/$NOW-sendReminders.log 2>&1;
 

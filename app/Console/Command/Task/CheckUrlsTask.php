@@ -25,6 +25,8 @@ class CheckUrlsTask extends Shell {
 		
 		$collection = $this->Course->checkUrls();
 		if(Configure::read('debug') > 0) $to = 'mail@hendrikschmeer.de';
+		$this->out('Debug level: ' . Configure::read('debug'));
+		$this->out('Alternative addressee (debug): ' . $to);
 		if(!empty($collection)) {
 			
 			if($sendMails !== false) {

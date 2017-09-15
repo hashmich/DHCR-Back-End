@@ -25,6 +25,8 @@ class SendRemindersTask extends Shell {
 		
 		$collection = $this->Course->getReminderCollection();
 		if(Configure::read('debug') > 0) $to = 'mail@hendrikschmeer.de';
+		$this->out('Debug level: ' . Configure::read('debug'));
+		$this->out('Alternative addressee (debug): ' . $to);
 		if(!empty($collection)) {
 			
 			if($out !== false) {
@@ -40,9 +42,18 @@ class SendRemindersTask extends Shell {
 					$country_id = null;
 					foreach($data as $id => $record) {
 						if($id == 'maintainer') continue;
-						$this->Course->id = $id;
-						$this->Course->saveField('last_reminder', date('Y-m-d H:i:s'));
 						
+						// set the last reminder timestamp only, if it is the first mailing after last update
+						if(	$record['Course']['last_reminder'] < $record['Course']['updated']) {
+							$save = array(
+								'id' => $id,
+								'last_reminder' => date('Y-m-d H:i:s'),
+								'modified' => false
+							);
+							$this->Course->save($save, array('validate' => false));
+						}
+						
+						// cc moderator only, if there were subsequent reminders after last update 
 						if(	$record['Course']['last_reminder'] > $record['Course']['updated']
 						AND	$record['Course']['last_reminder'] < date('Y-m-d H:i:s', time() - 60*60*24*60)) {
 							$ccMod = true;

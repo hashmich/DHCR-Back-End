@@ -197,15 +197,16 @@ class Course extends AppModel {
 	
 	
 	public function beforeSave($options = array()) {
-		$lon = $this->data['Course']['lon'];
-		$lat = $this->data['Course']['lat'];
-	
-		$lon = substr($lon, 0, strpos($lon, '.') + 7);
-		$lat = substr($lat, 0, strpos($lat, '.') + 7);
-	
-		$this->data['Course']['lon'] = floatval($lon);
-		$this->data['Course']['lat'] = floatval($lat);
-	
+		if(!empty($this->data['Course']['lon']) AND !empty($this->data['Course']['lat'])) {
+			$lon = $this->data['Course']['lon'];
+			$lat = $this->data['Course']['lat'];
+		
+			$lon = substr($lon, 0, strpos($lon, '.') + 7);
+			$lat = substr($lat, 0, strpos($lat, '.') + 7);
+		
+			$this->data['Course']['lon'] = floatval($lon);
+			$this->data['Course']['lat'] = floatval($lat);
+		}
 		return true;
 	}
 
@@ -398,7 +399,7 @@ class Course extends AppModel {
 		$courses = $this->find('all', array(
 			'contain' => array('AppUser'),
 			'conditions' => array(
-				'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod')),
+				'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')),
 				'Course.active' => 1
 			)
 		));
