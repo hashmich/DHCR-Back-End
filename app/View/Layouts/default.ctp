@@ -62,8 +62,13 @@ $this->start('header');
 	<div>
 		<h1>
 			<?php
-			echo $this->Html->link('Digital Humanities Registry', '/');
+			$title1 = 'Digital Humanities Registry';
 			$title = $this->fetch('title');
+			if(!empty($title) AND $title == 'Courses') {
+				$title1 = 'Digital Humanities Registry - Courses';
+				$title = null;
+			}
+			echo $this->Html->link($title1, '/');
 			if(!empty($title)) echo ' - ' . $title;
 			?>
 		</h1>

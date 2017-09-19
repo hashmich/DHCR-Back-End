@@ -31,8 +31,10 @@ OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() 
 	$stateTitle = 'entry not revised for more than ' . round(Configure::read('App.CourseRed')/(60*60*24*365), 1) . ' years';
 }
 
-if($state !== 'Green' AND !empty($edit))
-	$stateTitle = '<span style="color:red">Entry will disappear after ' . round(Configure::read('App.CourseExpirationPeriod'), 1) . ' years.<br>Please update!</span>';
+if($state !== 'Green' AND !empty($edit)) {
+	$remaining = strtotime($record['Course']['updated']) + Configure::read('App.CourseExpirationPeriod') - time();
+	$stateTitle = '<span style="color:red">Entry will disappear in ' . round($remaining/(60*60*24*7), 0) . ' weeks.<br>Please update!</span>';
+}
 ?>
 
 <tr <?php echo $toggle; ?>
