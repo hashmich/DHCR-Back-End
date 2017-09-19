@@ -42,9 +42,7 @@ class CoursesController extends AppController {
 			)
 		));
 
-		$institutionsList = $this->Course->Institution->find('list', array(
-			'conditions' => array('Institution.can_have_course' => true)
-		));
+		$institutionsList = $this->Course->Institution->find('list');
 		$institutions = array();
 		foreach($institutionsList as $id => $label) {
 			$c = $this->Course->find('count', array(
