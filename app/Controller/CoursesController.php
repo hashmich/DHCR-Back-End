@@ -198,14 +198,13 @@ class CoursesController extends AppController {
 	
 	public function view($id = null) {
 		if(empty($id)) $this->redirect('index');
-		$courses = $this->Course->find('all', array(
+		$course = $this->Course->find('first', array(
 			'conditions' => array('Course.id' => $id)
 		));
-		if(	$this->Auth->user('id') == $courses[0]['Course']['user_id']
+		if(	$this->Auth->user('id') == $course['Course']['user_id']
 		||	$this->Auth->user('is_admin'))
 			$this->set('edit', true);
-		$this->set(compact('courses'));
-		$this->render('index');
+		$this->set(compact('course'));
 	}
 	
 	

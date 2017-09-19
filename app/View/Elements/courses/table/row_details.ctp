@@ -22,17 +22,17 @@ $state = 'Green';
 $stateTitle = 'entry actively maintained';
 if($record['Course']['updated'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseYellow'))) {
 	$state = 'Yellow';
-	$stateTitle = 'entry not revised since one year';
+	$stateTitle = 'entry not revised since ' . round(Configure::read('App.CourseYellow')/(60*60*24*365), 1) . ' years';
 }
 if(	$record['Course']['updated'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseRed'))
 OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
 ) {
 	$state = 'Red';
-	$stateTitle = 'entry not revised since > 1,5 year';
+	$stateTitle = 'entry not revised for more than ' . round(Configure::read('App.CourseRed')/(60*60*24*365), 1) . ' years';
 }
 
 if($state !== 'Green' AND !empty($edit))
-	$stateTitle = '<span style="color:red">Entry will disappear after 2 years.<br>Please update!</span>';
+	$stateTitle = '<span style="color:red">Entry will disappear after ' . round(Configure::read('App.CourseExpirationPeriod'), 1) . ' years.<br>Please update!</span>';
 ?>
 
 <tr <?php echo $toggle; ?>
@@ -45,7 +45,7 @@ if($state !== 'Green' AND !empty($edit))
 		<div class="record_details">
 			<div class="left narrow">
 				<dl>
-					<dt>State <?php echo $state; ?></dt>
+					<dt>Status <?php echo $state; ?></dt>
 					<dd><?php echo $stateTitle; ?></dd>
 					<dt>Language</dt>
 					<dd><?php echo (!empty($record['Language']['name'])) ? $record['Language']['name'] : ' - '; ?></dd>
@@ -80,7 +80,7 @@ if($state !== 'Green' AND !empty($edit))
 						?>
 					</dd>
 					
-					<dt>Permalink</dt>
+					<dt>PID</dt>
 					<dd>
 						<?php
 						$url = array(
@@ -92,7 +92,7 @@ if($state !== 'Green' AND !empty($edit))
 					</dd>
 					
 					<?php
-					if(!empty($edit)) {
+					if(!empty($edit) AND $auth_user['is_admin']) {
 						?>
 						<dt>Maintainer</dt>
 						<dd>
@@ -117,6 +117,11 @@ if($state !== 'Green' AND !empty($edit))
 				<dl>
 					<dt>Access Requirements</dt>
 					<dd><?php echo (!empty($record['Course']['access_requirements'])) ? $record['Course']['access_requirements'] : ' - '; ?></dd>
+					
+					<dt>Description</dt>
+					<dd><?php echo (!empty($record['Course']['description'])) ? $record['Course']['description'] : ' - '; ?></dd>
+					
+					
 					<?php
 					$keywords = array();
 					if(!empty($record['Discipline'])) {
