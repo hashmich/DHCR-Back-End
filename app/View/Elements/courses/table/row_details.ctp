@@ -22,7 +22,7 @@ $state = 'Green';
 $stateTitle = 'entry actively maintained';
 if($record['Course']['updated'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseYellow'))) {
 	$state = 'Yellow';
-	$stateTitle = 'entry not revised since ' . round(Configure::read('App.CourseYellow')/(60*60*24*365), 1) . ' years';
+	$stateTitle = 'entry not revised for ' . round(Configure::read('App.CourseYellow')/(60*60*24*365), 1) . ' years';
 }
 if(	$record['Course']['updated'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseRed'))
 OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
