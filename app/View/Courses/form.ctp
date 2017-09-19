@@ -87,7 +87,9 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 </fieldset>
 <fieldset>
 	<?php
-	echo $this->Form->input('name');
+	echo $this->Form->input('name', array(
+		'label' => 'Course Name'
+	));
 	echo $this->Form->input('description', array('type' => 'textarea'));
 	echo $this->Form->input('course_type_id', array(
 			'empty' => ' -- none -- ',

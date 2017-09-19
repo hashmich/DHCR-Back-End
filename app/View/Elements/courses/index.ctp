@@ -20,7 +20,7 @@ $fieldlist = array(
 	'CourseType.name' => array('label' => 'Course Type'),
 	'Institution.name' => array('label' => 'Institution'),
 	'Course.department' => array('label' => 'Department'),
-	'Course.url' => array('label' => 'Information'),
+	'Course.info_url' => array('label' => 'Information'),
 	'Course.guide_url' => array('label' => 'Curriculum')
 );
 $colspan = count($fieldlist);
