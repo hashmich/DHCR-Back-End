@@ -42,18 +42,6 @@ class AppUser extends User {
 				'rule' => 'notBlank',
 				'message' => 'Please enter your first name.'
 			)
-		),
-		'telephone' => array(
-			'required' => array(
-				'rule' => 'notBlank',
-				'message' => 'Please enter your telephone number.'
-			)
-		),
-		'about' => array(
-			'required' => array(
-				'rule' => 'notBlank',
-				'message' => 'For verification of your involvement, please provide any further information.'
-			)
 		)
 	);
 	
@@ -73,6 +61,8 @@ class AppUser extends User {
 			if($temp) {
 				unset($this->data[$this->alias]['shib_eppn']);
 			}
+		}else{
+			$this->data[$this->alias]['shib_eppn'] = null;
 		}
 		return true;
 	}

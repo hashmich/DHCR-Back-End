@@ -15,26 +15,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+?>
 
  
-echo '<h2>Your Courses</h2>';
+<h2>Your Courses</h2>
 
+<div class="actions">
+	<ul>
+		<li>
+			<?php
+			echo $this->Html->link('Add new Course', array(
+				'controller' => 'courses',
+				'action' => 'add'
+			));
+			?>
+		</li>
+	</ul>
+</div>
+
+
+<?php
 echo $this->element('dashboard/shibboleth_link');
 
 
 if(empty($courses)) {
 	echo '<p>There are no courses in the registry owned by you.</p>';
-	echo $this->Html->tag('div', $this->Html->link('Add a Course', array(
-		'controller' => 'courses',
-		'action' => 'add'
-	)), array('class' => 'actions'));
 }else{
-	//echo $this->element('courses/map');
-	echo $this->Html->tag('div', $this->Html->link('Add new Course', array(
-		'controller' => 'courses',
-		'action' => 'add'
-	)), array('class' => 'actions'));
 	$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
 	echo $this->element('courses/index');
 }

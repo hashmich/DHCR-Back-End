@@ -1,27 +1,31 @@
 
 <h2>Course Details</h2>
 
-
-	<?php
-	if(!empty($edit)) {
-		echo '<div class="actions"><ul>';
-		echo '<li>';
-		echo $this->Html->link('review', array(
-				'controller' => 'courses',
-				'action' => 'edit',
-			$course['Course']['id']
-		));
-		echo '</li>';
-		echo '<li>';
-		echo $this->Html->link('revalidate', array(
-				'controller' => 'courses',
-				'action' => 'revalidate',
+<div class="actions">
+	<ul>
+		<li><?php echo $this->Html->link('list', '/'); ?></li>
+		
+		<?php
+		if(!empty($edit)) {
+			echo '<li>';
+			echo $this->Html->link('review', array(
+					'controller' => 'courses',
+					'action' => 'edit',
 				$course['Course']['id']
-		));
-		echo '</li>';
-		echo '</ul></div>';
-	}
-	?>
+			));
+			echo '</li>';
+			echo '<li>';
+			echo $this->Html->link('revalidate', array(
+					'controller' => 'courses',
+					'action' => 'revalidate',
+					$course['Course']['id']
+			));
+			echo '</li>';
+		}
+		?>
+	</ul>
+</div>
+
 
 <dl>
 <?php

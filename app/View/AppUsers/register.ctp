@@ -119,10 +119,6 @@
 		'default' => (empty($shibUser['last_name'])) ? null : $shibUser['last_name']
 	));
 	
-	echo $this->Form->input('telephone', array(
-		'type' => 'text'
-	));
-	
 	echo $this->Form->input('about', array(
 		'type' => 'textarea',
 		'placeholder' => 'Please provide some details about who you are and your institutional occupation, 

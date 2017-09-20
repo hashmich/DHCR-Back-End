@@ -159,6 +159,17 @@ class AppUsersController extends UsersController {
 	
 	
 	public function register() {
+		$this->{$this->modelClass}->validate = array_merge(
+			$this->{$this->modelClass}->validate,
+			array(
+				'about' => array(
+					'required' => array(
+						'rule' => 'notBlank',
+						'message' => 'For verification of your involvement, please provide any further information.'
+					)
+				)
+			)
+		);
 		parent::register();
 		$this->_setOptions();
 	}

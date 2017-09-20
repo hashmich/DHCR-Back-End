@@ -109,9 +109,6 @@
 	echo $this->Form->input('academic_title');
 	echo $this->Form->input('first_name');
 	echo $this->Form->input('last_name');
-	echo $this->Form->input('telephone', array(
-		'type' => 'text'
-	));
 	echo $this->Form->input('about', array(
 		'type' => 'textarea',
 		'label' => 'About me',

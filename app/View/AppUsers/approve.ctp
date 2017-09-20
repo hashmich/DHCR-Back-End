@@ -85,9 +85,6 @@
 	
 	
 	echo '<fieldset>';
-	echo $this->Form->input('telephone', array(
-		'type' => 'text'
-	));
 	echo $this->Form->input('about', array(
 		'type' => 'textarea',
 		'label' => 'About',

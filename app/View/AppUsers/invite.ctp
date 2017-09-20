@@ -64,7 +64,7 @@ We sincerely hope you will contribute to our effort to expand the knowledge on h
 
 Best wishes and thank you for your effort,
 
-'.$auth_user['name'].'(Moderator) and the Course Registry Team.
+'.$auth_user['name'].' (moderator) and the Course Registry Team.
 
 
 '
@@ -92,14 +92,6 @@ echo $this->Form->input('first_name');
 
 echo $this->Form->input('last_name');
 
-echo $this->Form->input('telephone', array('type' => 'text', 'required' => false));
-
-echo $this->Form->input('about', array(
-	'label' => 'Remarks',
-	'required' => false,
-	'type' => 'textarea',
-	'placeholder' => 'Please provide the name of the department or any other contact details that show the users involvement towards Digital Humanities.',
-));
 echo '</fieldset>';
 echo $this->Form->end('Invite');
 ?>

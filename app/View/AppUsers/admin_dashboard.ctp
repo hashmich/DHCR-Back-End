@@ -18,6 +18,39 @@
 ?>
 <h2>Admin Dashboard</h2>
 
+<div class="actions">
+	<ul>
+		<li>
+			<?php
+			echo $this->Html->link('Invite a new course maintainer', array(
+				'controller' => 'users',
+				'action' => 'invite',
+				'plugin' => null
+			));
+			?>
+		</li>
+		<li>
+			<?php
+			echo $this->Html->link('Re-Invite All!', array(
+					'controller' => 'users',
+					'action' => 'invite',
+					'plugin' => null,
+					'all'
+				), array('confirm' => 'Confirm to send out an invitation reminder email to *ALL* users listed above.')
+			);
+			?>
+		</li>
+		<li>
+			<?php
+			echo $this->Html->link('Add new Course', array(
+				'controller' => 'courses',
+				'action' => 'add'
+			));
+			?>
+		</li>
+	</ul>
+</div>
+
 <?php
 echo $this->element('dashboard/shibboleth_link');
 
@@ -33,7 +66,6 @@ if(!empty($moderated)) {
 	if(empty($moderated)) {
 		echo '<p>There are no courses in the registry moderated by you.</p>';
 	}else{
-		echo $this->element('courses/map', array('courses' => $moderated));
 		$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
 		echo $this->element('courses/index', array('courses' => $moderated));
 	}
@@ -44,16 +76,7 @@ if(!empty($moderated)) {
 <?php
 if(empty($courses)) {
 	echo '<p>There are no courses in the registry owned by you.</p>';
-	echo $this->Html->tag('div', $this->Html->link('Add a Course', array(
-		'controller' => 'courses',
-		'action' => 'add'
-	)), array('class' => 'actions'));
 }else{
-	echo $this->element('courses/map');
-	echo $this->Html->tag('div', $this->Html->link('Add new Course', array(
-		'controller' => 'courses',
-		'action' => 'add'
-	)), array('class' => 'actions'));
 	$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
 	echo $this->element('courses/index');
 }

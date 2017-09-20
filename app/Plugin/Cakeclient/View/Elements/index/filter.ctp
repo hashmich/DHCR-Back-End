@@ -35,15 +35,16 @@ if(!empty($crudFieldlist)) {
 					'empty' => '-- filter by field --'
 			));
 			
-			$_options = array(
-					'is','is not',
-					'starts with','ends with','contains',
-					'greater than','less than'
+			$options = array(
+					'contains' => 'contains (%LIKE%)',
+					'starts with' => 'starts with (LIKE%)',
+					'ends with' => 'ends with (%LIKE)',
+					'is' => 'is (=)',
+					'is not' => 'is not (!=)',
+					'greater than' => 'greater than (>)',
+					'less than' => 'less than (<)'
 			);
-			$options = array();
-			foreach($_options as $v) $options[$v] = $v;
-			
-			echo $this->Form->input('operator', array('options' => $options, 'default' => 'is'));
+			echo $this->Form->input('operator', array('options' => $options, 'default' => 'contains'));
 			
 			echo $this->Form->input('value');
 			

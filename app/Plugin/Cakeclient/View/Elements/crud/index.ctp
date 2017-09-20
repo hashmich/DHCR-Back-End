@@ -46,6 +46,8 @@ echo '<div class="scroll_wrapper">';
 							// be aware of NULL values!
 							if(isset($record[$fieldModelName]) AND array_key_exists($fieldname, $record[$fieldModelName])) {
 								$value = $record[$fieldModelName][$fieldname];
+								//if(strlen($value) > 153)
+								//	$value = substr($value, 0, 150) . '...';
 								// check whether we have a foreign model field to display
 								if(isset($fieldDef['displayField'])) {
 									$key = $fieldname = $fieldDef['displayField'];
