@@ -96,8 +96,9 @@
 	echo '<fieldset>';
 	
 	echo $this->Form->input('institution_id', array(
-		'label' => 'Institution',
-		'empty' => '-- choose institution --'
+		'label' => 'Institution (*)',
+		'empty' => '-- choose institution --',
+		'required' => false
 	));
 	
 	echo $this->Form->input('university', array(
@@ -122,7 +123,7 @@
 	echo $this->Form->input('about', array(
 		'type' => 'textarea',
 		'placeholder' => 'Please provide some details about who you are and your institutional occupation, 
-				so that our moderators get an idea of your involvement into Digital Humanities.',
+so that our moderators get an idea of your involvement into Digital Humanities.',
 	));
 	
 	echo '</fieldset>';

@@ -159,6 +159,9 @@ class AppUsersController extends UsersController {
 	
 	
 	public function register() {
+		if(!empty($this->request->data[$this->modelClass]['university'])) {
+			$this->request->data[$this->modelClass]['institution_id'] = null;
+		}
 		$this->{$this->modelClass}->validate = array_merge(
 			$this->{$this->modelClass}->validate,
 			array(

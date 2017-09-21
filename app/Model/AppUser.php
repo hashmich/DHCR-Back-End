@@ -99,7 +99,6 @@ class AppUser extends User {
 	
 	// custom validation
 	public function checkUniversity($check) {
-		$result = false;
 		$universities = $this->Institution->find('list');
 		
 		if(	!empty($this->data[$this->alias]['institution_id'])
@@ -107,7 +106,7 @@ class AppUser extends User {
 		) {
 			$this->Institution->id = $this->data[$this->alias]['institution_id'];
 			$this->data[$this->alias]['country_id'] = $this->Institution->field('country_id');
-			$result = true;
+			return true;
 		}
 		elseif(!empty($this->data[$this->alias]['university'])) {
 			foreach($universities as $k => &$value) {
@@ -119,10 +118,10 @@ class AppUser extends User {
 				$this->Institution->id = $pos;
 				$this->data[$this->alias]['country_id'] = $this->Institution->field('country_id');
 			}
-			$result = true;
+			return true;
 		}
 		
-		return $result;
+		return false;
 	}
 	
 	

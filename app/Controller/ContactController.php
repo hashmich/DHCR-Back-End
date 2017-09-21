@@ -68,7 +68,7 @@ class ContactController extends AppController {
 		$moderators = $this->AppUser->find('all', array(
 			'contain' => array('Country'),
 			'conditions' => array('AppUser.user_role_id' => 2),
-			'order' => array('country_id' => 'asc')
+			'order' => array('Country.name' => 'asc')
 		));
 		$userAdmins = $this->AppUser->find('all', array(
 				'contain' => array(),
