@@ -1,6 +1,6 @@
 <?php
 if(!empty($crudFieldlist)) {
-	$this->append('script_bottom');
+	$this->Html->scriptStart(array('inline' => false));
 	?>
 	$(document).ready(function() {
 		$('#cakeclient-filter > .toggle').on('click', function() {
@@ -14,9 +14,7 @@ if(!empty($crudFieldlist)) {
 			$('#cakeclient-filter > .toggle > span').toggleClass('glyphicon-menu-up');
 		});
 	});
-	<?php
-	$this->end();
-	?>
+	<?php $this->Html->scriptEnd(); ?>
 	<div id="cakeclient-filter">
 		<h3 class="toggle off"><span class="glyphicon glyphicon-menu-down"></span> Filter</h3>
 		<div id="cakeclient-filterpane" style="display:none">

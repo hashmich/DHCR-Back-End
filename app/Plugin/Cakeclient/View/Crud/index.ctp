@@ -4,7 +4,7 @@
 if(!empty($title_for_layout)) echo '<h2>'.$title_for_layout.'</h2>';
 echo $this->element('layout/actions', array(), array('plugin' => 'Cakeclient'));
 
-$this->append('script_bottom');
+$this->Html->scriptStart(array('inline' => false));
 ?>
 $(document).ready(function() {
 	$('#cakeclient-ancestry > .toggle').on('click', function() {
@@ -19,7 +19,7 @@ $(document).ready(function() {
 	});
 });
 <?php
-$this->end();
+$this->Html->scriptEnd();
 ?>
 <div id="cakeclient-ancestry">
 	<h3 class="toggle off"><span class="glyphicon glyphicon-menu-down"></span> Ancestry</h3>

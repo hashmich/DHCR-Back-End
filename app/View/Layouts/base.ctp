@@ -57,7 +57,6 @@
 	echo $this->fetch('css');
 	?>
 	
-	
 </head>
 
 
