@@ -35,6 +35,8 @@ $this->Html->scriptBlock(
 	$this->element('courses/initialize_map'),
 	array('inline' => false)
 );
-
-$this->append('onload', 'var map = initializeMap();');
+$this->Html->scriptBlock(
+	'var map = initializeMap();',
+	array('inline' => false)
+);
 ?>

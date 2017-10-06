@@ -98,7 +98,6 @@
 	</script>
 	
 	<?php echo $this->fetch('script'); ?>
-	<?php echo $this->element('layout/onload', array(), array('plugin' => 'Cakeclient')); ?>
 	
 </body>
 </html>

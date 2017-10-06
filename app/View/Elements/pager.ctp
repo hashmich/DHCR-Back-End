@@ -54,7 +54,14 @@
 			'div' => array('id' => $id)
 		));
 		
-		$this->append('onload', 'document.getElementById("' . $id . '").style.display = "none";');
+		$this->Html->scriptStart(array('inline' => false));
+		?>
+		$(document).ready(function() {
+			document.getElementById("' . $id . '").style.display = "none";
+		});
+		<?php
+		$this->Html->scriptEnd();
+		
 		$this->set('paging_form_count', ++$paging_form_count);
 	}
 	

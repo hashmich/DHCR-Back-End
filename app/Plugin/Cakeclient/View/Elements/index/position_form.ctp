@@ -58,16 +58,18 @@
 	
 	// remove the submit buttons, as long the form will be submitted by js
 	if(empty($positon_form)) {
-		$this->start('onload');
-			?>
+		$this->Html->scriptBlock(array('inline' => false));
+		?>
+		$(document).ready(function() {
 			var elements = document.getElementsByClassName('positioning_submit');
 			i = elements.length;
 			while(i--) {
 				elements[i].style.display = "none";
 				elements[i].form.style.minWidth = "40px";
 			}
-			<?php
-		$this->end('onload');
+		});
+		<?php
+		$this->Html->scriptEnd();
 		$this->set('position_form', true);
 	}
 	?>

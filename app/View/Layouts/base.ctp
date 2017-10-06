@@ -126,13 +126,7 @@
 	
 	
 	<?php echo $this->fetch('script'); ?>
-	<script type="text/javascript"><?php echo $this->fetch('script_bottom'); ?></script>
-	<script type="text/javascript">
-		window.onload = function() {
-			// some features don't make use of jQuery
-			<?php echo $this->fetch('onload'); ?>
-		}
-	</script>
+	
 	<!-- Piwik -->
 	<script type="text/javascript">
 	  var _paq = _paq || [];

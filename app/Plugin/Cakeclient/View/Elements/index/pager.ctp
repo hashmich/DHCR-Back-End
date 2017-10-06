@@ -37,12 +37,14 @@
 			'div' => array('id' => $id)
 		));
 		
-		$this->start('onload');
+		$this->Html->scriptBlock(array('inline' => false));
 			?>
-			var element = document.getElementById('<?php echo $id; ?>');
-			element.style.display = "none";
+			$(document).ready(function() {
+				var element = document.getElementById('<?php echo $id; ?>');
+				element.style.display = "none";
+			});
 			<?php
-		$this->end('onload');
+		$this->Html->scriptEnd();
 		
 		$this->set('paging_form_count', ++$paging_form_count);
 	}

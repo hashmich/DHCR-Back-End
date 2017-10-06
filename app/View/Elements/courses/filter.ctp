@@ -60,7 +60,11 @@ if(!empty($filter))
 	array('class' => 'form-button')) . '</li>';
 ?>
 
-<?php $this->append('onload', 'document.getElementById("submit_filter").style.display = "none";'); ?>
+<?php $this->Html->scriptStart(array('inline' => false)); ?>
+$(document).ready(function() {
+	document.getElementById("submit_filter").style.display = "none";
+});
+<?php $this->Html->scriptEnd(); ?>
 
 
 
