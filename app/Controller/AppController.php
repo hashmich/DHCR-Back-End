@@ -137,6 +137,35 @@ class AppController extends Controller {
 	
 	protected function _postedFilter() {}
 	
+	
+	protected function _checkCaptcha() {
+		$ip = $_SERVER['REMOTE_ADDR'];
+		if(!empty($_SERVER['HTTP_CLIENT_IP'])) 
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) 
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		
+		$data = array(
+			'secret' => Configure::read('App.reCaptchaPrivateKey'),
+			'response' => $this->request->data['g-recaptcha-response'],
+			'remoteip' => $ip
+		);
+		
+		// set URL and other appropriate options
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+		
+		// grab URL and pass it to the browser
+		$result = curl_exec($ch);
+		
+		// close cURL resource, and free up system resources
+		curl_close($ch);
+		
+		print_r($result); // output result for all the kings
+	}
+	
 }
 
 

@@ -142,7 +142,7 @@ so that our moderators get an idea of your involvement into Digital Humanities.'
 	echo $this->Form->end(array(
 		'label' => 'Submit',
 		'class' => 'g-recaptcha',
-		'data-sitekey' => '6LdFITIUAAAAAKWsXvYMT7zBwXj7t7aBzn4TAZn4',
+		'data-sitekey' => Configure::read('App.reCaptchaPublicKey'),
 		'data-callback' => 'recaptchaCallback'
 	));
 	?>
