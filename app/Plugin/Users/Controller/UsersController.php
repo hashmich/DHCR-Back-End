@@ -8,7 +8,10 @@ class UsersController extends UsersAppController {
 	public $name = 'Users';
 	
 	public $components = array(
-		'Security' => array('priority' => 1)
+		'Security' => array(
+			'priority' => 1,
+			'csrfExpires' => '+2 hours'
+		)
 	);
 	
 	

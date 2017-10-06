@@ -22,12 +22,15 @@
 // view extension doesn't work well with Cake's form validation.
 ?>
 
-<?php $this->Html->script('https://www.google.com/recaptcha/api.js', array('inline' => false)); ?>
-<script type="text/javascript">
-    function recaptchaCallback(token) {
-       	document.getElementById("AppUserRegisterForm").submit();
-    }
-</script>
+<?php
+$this->Html->script('https://www.google.com/recaptcha/api.js', array('inline' => false));
+
+$this->Html->scriptStart(array('inline' => false));
+?>
+function recaptchaCallback(token) {
+	document.getElementById("AppUserRegisterForm").submit();
+}
+<?php $this->Html->scriptEnd(); ?>
 
 <div class="users_form">
 	<h2>User Registration</h2>
@@ -136,7 +139,8 @@ so that our moderators get an idea of your involvement into Digital Humanities.'
 	
 	echo '</fieldset>';
 	
-	echo $this->Form->end('Submit', array(
+	echo $this->Form->end(array(
+		'label' => 'Submit',
 		'class' => 'g-recaptcha',
 		'data-sitekey' => '6LdFITIUAAAAAKWsXvYMT7zBwXj7t7aBzn4TAZn4',
 		'data-callback' => 'recaptchaCallback'

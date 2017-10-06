@@ -43,6 +43,8 @@ class AppUsersController extends UsersController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		
+		$this->Security->unlockedFields[] = 'g-recaptcha-response';
+		
 		if($this->Auth->user('user_role_id') < 3) $this->Auth->allow(array('invite'));
 		
 		$shibLogin = !empty($_SERVER['HTTP_EPPN']);
