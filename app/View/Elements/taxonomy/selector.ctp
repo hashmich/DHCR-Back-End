@@ -90,12 +90,6 @@ $classes .= (!empty($dropdown)) ? ' dropdown_checklist' : '';
 			
 			<?php
 			if(!empty($buttons)) {
-				/*
-				echo $this->Form->button('Ok', array(
-					'type' => 'submit',
-					'style' => 'margin-bottom:8px;'
-				));
-				*/
 				echo $this->Form->button('Deselect all', array(
 					'onclick' => "deselectList('#".$habtmModel."_checklist');",
 					'type' => 'button',
@@ -132,7 +126,7 @@ $classes .= (!empty($dropdown)) ? ' dropdown_checklist' : '';
 <?php
 if(!empty($dropdown) AND empty($dropdownScript)) {
 	$this->set('dropdownScript', true);
-	$this->append('script_bottom');
+	$this->Html->scriptStart(array('inline' => false));
 	?>
 	if(!dropdownScript) {
 		var dropdownScript = 1;
@@ -155,8 +149,10 @@ if(!empty($dropdown) AND empty($dropdownScript)) {
 				var inputlist = checklist.find('input[type=checkbox]');
 				inputlist.each(function(key) {
 					$(this).on('change', function() {
-						//dc_writeDisplay(currentToggle, checklist);
-						$(this).closest('form').submit();
+						<?php
+						if(!empty($autosubmit)) echo '$(this).closest("form").submit();';
+						else echo 'dc_writeDisplay(currentToggle, checklist);';
+						?>
 					});
 				});
 			});
@@ -180,12 +176,14 @@ if(!empty($dropdown) AND empty($dropdownScript)) {
 		
 		function deselectList(selector) {
 			$(selector + ' :checkbox').prop('checked', false);
-			//dc_writeDisplay($(selector).prev('.checklist_toggle'), $(selector));
-			$(selector + ' :checkbox').closest('form').submit();
+			<?php
+			if(!empty($autosubmit)) echo '$(selector + " :checkbox").closest("form").submit();';
+			else echo 'dc_writeDisplay($(selector).prev(".checklist_toggle"), $(selector));';
+			?>
 		}
 	}
 	<?php
-	$this->end();
+	$this->Html->scriptEnd();
 }
 ?>
 

@@ -27,19 +27,22 @@ echo $this->element('taxonomy/selector', array(
 	'habtmModel' => 'Discipline',
 	'label' => 'Disciplines',
 	'dropdown' => $dropdownChecklist,
-	'buttons' => true
+	'buttons' => true,
+	'autosubmit' => true
 ));
 
 echo $this->element('taxonomy/selector', array(
 	'habtmModel' => 'TadirahTechnique',
 	'label' => 'Techniques',
 	'dropdown' => $dropdownChecklist,
-	'buttons' => true
+	'buttons' => true,
+	'autosubmit' => true
 ));
 echo $this->element('taxonomy/selector', array(
 	'habtmModel' => 'TadirahObject',
 	'label' => 'Objects',
 	'dropdown' => $dropdownChecklist,
-	'buttons' => true
+	'buttons' => true,
+	'autosubmit' => true
 ));
 ?>
