@@ -37,7 +37,7 @@
 			'div' => array('id' => $id)
 		));
 		
-		$this->Html->scriptBlock(array('inline' => false));
+		$this->Html->scriptStart(array('inline' => false));
 			?>
 			$(document).ready(function() {
 				var element = document.getElementById('<?php echo $id; ?>');
