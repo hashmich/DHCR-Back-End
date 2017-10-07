@@ -85,6 +85,15 @@
 	<h3>Contact Form</h3>
 	
 	<?php
+	$this->Html->script('https://www.google.com/recaptcha/api.js', array('inline' => false));
+	$this->Html->scriptStart(array('inline' => false));
+	?>
+	function recaptchaCallback(token) {
+		document.getElementById("AppUserRegisterForm").submit();
+	}
+	<?php $this->Html->scriptEnd(); ?>
+	
+	<?php
 	echo $this->Form->create('Contact', array('novalidate' => true));
 	
 	echo $this->Form->input('email', array(
@@ -109,7 +118,12 @@
 		'type' => 'textarea',
 	));
 	
-	echo $this->Form->end('Submit');
+	echo $this->Form->end(array(
+			'label' => 'Submit',
+			'class' => 'g-recaptcha',
+			'data-sitekey' => Configure::read('App.reCaptchaPublicKey'),
+			'data-callback' => 'recaptchaCallback'
+	));
 	?>
 	
 	

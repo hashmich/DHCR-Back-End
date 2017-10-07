@@ -161,6 +161,12 @@ class AppUsersController extends UsersController {
 	
 	
 	public function register() {
+		if(!empty($this->request->data)) {
+			if(!$this->_checkCaptcha()) {
+				$this->Flash->set('You did not succeed the CAPTCHA test. Please make sure you are human and try again.');
+				$this->redirect('/');
+			}
+		}
 		if(!empty($this->request->data[$this->modelClass]['university'])) {
 			$this->request->data[$this->modelClass]['institution_id'] = null;
 		}

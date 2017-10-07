@@ -151,19 +151,17 @@ class AppController extends Controller {
 			'remoteip' => $ip
 		);
 		
-		// set URL and other appropriate options
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-		
-		// grab URL and pass it to the browser
 		$result = curl_exec($ch);
-		
-		// close cURL resource, and free up system resources
 		curl_close($ch);
 		
-		print_r($result); // output result for all the kings
+		if(!$result) return false;
+		$result = json_decode($result, true);
+		if(!empty($result['success'])) return true;
+		return false;
 	}
 	
 }

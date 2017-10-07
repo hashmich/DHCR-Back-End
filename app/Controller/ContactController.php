@@ -29,12 +29,18 @@ class ContactController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		
+		$this->Security->unlockedFields[] = 'g-recaptcha-response';
 		$this->Auth->allow(array('us'));
 		$this->set('title_for_layout', 'Contact');
 	}
 	
 	public function us() {
 		if(!empty($this->request->data['Contact'])) {
+			if(!$this->_checkCaptcha()) {
+				$this->Flash->set('You did not succeed the CAPTCHA test. Please make sure you are human and try again.');
+				$this->redirect('/');
+			}
+			
 			$data = $this->request->data['Contact'];
 			
 			// try fetching the moderator in charge of the user's country

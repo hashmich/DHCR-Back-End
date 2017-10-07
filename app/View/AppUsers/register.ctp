@@ -24,7 +24,6 @@
 
 <?php
 $this->Html->script('https://www.google.com/recaptcha/api.js', array('inline' => false));
-
 $this->Html->scriptStart(array('inline' => false));
 ?>
 function recaptchaCallback(token) {
