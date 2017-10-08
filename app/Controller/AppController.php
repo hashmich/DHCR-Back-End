@@ -158,7 +158,7 @@ class AppController extends Controller {
 		$result = curl_exec($ch);
 		curl_close($ch);
 		
-		if(!$result) return false;
+		if(empty($result)) return false;
 		$result = json_decode($result, true);
 		if(!empty($result['success'])) return true;
 		return false;
