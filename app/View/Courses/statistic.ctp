@@ -1,3 +1,18 @@
+<?php $this->Html->scriptStart(array('inline' => false)); ?>
+	$(document).ready(function() {
+		$('.statistic > .toggle').on('click', function() {
+			if($(this).hasClass('off')) {
+				$(this).next('div').show();
+			}else{
+				$(this).next('div').hide();
+			}
+			$(this).toggleClass('off');
+			$(this).find('span').toggleClass('glyphicon-menu-down');
+			$(this).find('span').toggleClass('glyphicon-menu-up');
+		});
+	});
+<?php $this->Html->scriptEnd(); ?>
+
 <div class="statistic">
 
 	<h2>Course Statistic</h2>
@@ -7,8 +22,8 @@
 		<dd><?php echo $count; ?></dd>
 	</dl>
 	
-	<h3 onclick="$('#countries').toggle()">By Country</h3>
-	<div id="countries" style="display:none">
+	<h3 class="toggle off"><span class="glyphicon glyphicon-menu-down"></span> By Country</h3>
+	<div style="display:none">
 		<dl>
 			<?php
 			foreach($countries as $item) {
@@ -19,8 +34,8 @@
 		</dl>
 	</div>
 	
-	<h3 onclick="$('#institutions').toggle()">By Institution</h3>
-	<div id="institutions" style="display:none">
+	<h3 class="toggle off"><span class="glyphicon glyphicon-menu-down"></span> By Institution</h3>
+	<div style="display:none">
 		<dl>
 			<?php
 			foreach($institutions as $item) {
@@ -31,8 +46,8 @@
 		</dl>
 	</div>
 	
-	<h3 onclick="$('#disciplines').toggle()">By Discipline</h3>
-	<div id="disciplines" style="display:none">
+	<h3 class="toggle off"><span class="glyphicon glyphicon-menu-down"></span> By Discipline</h3>
+	<div style="display:none">
 		<dl>
 			<?php
 			foreach($disciplines as $item) {
@@ -43,8 +58,8 @@
 		</dl>
 	</div>
 	
-	<h3 onclick="$('#techniques').toggle()">By Technique</h3>
-	<div id="techniques" style="display:none">
+	<h3 class="toggle off"><span class="glyphicon glyphicon-menu-down"></span> By Technique</h3>
+	<div style="display:none">
 		<dl>
 			<?php
 			foreach($techniques as $item) {
@@ -55,8 +70,8 @@
 		</dl>
 	</div>
 	
-	<h3 onclick="$('#objects').toggle()">By Object</h3>
-	<div id="objects" style="display:none">
+	<h3 class="toggle off"><span class="glyphicon glyphicon-menu-down"></span> By Object</h3>
+	<div style="display:none">
 		<dl>
 			<?php
 			foreach($objects as $item) {
