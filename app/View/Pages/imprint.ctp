@@ -97,7 +97,17 @@
 	This is a notice to indicate that for reasons of system security and overview of 
 	user behavior, personal data of users of this website (visiting period, operating 
 	system, browser version, browser resolution, country of origin, number of visits) 
-	will be stored using cookies and piwik tracking. Data will be stored until further notice. 
+	will be stored using cookies and 
+	<?php echo $this->Html->link('Piwik', 'https://piwik.org/'); ?> tracking. 
+	The registration page and contact form are protected against spam bots by Google 
+	<?php echo $this->Html->link('reCaptcha', 'https://www.google.com/recaptcha/intro/android.html'); ?>. 
+	The user's IP address will be transferred to Google on submit of these forms, to proove 
+	the humanness by previously recorded user behavior and other reCaptcha results. 
+	Google's  
+	<?php echo $this->Html->link('privacy policy', 'https://www.google.com/intl/en/policies/privacy/'); ?> and 
+	<?php echo $this->Html->link('terms of service', 'https://www.google.com/intl/en/policies/terms/'); ?> 
+	can be found here.
+	Data will be stored until further notice. 
 	Data will not be disseminated without your explicit consent. 
 	By using this website, you agree to the manner and purposes of data processing. 
 	You can disable cookies in your browser settings. However, this might limit functionality 
@@ -216,8 +226,21 @@
 	Wir weisen darauf hin, dass zum Zwecke der Systemsicherheit und der Übersicht über das 
 	Nutzungsverhalten der Besuchenden im Rahmen von Cookies diverse personenbezogene Daten 
 	(Besuchszeitraum, Betriebssystem, Browserversion, innere Auflösung des Browserfensters, 
-	Herkunft nach Land, wievielter Besuch seit Beginn der Aufzeichnung) mittels Piwik-Tracking 
-	gespeichert werden. Die Daten werden bis auf weiteres gespeichert. Soweit dies erfolgt, 
+	Herkunft nach Land, wievielter Besuch seit Beginn der Aufzeichnung) mittels 
+	<?php echo $this->Html->link('Piwik-Tracking', 'https://piwik.org/'); ?> 
+	gespeichert werden. 
+	Das Registrierungs- und Kontaktformular werden gegen Spam-Bots durch Google
+	<?php echo $this->Html->link('reCaptcha', 'https://www.google.com/recaptcha/intro/android.html'); ?>
+	geschützt. 
+	Die IP-Adresse des Besuchers wird beim Absenden dieser Formulare an Google gesendet, 
+	um das Mensch-Sein des Besuchers durch bereits zuvor von Google aufgezeichnetes Nutzerverhalten 
+	und gelöste reCaptcha zu bestätigen.  
+	Googles 
+	<?php echo $this->Html->link('Dateschutzerklärung', 'https://www.google.com/intl/de/policies/privacy/'); ?> und 
+	<?php echo $this->Html->link('Nutzungsbedingungen', 'https://www.google.com/intl/de/policies/terms/'); ?> 
+	können hier eingesehen werden. 
+	
+	Die Daten werden bis auf weiteres gespeichert. Soweit dies erfolgt, 
 	werden diese Daten nicht ohne Ihre ausdrückliche Zustimmung an Dritte weitergegeben. 
 	Durch die Nutzung der Website erklären Sie sich mit der Art und Weise sowie dem Zweck 
 	der Datenverarbeitung einverstanden. Durch eine entsprechende Einstellung in Ihrem Browser 

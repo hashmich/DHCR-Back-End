@@ -106,40 +106,6 @@
 		</div>
 	</div>
 	
-	<div id="cookie-information">
-		<h1>Cookie Information</h1>
-		<p>
-			This website uses cookies. </br>
-			Session cookies are required for the page to function properly 
-			and do not store any information which allows to identify you 
-			anywhere else on the web.
-		</p>
-		<p>
-			In addition, we are using 
-			<?php echo $this->Html->link('Piwik', 'https://piwik.org/'); ?> 
-			to monitor the usage of our website. 
-			Recorded usage is not linkable to any individual user. 
-			If you do not wish being tracked anyway, 
-			you may opt out here.
-		</p>
-		<p>
-			Our registration page and the contact form is protected by Google 
-			reCaptcha. Google will deploy some cookies in order to 
-			make this feature work. 
-			You may have a look at Google's  
-			<?php echo $this->Html->link('privacy policy', 'https://www.google.com/intl/en/policies/privaicy/'); ?> and 
-			<?php echo $this->Html->link('terms of service', 'https://www.google.com/intl/en/policies/terms/'); ?>.
-			Opting out is not possible, except not to visit the mentioned pages.
-		</p>
-		<p>
-			Click here to hide this message: 
-		</p>
-	</div>
-	
-	<div id="piwik-optout">
-        <div><span id="piwik-span" class="hidden">× </span>Datenschutz</div>
-        <iframe id="piwik-frame" class="" src="https://piwik.apollo.arz.oeaw.ac.at/index.php?module=CoreAdminHome&action=optOut&idSite=21" style="display: inline;"></iframe>
-    <div></div></div>
 	
 	
 	<script src="https://code.jquery.com/jquery-1.12.4.min.js"
