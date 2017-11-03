@@ -47,9 +47,11 @@ class AppController extends Controller {
 	
 	public $filter = array();
 	
+	public $shibUser = array();
+	
+	
 	
 	public function beforeFilter() {
-		// maintain pagination settings
 		// maintain pagination settings
 		if($paginate = $this->Session->read('Paginate'))
 			$this->paginate = array_merge($this->paginate, $paginate);
@@ -85,6 +87,44 @@ class AppController extends Controller {
 			// dynamically load the AclMenu Component
 			$this->Crud->loadAclMenu();
 			$this->AclMenu->setMenu();
+		}
+		
+		$shibLogin = !empty($_SERVER['HTTP_EPPN']);
+		if($shibLogin) {
+			// eppn: shib-'ID' (Matej said), givenName, surname, mail
+			$shibVars = array(
+					'HTTP_EPPN' => 'shib_eppn',
+					'HTTP_GIVENNAME' => 'first_name',
+					'HTTP_SN' => 'last_name',
+					'HTTP_EMAIL' => 'email');
+			foreach($_SERVER as $k => $v) {
+				if(isset($shibVars[$k]) AND !empty($v) AND $v != '(null)') {
+					$this->shibUser[$shibVars[$k]] = $v;
+				}
+			}
+			// shibboleth might return strange empty-values...
+			if(empty($this->shibUser['shib_eppn']) OR $this->shibUser['shib_eppn'] == '(null)')
+				$this->shibUser = array();
+				$this->set('shibUser', $this->shibUser);
+		}
+		
+		if($this->request->params['action'] != 'login') {
+			if($this->shibUser AND !$this->Auth->user()) {
+				// check for a matching user
+				$this->loadModel('AppUser');
+				$user = $this->AppUser->find('first', array(
+						'contain' => array(),
+						'conditions' => array(
+							'AppUser.shib_eppn' => $this->shibUser['shib_eppn']
+						)
+				));
+				if(empty($user)) {
+					// account has not yet been linked to the DHCR - or not yet registered!!!
+					$this->Flash->set('You have an active external identity provider session (single sign-on), 
+							but you either just logged out from the registry or you do not yet have an account..
+							If you did not register yourself to the DH-Course Registry, please register now.');
+				}
+			}
 		}
 	}
 	
@@ -138,7 +178,7 @@ class AppController extends Controller {
 	protected function _postedFilter() {}
 	
 	
-	protected function _checkCaptcha() {
+	protected function _checkCaptcha(&$errors = array()) {
 		$ip = $_SERVER['REMOTE_ADDR'];
 		if(!empty($_SERVER['HTTP_CLIENT_IP'])) 
 			$ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -154,12 +194,14 @@ class AppController extends Controller {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
 		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
 		$result = curl_exec($ch);
 		curl_close($ch);
 		
 		if(empty($result)) return false;
 		$result = json_decode($result, true);
+		if(!empty($result['error-codes'])) $errors = $result['error-codes'];
 		if(!empty($result['success'])) return true;
 		return false;
 	}

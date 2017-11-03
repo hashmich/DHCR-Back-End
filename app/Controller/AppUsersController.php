@@ -37,7 +37,6 @@ class AppUsersController extends UsersController {
 	
 	public $uses = array('AppUser');
 	
-	public $shibUser = array();
 	
 	
 	public function beforeFilter() {
@@ -47,31 +46,13 @@ class AppUsersController extends UsersController {
 		
 		if($this->Auth->user('user_role_id') < 3) $this->Auth->allow(array('invite'));
 		
-		$shibLogin = !empty($_SERVER['HTTP_EPPN']);
-		if($shibLogin) {
-			// eppn: shib-'ID' (Matej said), givenName, surname, mail
-			$shibVars = array(
-				'HTTP_EPPN' => 'shib_eppn',
-				'HTTP_GIVENNAME' => 'first_name',
-				'HTTP_SN' => 'last_name',
-				'HTTP_EMAIL' => 'email');
-			foreach($_SERVER as $k => $v) {
-				if(isset($shibVars[$k]) AND !empty($v) AND $v != '(null)') {
-					$this->shibUser[$shibVars[$k]] = $v;
-				}
-			}
-			if(empty($this->shibUser['shib_eppn']) OR $this->shibUser['shib_eppn'] == '(null)')
-				$this->shibUser = array();
-			$this->set('shibUser', $this->shibUser);
-		}
-		
+		// save identity provider ID, if not already set
 		if(	$this->Auth->user()
 		AND	empty($this->Auth->user('shib_eppn'))
 		AND	$this->shibUser
 		AND	(!$this->Session->read('Users.block_eppn') 
 			|| $this->Session->read('Users.block_eppn') != $this->shibUser['shib_eppn'])
 		) {
-			// make connection, if not already set
 			$this->{$this->modelClass}->recursive = 0;
 			$this->{$this->modelClass}->id = $this->Auth->user('id');
 			$this->{$this->modelClass}->saveField('shib_eppn', $this->shibUser['shib_eppn'], true);
@@ -114,10 +95,12 @@ class AppUsersController extends UsersController {
 					}
 					// else: handle every other login errors in parent login method
 				}else{
-					// account has not yet been linked to the DHCR
-					$this->Auth->flash('You have been successfully verified by your identity provider (IDP), 
-							but your Courseregistry account has not been linked to that external service, yet. 
-							Please login using your DH-Courseregistry account to connect.');
+					// account has not yet been linked to the DHCR - or not yet registered!!!
+					$this->Flash->set('You have been successfully verified by your identity provider (IDP),
+							but we could not find a matching account in our user management system.
+							If you did not register yourself to the Courseregistry before, please register now. 
+							In case you already have an account, please login once using your existing account 
+							to link your external identity to the DH-Course Registry.');
 				}
 			}
 		}

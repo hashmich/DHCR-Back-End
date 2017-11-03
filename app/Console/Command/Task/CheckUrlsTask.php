@@ -24,11 +24,13 @@ class CheckUrlsTask extends Shell {
 		Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
 		
 		$collection = $this->Course->checkUrls();
-		if(Configure::read('debug') > 0) $to = 'mail@hendrikschmeer.de';
+		if(Configure::read('debug') > 0 AND $to == null) $to = 'mail@hendrikschmeer.de';
 		$this->out('Debug level: ' . Configure::read('debug'));
 		$this->out('Alternative addressee (debug): ' . $to);
 		if(!empty($collection)) {
-			
+			if(Configure::read('debug') > 0) {
+				//debug(count($collection));
+			}
 			if($sendMails !== false) {
 				App::uses('CakeEmail', 'Network/Email');
 				

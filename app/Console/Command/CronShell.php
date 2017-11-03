@@ -29,7 +29,7 @@ class CronShell extends AppShell {
 	public function main() {
         $this->out("Available tasks: \n\t ");
 		foreach($this->tasks as $task) {
-			$this->out($task . " \n\t");
+			$this->out($task . " (" . strtoupper($task[0]) . ")\n\t");
 		}
 		$this->out("Please note: \nperforming these tasks will send out emails to recipients, \nif the application is not in debug-mode.\nYou can enter an alternative debug-mail recipient.");
 		$this->hr();
@@ -59,7 +59,7 @@ class CronShell extends AppShell {
     
     private function __emailSettings() {
     	$this->out("Send emails to the collected recipients or an alternative debug email address? \n
-    			Hit Enter or type \"recipients\" to start mass emailing. Type in an alternative address for debugging.");
+Hit Enter or type \"recipients\" to start mass emailing. Type in an alternative address for debugging.");
     	$this->to = $this->in('Send all Emails to...: ', null, 'recipients');
     	if($this->to == 'recipients') $this->to = null;
     	$this->sendMails = $this->in('Send Emails?', array('Y','N'), 'N');

@@ -93,7 +93,7 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 	echo $this->Form->input('description', array('type' => 'textarea'));
 	echo $this->Form->input('course_type_id', array(
 			'empty' => ' -- none -- ',
-			'label' => 'Education'
+			'label' => 'Education Type'
 	));
 	echo $this->Form->input('language_id', array('empty' => ' -- none -- '));
 	echo $this->Form->input('access_requirements');
@@ -112,7 +112,7 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 			<p>
 				URL Validation has been set up to assist you providing valid content. <br />
 				But sometimes you may have trouble to get URLs past validation, due to weird 
-				http status codes (codes > 400) or restrictive server settings.
+				http status codes (codes > 300) or restrictive server settings.
 			</p>
 			<p>
 				Please check these boxes, if you thoroughly checked the URLs, 
@@ -126,10 +126,10 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 				'value' => 1
 			));
 			echo $this->Form->input('skip_guide_validation', array(
-					'label' => 'Skip Guide URL Validation',
-					'type' => 'checkbox',
-					'checked' => false,
-					'value' => 1
+				'label' => 'Skip Guide URL Validation',
+				'type' => 'checkbox',
+				'checked' => false,
+				'value' => 1
 			));
 		echo '</div>';
 	}

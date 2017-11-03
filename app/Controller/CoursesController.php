@@ -226,7 +226,7 @@ class CoursesController extends AppController {
 			$this->Course->set($course);
 			$this->Course->save();
 			$this->Course->read();
-			$this->Session->setFlash('The record has been revalidated with the current timestamp: '
+			$this->Flash->set('The record has been revalidated with the current timestamp: '
 					. $this->Course->data['Course']['updated']);
 		}
 		
@@ -275,12 +275,10 @@ class CoursesController extends AppController {
 			$this->request->data['Course']['id'] = $id;
 
 			if(!empty($this->request->data['Course']['skip_info_validation'])) {
-				// TODO: check if correct input for DATETIME
 				$this->request->data['Course']['skip_info_url'] = date('Y-m-d H:i:s');
 				$this->Course->validator()->remove('info_url', 'status_ok');
 			}
 			if(!empty($this->request->data['Course']['skip_guide_validation'])) {
-				// TODO
 				$this->request->data['Course']['skip_guide_url'] = date('Y-m-d H:i:s');
 				$this->Course->validator()->remove('guide_url', 'status_ok');
 			}
@@ -317,12 +315,10 @@ class CoursesController extends AppController {
 				unset($this->request->data['Course']['updated']);
 			}
 			if(!empty($this->request->data['Course']['skip_info_validation'])) {
-				// TODO: check if correct input for DATETIME
 				$this->request->data['Course']['skip_info_url'] = date('Y-m-d H:i:s');
 				$this->Course->validator()->remove('info_url', 'status_ok');
 			}
 			if(!empty($this->request->data['Course']['skip_guide_validation'])) {
-				// TODO
 				$this->request->data['Course']['skip_guide_url'] = date('Y-m-d H:i:s');
 				$this->Course->validator()->remove('guide_url', 'status_ok');
 			}

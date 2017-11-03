@@ -28,8 +28,7 @@ if(empty($unapproved)) {
 		'Institution.name' => array('label' => 'Institution'),
 		'AppUser.university' => array('label' => 'New Institution?'),
 		'AppUser.about' => array('label' => 'About'),
-		'AppUser.email' => array('label' => 'Email'),
-		'AppUser.telephone' => array('label' => 'Telephone')
+		'AppUser.email' => array('label' => 'Email')
 	);
 
 	
