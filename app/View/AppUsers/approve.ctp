@@ -58,23 +58,23 @@
 		'disabled' => true,
 		'title' => 'The user could not find this institution on the list - you have to add it.'
 	));
-	echo '<p class="strong">The following categories possibly have to be extended in this order:</p>';
+	echo '<p class="strong">The following categories possibly have to be extended in this order, afterwards please reload this page:</p>';
 	echo '<p>1. If the country doesn\'t exist, please go to "'
-			.$this->Html->link('Add Country', '/moderator/countries/add').'".</p>';
+			.$this->Html->link('Add Country', '/moderator/countries/add', array('target' => '_blank')).'".</p>';
 	echo $this->Form->input('country_id', array(
 		'required' => 'required',
 		'empty' => '-- choose country --',
 		'div' => array('class' => 'input select required')
 	));
 	echo '<p>2. If the city doesn\'t exist, please go to "'
-			.$this->Html->link('Add City', '/moderator/cities/add').'".</p>';
+			.$this->Html->link('Add City', '/moderator/cities/add', array('target' => '_blank')).'".</p>';
 	echo $this->Form->input('city_id', array(
 		'required' => 'required',
 		'empty' => '-- choose city --',
 		'div' => array('class' => 'input select required')
 	));
 	echo '<p>3. If the institution doesn\'t exist, please go to "'
-			.$this->Html->link('Add Institution', '/moderator/institutions/add').'".</p>';
+			.$this->Html->link('Add Institution', '/moderator/institutions/add', array('target' => '_blank')).'".</p>';
 	echo $this->Form->input('institution_id', array(
 		'required' => 'required',
 		'empty' => '-- choose institution --',
