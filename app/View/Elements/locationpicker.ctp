@@ -7,8 +7,8 @@ $this->Html->css('/leaflet/leaflet.css', array('inline' => false));
 $this->Html->script('/leaflet/leaflet.js', array('inline' => false));
 ?>
 
-<?php $this->append('script_bottom'); ?>
-
+<?php $this->append('script'); ?>
+<script type="text/javascript">
 var inputLon, inputLat, locationMap, pickedLocation, defaultLocation;
 
 jQuery(document).ready(function() {
@@ -109,6 +109,6 @@ function setMarker(map) {
 		map.setZoom(10);
 	}
 }
-
+</script>
 
 <?php $this->end(); ?>

@@ -150,32 +150,32 @@ class Course extends AppModel {
 		'lon' => array(
 			'notEmpty' => array(
 				'rule' => array('notBlank')
-			)/*
+			),/*
 			'decimal' => array(
 				'rule' => array('decimal', 6),
 				'message' => 'Enter a decimal with 6 digits after the decimal point.',
 				'allowEmpty' => false,
 				'required' => true
-			),
+			),*/
 			'range' => array(
 				'rule' => array('range', -180, 180),
-				'message' => 'This does not look not like a proper coordinate.'
-			)*/
+				'message' => 'The longitude value is out of range.'
+			)
 		),
 		'lat' => array(
 			'notEmpty' => array(
 				'rule' => array('notBlank')
-			)/*
+			),/*
 			'decimal' => array(
 				'rule' => array('decimal', 6),
 				'message' => 'Enter a decimal with 6 digits after the decimal point.',
 				'allowEmpty' => false,
 				'required' => true
-			),
+			),*/
 			'range' => array(
 				'rule' => array('range', -90, 90),
-				'message' => 'This does not look not like a proper coordinate.'
-			)*/
+				'message' => 'The latitude value is out of range.'
+			)
 		),
 		'department' => array(
 			'notEmpty' => array(

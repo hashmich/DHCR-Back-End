@@ -84,10 +84,10 @@
 			'required' => ($auth_user['user_role_id'] == 2) ? 'required' : false,
 			'div' => array('class' => ($auth_user['user_role_id'] == 2) ? 'input select required' : 'input select')
 		));
-		$this->append('script_bottom');
+		$this->append('script');
 		?>
+		<script type="text/javascript">
 		$('#AppUserUserRoleId').on('change', function() {
-			console.log('foo');
 			if($('#AppUserUserRoleId').value == 2) {
 				$('#AppUserCountryId').attr('required', 'required');
 				$('#AppUserCountryId').parent().addClass('required');
@@ -96,6 +96,7 @@
 				$('#AppUserCountryId').parent().removeClass('required');
 			}
 		});
+		</script>
 		<?php
 		$this->end();
 		echo '</fieldset>';
