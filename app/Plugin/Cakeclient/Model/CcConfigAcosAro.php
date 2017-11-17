@@ -5,9 +5,14 @@ if(file_exists(APP . 'Model' . DS . pathinfo(__FILE__, PATHINFO_BASENAME))) {
 	return;
 }
 
-class CcConfigAco extends CakeclientAppModel {
+
+/**
+ * 
+ */
+
+class CcConfigAcosAro extends CakeclientAppModel {
 	
-	// there's an UNIQUE key on the combination (model, foreign_key)
+	// there's an complex key on the combination (aro_key_name, aro_key_value)
 	
 	/* Virtually - yes. 
 	public $belongsTo = array(
@@ -17,36 +22,44 @@ class CcConfigAco extends CakeclientAppModel {
 	);
 	*/
 	
-	public $hasMany = array(
-		'CcConfigTable' => array(
-			'className' => 'CcConfigTable'
+	public $belongsTo = array(
+		'CcConfigMenu' => array(
+			'className' => 'CcConfigMenu'
 		)
+		// AroModel
 	);
 	
-	public $aro_model = 'UserRole';
-	public $aro_value = 1;
+	public $aro_key_name = 'User.user_role_id';
 	
-	public $sources = array('default');
+	public $aro_key_value = null;
+	
+	// TODO: how to dynamically make a model binding on find and return related results?
 	
 	
 	
-	public function updateTree($sources = array()) {
-		if(empty($sources)) $sources = $this->sources;
+	
+	
+	
+	
+	
+	
+	
+	public function updateTree($source = array()) {
+		if(empty($sources)) $sources = array('default');
 		
-		$data['CcConfigAco'] = $this->getDefaultAco();
+		$data['CcConfigAcosAro'] = $this->getDefaultAco();
 		$data['CcConfigTable'] = $this->CcConfigTable->getDefaultAcoTableTree($sources);
 		
 		$result = $this->saveAll($data, array('validate' => false, 'deep' => true));
 	}
 	
 	
-	public function getDefaultAco($name = null) {
-		if(empty($name)) $name = $this->aro_model.' '.$this->aro_value;
+	public function getDefaultAco() {
 		return array(
 			//'id',
-			'name' => $name,
-			'foreign_key' => $this->aro_value,
-			'model' => $this->aro_model
+			//'cc_config_menu_id',
+			'aro_key_name' => $this->aro_key_name,
+			'aro_key_value' => $this->aro_key_value
 		);
 	}
 	

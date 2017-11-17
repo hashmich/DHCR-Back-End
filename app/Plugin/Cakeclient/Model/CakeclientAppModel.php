@@ -18,9 +18,9 @@ class CakeclientAppModel extends AppModel {
 	}
 	
 	
-	public function makeTableLabel($tablename = null, $prefix = null) {
+	public function makeTableLabel($tablename = null, $table_prefix = null) {
 		$label = $tablename;
-		if($prefix) $label = str_replace($prefix, '', $label);
+		if($table_prefix) $label = str_replace($table_prefix, '', $label);
 		return $label = Inflector::camelize($label);
 	}
 	

@@ -13,70 +13,51 @@ class CcConfigMenu extends CakeclientAppModel {
 		)
 	);
 	
-	/* Virtually - yes. 
-	public $belongsTo = array(
-		'UserRole' => array(
-			'className' => 'UserRole'
-		)
-	);
-	*/
 	
 	public $hasMany = array(
 		'CcConfigTable' => array(
 			'className' => 'CcConfigTable'
+		),
+		'CcConfigAcosAro' => array(
+			'className' => 'CcConfigAcosAro'
 		)
 	);
 	
-	public $aro_model = 'UserRole';
-	public $aro_value = 1;
+	/* virtually:
+	public $hasAndBelongsToMany = array(
+		AroModel (User or UserRole via CcConfigAcosAro)
+	);
+	*/
 	
 	
 	
 	
-	public function getDefaultMenu($group = array(), $k = 0) {
-		$source = (!empty($group['dataSource'])) ? $group['dataSource'] : null;
-		$prefix = (!empty($group['prefix'])) ? $group['prefix'] : null;
-		$name = (!empty($group['name'])) ? $group['name'] : 'Menu '.$k+1;
+	protected  function getDefaultMenu($group = array(), $k = null) {
+		
+		$source = (!empty($group['data_source'])) ? $group['data_source'] : 'default';
+		$prefix = (!empty($group['table_prefix'])) ? $group['table_prefix'] : null;
+		$name = (!empty($group['name'])) ? $group['name'] : 'Menu '.$k;
 		
 		return array(
 			//'id',
 			'label' => $name,
-			'position' => $k+1,
-			'block' => 'cakeclient_navbar',
-			'foreign_key' => $this->aro_value,
-			'model' => $this->aro_model
+			'position' => $k,
+			'layout_block' => 'cakeclient_navbar'
 		);
 	}
 	
-	
-	public function getDefaultMenuTree($aro_id = null, $aro_model = null, $dataSource = null, $menuGroups = array()) {
-		// determine the role prefix
-		$this->bindModel(array(
-			'belongsTo' => array(
-				$aro_model => array(
-					'className' => $aro_model,
-					'foreignKey' => 'foreign_key'
-				)
-			)
-		));
-		$role = $this->{$aro_model}->find('first', array(
-			'contain' => array(),
-			'conditions' => array(
-				$aro_model.'.id' => $aro_id
-			)
-		));
-		$prefix = null;
-		if(isset($role[$aro_model]['cakeclient_prefix']))
-			$prefix = $role[$aro_model]['cakeclient_prefix'];
-		
+	public function getDefaultMenuTree($routePrefix = null, $isAdmin = false, $menuGroups = array()) {
 		$menu = array();
 		if(!empty($menuGroups)) {
-			$tablePrefixes = Hash::extract($menuGroups, '{n}.prefix');
+			$tablePrefixes = Hash::extract($menuGroups, '{n}.table_prefix');
 			foreach($menuGroups as $k => $group) {
-				$menu[$k]['CcConfigMenu'] = $this->getDefaultMenu($group, $k);
-				
-				$source = (!empty($group['dataSource'])) ? $group['dataSource'] : $dataSource;
-				$menu[$k]['CcConfigTable'] = $this->CcConfigTable->getDefaultMenuTableTree($prefix, $group, $tablePrefixes, $source);
+				if(!$isAdmin AND !empty($group['require_super_user']))
+					continue;
+				$menu[$k]['CcConfigMenu'] = $this->getDefaultMenu($group, $k + 1);
+				$source = (!empty($group['data_source'])) ? $group['data_source'] : 'default';
+				$tableTree = $this->CcConfigTable->getDefaultMenuTableTree($routePrefix, $group, $tablePrefixes, $source);
+				if(!empty($tableTree['CcConfigTable'])) $tableTree['CcConfigTable'];
+				$menu[$k]['CcConfigMenu']['CcConfigTable'] = $tableTree;
 			}
 		}
 		return $menu;

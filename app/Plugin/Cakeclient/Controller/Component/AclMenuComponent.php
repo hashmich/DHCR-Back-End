@@ -1,15 +1,70 @@
 <?php
 class AclMenuComponent extends Component {
 	
-	public $menuModel, $menuModelName, $tableModelName, $acf = null;
-	public $actionModelName, $controller, $request, $aro_model = null;
+	public $aroModelName = 'CcConfigAcosAro';	// this is not yet the actual ARO table, but the connection table
 	
-	// acf - the access controling field ;)
-	public $acf_adminValue = 1;
+	public $menuModelName = 'CcConfigMenu';
 	
-	public $settings, $defaultMenus = array();
+	public $tableModelName = 'CcConfigTable';
 	
-	public $aro_id = null;
+	public $actionModelName = 'CcConfigAction';
+	
+
+	public $aroKeyName = 'User.user_role_id';
+	
+	public $aroKeyValue = null;
+	
+	
+	// the menu currently loaded for the user - needs to be stored, as we will have to do ACL checking against this structure - or second db query?
+	protected $currentMenu = array();
+	
+	// the model where the permissions are bound against 
+	//public $aro_model = 'UserRole';		// 'User'
+	
+	// acf - the access controling field
+	//public $acf = 'user_role_id';		// 'id'
+	
+	// the field value that enables admin function (allow all for admin group UserRole.id = 1)
+	//public $acf_adminValue = 1;			// 42 (id of the admin account)
+	
+	// the currently requesting object ID (null = anonymous) - aka a role, or user.
+	//public $aro_id = null;
+	
+	
+	/**
+	 * The menus we want to generate if no other menu is available for the current ARO.
+	 * If require_super_user is not set or false, the menu will be public to all, 
+	 * who can access the application level showing this menu!!!
+	 */
+	public $defaultMenus = array(
+		array(
+			'name' => 'Config',
+			'table_prefix' => 'cc_config_',		// table name prefix
+			'data_source' => 'default',
+			'require_super_user' => true,			// to be checked against DefaultAuth.isAdmin
+			'layout_block' => 'cakeclient_navbar'
+			// #ToDo: implement this (default false):
+			//'classPrefix' => false
+			// what about class prefixes for different sources?
+			// what about prefixing during ACO generation?
+		),
+		array(
+			'name' => 'Tables',
+			'dataSource' => 'default',
+			'require_super_user' => true,
+			'layout_block' => 'cakeclient_navbar'
+			// no table name prefix - gather all tables without prefix
+		)
+		// extend with further prefixed (plugin) table groups);
+	);
+	
+	
+	public $settings = array();
+	
+	public $controller = null;
+	
+	public $request = null;
+	
 	
 	
 	
@@ -36,66 +91,12 @@ class AclMenuComponent extends Component {
 	}
 	
 	
-	private function _defaults() {
-		$defaults =  array(
-			'acoModelName' => 'CcConfigAco',
-			'menuModelName' => 'CcConfigMenu',
-			'tableModelName' => 'CcConfigTable',
-			'actionModelName' => 'CcConfigAction',
-			'acf' => 'user_role_id',
-			'acf_adminValue' => 1,
-			'aro_model' => 'UserRole',
-			'aro_id' => null,
-			'defaultMenus' => array(
-				array(
-					'name' => 'Config',
-					'prefix' => 'cc_config_',
-					'dataSource' => 'default',
-					// #ToDo: implement this (default false):
-					'classPrefix' => false
-					// what about class prefixes for different sources?
-					// what about prefixing during ACO generation?
-				),
-				array(
-					'name' => 'Tables',
-					'dataSource' => 'default'
-					// no prefix - gather all tables without prefix
-				)
-				// extend with further prefixed (plugin) table groups
-			)
-		);
-		if(isset($this->controller->DefaultAuth)) {
-			$defaults['acf'] = $this->controller->DefaultAuth->userRoleField;
-			$defaults['acf_adminValue'] = $this->controller->DefaultAuth->userRoleAdminValue;
-		}
-		return $defaults;
-	}
-	
-	
 	public function isAdmin() {
-		if(	(isset($this->controller->DefaultAuth)
-			AND $this->controller->DefaultAuth->isAdmin())
-		OR	(isset($this->controller->Auth)
-			AND $this->controller->Auth->user($this->acf) == $this->acf_adminValue)
-		) return true;
+		if(	(method_exists($this->controller, 'isAdmin')
+			AND $this->controller->isAdmin())
+		OR	(isset($this->controller->DefaultAuth)
+			AND $this->controller->DefaultAuth->isAdmin())) return true;
 		return false;
-	}
-	
-	
-	public function getAcl($aro_id = null) {
-		$model = $this->getModel($this->acoModelName);
-		return $model->find('all', array(
-			'contain' => array(
-				$this->tableModelName => array(
-					'conditions' => array('name' => $this->request->params['controller']),
-					$this->actionModelName
-				)
-			),
-			'conditions' => array(
-				'foreign_key' => $aro_id,
-				'model' => $this->aro_model
-			)
-		));
 	}
 	
 	
@@ -106,25 +107,44 @@ class AclMenuComponent extends Component {
 	public function initialize(Controller $controller) {
 		$this->controller = $controller;
 		
-		$this->settings = Hash::merge($this->_defaults(), $this->settings);
 		foreach($this->settings as $key => $value)
 			$this->{$key} = $value;
 		
 		$this->request = $controller->request;
 		
+		
 		if(isset($this->controller->Auth))
 			if(!$this->aro_id = $this->controller->Auth->user($this->acf))
-			// just to make sure the value is not (bool)false, as NULL is a valid aro_id for the public user
-			$this->aro_id = null;	
+				// just to make sure the value is not (bool)false, as NULL is a valid aro_id for the public user
+				$this->aro_id = null;
+	}
+	
+	
+	public function getAcl($aro_key_value = null, $aro_key_name = null) {
+		$model = $this->getModel($this->aroModelName);
+		return $model->find('all', array(
+			'contain' => array(
+				$this->tableModelName => array(
+					'conditions' => array('name' => $this->request->params['controller']),
+					$this->actionModelName
+				)
+			),
+			'conditions' => array(
+				'foreign_key' => $aro_key_value,
+				'model' => $this->aro_model
+			)
+		));
 	}
 	
 	
 	/*
-	* requires: DefaAuthComponent (includes AuthComponent)
+	* requires: DefaultAuthComponent (includes AuthComponent)
 	* doing ACL authorisation in this method
 	*/
-	public function check($aro_id = null, $aro_model = null) {
-		if(empty($aro_id)) $aro_id = $this->_aro_id;
+	
+	//public function checkPermission($aro_key_name = null, $aro_key_value = null) {
+	public function check($aro_key_value = null, $aro_key_name = null) {
+		if(empty($aro_key_value)) $aro_key_value = $this->aro_id;
 		$params = $this->controller->request->params;
 		if(!empty($params['pass'])) foreach($params['pass'] as $arg) {
 			$params[] = $arg;
@@ -142,7 +162,7 @@ class AclMenuComponent extends Component {
 			// #ToDo: make a quicker check, that doesn't iterate over the entire tree - use joins
 			
 			// now authorize against the list! (if any)
-			$acl = $this->getAcl($aro_id);
+			$acl = $this->getAcl($aro_key_value);
 			
 			if(!empty($acl)) {
 				foreach($acl as $i => $menu) {
@@ -178,8 +198,8 @@ class AclMenuComponent extends Component {
 	}
 	
 	
-	public function setMenu() {
-		$cakeclientMenu = $this->getMenu();
+	public function setMenu($routePrefix = null) {
+		$cakeclientMenu = $this->getMenu($routePrefix);
 		
 		if(!$this->request->is('requested') AND Configure::read('Cakeclient.navbar')) {
 			// load the AssetHelper which appends the top_nav Menu to whichever layout
@@ -192,7 +212,7 @@ class AclMenuComponent extends Component {
 	}
 	
 	
-	public function getMenu($aro_id = null, $aro_model = null, $dataSource = null) {
+	public function getMenu($routePrefix = null) {
 		$menu = array();
 		//$menuName = $this->acf.'_'.$aro_id.'_menu';
 		//$menu = Cache::read($menuName, 'cakeclient');
@@ -203,26 +223,15 @@ class AclMenuComponent extends Component {
 			//$menu = $this->getAcl(2);
 			
 			// only if demanded or admin: get defaults if no menu available
-			if(empty($menu) AND $this->isAdmin()) {
-				$menu = $this->getDefaultMenu($aro_id, $aro_model, $dataSource);
+			if(empty($menu)) {
+				$menuModel = $this->getModel($this->menuModelName);
+				$menu = $menuModel->getDefaultMenuTree($routePrefix, $this->isAdmin(), $this->defaultMenus);
 			}	
 			
 			//Cache::write($menuName, $menu, 'cakeclient');
 		}
 		
 		return $menu;
-	}
-	
-	
-	public function getDefaultMenu($aro_id = null, $aro_model = null, $dataSource = null, $groups = array()) {
-		if(empty($aro_id)) 		$aro_id 	= $this->aro_id;
-		if(empty($aro_model)) 	$aro_model 	= $this->aro_model;
-		$menuModel = $this->getModel($this->menuModelName);
-		$menuModel->acf_value = $this->acf_adminValue;
-		$menuModel->aro_model = $this->aro_model;
-		if(empty($groups)) $groups = $this->defaultMenus;
-		
-		return $menuModel->getDefaultMenuTree($aro_id, $aro_model, $dataSource, $groups);
 	}
 	
 	

@@ -21,7 +21,7 @@
 		<ul class="nav navbar-nav">
 			<?php
 			if(!empty($cakeclientMenu)) foreach($cakeclientMenu as $m => $group) {
-				if($group['CcConfigMenu']['block'] != 'cakeclient_navbar') continue;
+				if($group['CcConfigMenu']['layout_block'] != 'cakeclient_navbar') continue;
 				
 				$class = ' class="dropdown';
 				$sr = null;
@@ -42,13 +42,12 @@
 				
 				echo '<li'.$class.'>';
 					echo $this->Html->link($group['CcConfigMenu']['label'].$sr.$caret, '#', $dropdownOptions);
-					if(!empty($group['CcConfigTable'])) {
+					if(!empty($group['CcConfigMenu']['CcConfigTable'])) {
 						echo '<ul class="dropdown-menu">';
-							foreach($group['CcConfigTable'] as $t => $table) {
+							foreach($group['CcConfigMenu']['CcConfigTable'] as $t => $table) {
 								echo '<li role="group_label" class="group_label">'.$table['label'].'</li>';
-								if(!empty($table['CcConfigMenuEntry'])) foreach($table['CcConfigMenuEntry'] as $a => $action) {
-									$action = $action['CcConfigAction'];
-									$linkOptions = array();
+								if(!empty($table['CcConfigAction'])) foreach($table['CcConfigAction'] as $a => $action) {
+									$linkOptions = (!empty($action['html_options'])) ? $action['html_options'] : array();
 									echo '<li class="group">';
 										echo $this->Html->link($action['label'], $action['url'], $linkOptions);
 									echo '</li>';

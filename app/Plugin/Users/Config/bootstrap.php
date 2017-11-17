@@ -3,7 +3,8 @@
 * set some defaults
 */
 Configure::write('Users.allowRegistration', true);
-Configure::write('Users.disableDefaultAuth', false);
+Configure::write('Users.disableDefaultAuth', false); // do not load
+Configure::write('Users.DefaultAuthAllowAll', false);// load but allow all
 Configure::write('Users.emailConfig', 'default');
 Configure::write('Users.securitySettings', array(
 	'blackHoleCallback' => 'blackHole',
@@ -13,6 +14,15 @@ Configure::write('Users.userModel', 'Users.User');
 // user roles are not actively being used by the plugin, 
 // but optionally can be displayd on login_info.ctp
 Configure::write('Users.roleModel', 'UserRole');
+
+
+// adjust this to your actual user model configuration/naming in your applicationside config
+Configure::write('Users.superUserDefinition', array(
+		'user_role_id' => array(1),	// if using an admin role
+		'is_admin' => true,			// if using an admin flag
+		'id' => array()				// list of individual user IDs
+));
+
 
 
 // extend the App::paths() array in order to make the plugin controllers 

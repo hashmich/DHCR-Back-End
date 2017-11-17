@@ -1,8 +1,10 @@
 <?php
-	// Provide route prefixes for the plugin as an array. It may also contain the empty string ''.
+	// Provide route prefixes for the plugin as an array. 
+	// It may also contain the empty string '' (null values are not allowed in Cake.Configure class).
 	// this cannot be defined in the database, as it's required to have it declared before everything else
-	// this can be overridden in the application
-	Configure::write('Cakeclient.prefixes', array('admin'));
+	// can be overridden in the application
+	// string or array
+	Configure::write('Cakeclient.prefixes', array('', 'db-webclient'));
 	
 	
 	// read in app-specific configuration and override of the previous defaults
@@ -88,6 +90,11 @@
 	function setRoutes($prefix, $RoutingPrefixes) {
 		// take care for the empty prefix
 		$prefix_empty = false;
+		if(empty($prefix)) {
+			$prefix = '';
+			$prefix_empty = true;
+		}
+		
 		$short_url_array = array(
 			'plugin' => 'cakeclient',
 			'controller' => 'virtual',

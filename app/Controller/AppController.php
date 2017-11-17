@@ -79,14 +79,18 @@ class AppController extends Controller {
 		// for debugging purposes
 		if(!$this->Auth->user() AND strpos(APP, 'xampp') !== false AND Configure::read('debug') > 0) {
 			//$this->Auth->allow();
-			//$this->DefaultAuth->is_admin = true;
 			//debug('allowed by debug settings');
 		}
 		
 		if($this->Auth->user('user_role_id') AND $this->Auth->user('user_role_id') < 3) {
 			// dynamically load the AclMenu Component
-			$this->Crud->loadAclMenu();
-			$this->AclMenu->setMenu();
+			if(!isset($this->AclMenu)) {
+				$this->AclMenu = $this->Components->load('Cakeclient.AclMenu');
+				// if not loaded before beforeFilter, we need to initialize manually
+				$this->AclMenu->initialize($this);
+			}
+			// there will be only one prefix in this application's config (db-webclient)
+			$this->AclMenu->setMenu(Configure::read('Cakeclient.prefixes'));
 		}
 		
 		$shibLogin = !empty($_SERVER['HTTP_EPPN']);

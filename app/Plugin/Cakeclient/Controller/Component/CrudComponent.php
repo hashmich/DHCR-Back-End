@@ -141,15 +141,6 @@ class CrudComponent extends Component {
 	}
 	
 	
-	public function loadAclMenu() {
-		if(!isset($this->controller->AclMenu)) {
-			$this->controller->AclMenu = $this->controller->Components->load('Cakeclient.AclMenu');
-			// if not loaded before beforeFilter, we need to initialize manually
-			$this->controller->AclMenu->initialize($this->controller);
-		}
-	}
-	
-	
 	function setCRUDenv() {
 		if($this->onCrud) {
 			if(Configure::read('Cakeclient.layout'))

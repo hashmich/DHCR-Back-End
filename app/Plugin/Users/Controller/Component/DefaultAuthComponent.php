@@ -7,16 +7,7 @@ class DefaultAuthComponent extends Component {
 	
 	public $settings = array();
 	
-	// for debugging - to let isAdmin return true
-	public $is_admin = false;
-	
 	public $components = array();
-	
-	public $userRoleField = null;
-	
-	public $userRoleAdminValue = null;
-	
-	private $adminField = null;
 	
 	private $controller = null;
 	
@@ -31,9 +22,6 @@ class DefaultAuthComponent extends Component {
 	
 	private function _defaults() {
 		return array(
-			'adminField' => 'is_admin',
-			'userRoleField' => 'user_role_id',
-			'userRoleAdminValue' => 1,
 			'components' => array(
 				'Auth' => array(
 					'priority' => 2,
@@ -69,6 +57,8 @@ class DefaultAuthComponent extends Component {
 	
 	
 	public function initialize(Controller $controller) {
+		if(Configure::read('Users.disableDefaultAuth') === true) return;
+		
 		$this->controller = $controller;
 		// load all components
 		foreach($this->components as $component => $settings) {
@@ -78,19 +68,38 @@ class DefaultAuthComponent extends Component {
 		}
 		
 		$controller->set('auth_user', $controller->Auth->user());
-		if(Configure::read('Users.disableDefaultAuth') === true) {
+		
+		if(Configure::read('Users.DefaultAuthAllowAll') === true) {
+			// since Cakephp 2.1, provide no arguments to allow all:
 			$controller->Auth->allow();
 		}
 	}
 	
-	public function isAdmin() {
+	/**
+	 * SuperUser checking against the definition given in Configure class: Users.SuperUserDefinition
+	 * @return unknown|boolean
+	 */
+	public function isAdmin($user = null) {
 		if(method_exists($this->controller, 'isAdmin')) {
-			return $this->controller->isAdmin();
+			return $this->controller->isAdmin($user);
 		}
-		if( (bool)$this->controller->Auth->user($this->adminField)
-		OR	(int)$this->controller->Auth->user($this->userRoleField) === $this->userRoleAdminValue
-		) return true;
-		if(Configure::read('debug') > 0 AND $this->is_admin) return true;
+		
+		$definition = Configure::read('Users.superUserDefinition');
+		if(!$user) $user = $this->controller->Auth->user();
+		if($user) {
+			if(isset($user[$this->userModel])) $user = $user[$this->userModel];
+			if($definition AND is_array($definition)) foreach($definition as $key => $value) {
+				if(isset($user[$key]) AND $user[$key] === $value) {
+					return true;
+				}
+				elseif(is_array($value)) {
+					foreach($value as $v) {
+						if($user[$key] === $v) return true;
+					}
+				}
+			}
+		}
+		
 		return false;
 	}
 	

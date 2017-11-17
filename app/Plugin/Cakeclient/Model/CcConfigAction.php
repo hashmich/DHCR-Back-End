@@ -51,7 +51,7 @@ class CcConfigAction extends CakeclientAppModel {
 	
 	
 	
-	public function getDefaultAction($method = null, $tableName = null, $viewName = null, $tablePrefix = null, $urlPrefix = null, $data = array()) {
+	protected function getDefaultAction($urlPrefix = null, $method = null, $tableName = null, $tablePrefix = null, $viewName = null, $data = array()) {
 		if(empty($method) OR empty($tableName)) return array();
 		
 		if(empty($urlPrefix) AND $urlPrefix !== false)
@@ -108,7 +108,7 @@ class CcConfigAction extends CakeclientAppModel {
 	}
 	
 	
-	public function getDefaultActions($tableName = null, $viewName = null, $tablePrefix = null, $urlPrefix = null) {
+	public function getDefaultActions($routePrefix = null, $tableName = null, $tablePrefix = null, $viewName = null) {
 		$actions = array();
 		// default CRUD actions
 		$methods = array('index','add','view','edit','delete');
@@ -123,7 +123,7 @@ class CcConfigAction extends CakeclientAppModel {
 		// we have an array-format conversion here...
 		
 		foreach($union as $method => $method_data) {
-			$action = $this->getDefaultAction($method, $tableName, $viewName, $tablePrefix, $urlPrefix, $method_data);
+			$action = $this->getDefaultAction($routePrefix, $method, $tableName, $tablePrefix, $viewName, $method_data);
 			// special handling for the contextual property
 			if(	!in_array($method, array('add','index','reset_order'))
 			AND isset($method_data['contextual']))

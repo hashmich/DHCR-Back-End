@@ -2,7 +2,10 @@
 	// set some defaults
 	// layout: [bool]false (don't override app-layout), any other
 	Configure::write('Cakeclient.layout', 'Cakeclient.cakeclient');	// Cakeclient default layout (naming conflict with 'default')
-	// disallow app-level view overrides by default. 
+	// Disallow app-level view overrides by default. 
+	// This is, to have this plugin fully functionally as a db-client on an alternative route-prefix.
+	// To do overrides nevertheless, create a special route and controller action 
+	// that sends requests to the application logic instead.
 	Configure::write('Cakeclient.allowViewOverride',false);
 	// show or hide the navbar
 	Configure::write('Cakeclient.navbar', true);
@@ -10,7 +13,8 @@
 	Configure::write('Cakeclient.footer', '&copy; 2016 <a href="http://hendrikschmeer.de" target="_blank">Hendrik Schmeer</a>');
 	
 	Configure::write('Cakeclient.AclChecking', true);
-	Configure::read('Cakeclient.AuthComponent', 'Auth');
+	Configure::write('Cakeclient.AuthComponent', 'Auth');
+	
 	
 	
 	// make the plugin controllers & models available to the application

@@ -54,9 +54,6 @@ class CakeclientAppController extends AppController {
 		// check with main application AppController, if we got permission to proceed
 		parent::beforeFilter();
 		
-		// dynamically load the AclMenu
-		$this->Crud->loadAclMenu();
-		
 		// require Auth or custom class
 		if(Configure::read('Cakeclient.AclChecking')) {
 			if(!isset($this->Auth)) {

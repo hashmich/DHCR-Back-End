@@ -21,7 +21,8 @@ App::uses('AppController', 'Controller');
 class UsersAppController extends AppController {
 	
 	public $components = array(
-		'Users.DefaultAuth'	// you need to include this component also on app-level
+		// you need to include this component also on app-level, in order to have Auth available for all controllers 
+		'Users.DefaultAuth'
 	);
 	
 	protected function _getMailInstance() {
