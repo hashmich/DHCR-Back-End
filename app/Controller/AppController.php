@@ -90,7 +90,7 @@ class AppController extends Controller {
 				$this->AclMenu->initialize($this);
 			}
 			// there will be only one prefix in this application's config (db-webclient)
-			// otherwise, we would have to chose a prefix, that is assoziated to a role
+			// otherwise, we would have to chose a prefix, that is associated to a role
 			$this->AclMenu->setMenu('db-webclient');
 		}
 		

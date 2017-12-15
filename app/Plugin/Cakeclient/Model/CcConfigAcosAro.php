@@ -47,20 +47,29 @@ class CcConfigAcosAro extends CakeclientAppModel {
 	public function updateTree($source = array()) {
 		if(empty($sources)) $sources = array('default');
 		
-		$data['CcConfigAcosAro'] = $this->getDefaultAco();
-		$data['CcConfigTable'] = $this->CcConfigTable->getDefaultAcoTableTree($sources);
+		$data['CcConfigAcosAro'] = $this->getDefaultAcosAro();
+		$data['CcConfigAco'] = $this->CcConfigTable->getDefaultAcoTableTree($sources);
 		
 		$result = $this->saveAll($data, array('validate' => false, 'deep' => true));
 	}
 	
 	
-	public function getDefaultAco() {
+	public function getDefaultAcosAro() {
 		return array(
 			//'id',
 			//'cc_config_menu_id',
 			'aro_key_name' => $this->aro_key_name,
 			'aro_key_value' => $this->aro_key_value
 		);
+	}
+	
+	
+	public function getAco($controller, $action = null, $plugin = null) {
+		if(empty($action)) $action = 'index';
+		if(empty($controller)) return false;
+		$conditions = array('controller' => $controller, 'action' => $action);
+		if(!empty($plugin)) $conditions['plugin'] = $plugin;
+		return $this->find('first', array('conditions' => $conditions));
 	}
 	
 	

@@ -104,7 +104,7 @@ class CcConfigTable extends CakeclientAppModel {
 		foreach($sources as $source)
 			$tables = array_merge($tables, $this->getGroupTables($source));
 		if(!empty($tables)) foreach($tables as $i => &$table) {
-			$table['CcConfigAction'] = $this->CcConfigAction->getDefaultActions($table['name'], null);
+			$table['CcConfigAco'] = $this->CcConfigAco->getDefaultAcos($table['name'], null);
 		}
 		return $tables;
 	}

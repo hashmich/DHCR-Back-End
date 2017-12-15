@@ -57,7 +57,74 @@ class CakeclientAppModel extends AppModel {
 	}
 	
 	
-	
+	public function getControllerMethods($tableName = null, $plugin = false, $pluginAppOverride = false, $defaultMethods = array()) {
+		$plugin = $pluginAppOverride = false;
+		$controllerMethods = array();
+		$controllerName = Inflector::camelize($tableName).'Controller';
+		
+		// plugins need to extend the App::paths() array in order to be detected
+		// App::build(array('Controller' => App::path('Controller', 'Plugin')));
+		// if a plugin controller, get the app-level override, if any
+		$controllerName = $this->getAppClass($controllerName, 'Controller', $virtual, $plugin, $pluginAppOverride);
+		
+		if($controllerName AND !$virtual) {
+			$reflector = new ReflectionClass($controllerName);
+			$dir = dirname($reflector->getFileName());
+			unset($reflector);
+			if(strpos($dir, 'Plugin')) {
+				$plugin = true;
+				$expl = explode(DS, $dir);
+				foreach($expl as $k => $d) if($d == 'Plugin') $plugin = $expl[$k+1];
+				// test for an app-level override
+				$_controllerName = Inflector::camelize('app_'.$tableName).'Controller';
+				App::uses($_controllerName, 'Controller');
+				if(class_exists($_controllerName, true)) {
+					$pluginAppOverride = true;
+					$controllerName = $_controllerName;
+				}
+			}
+		
+			$excludes = array('reset_order',);
+			if($appExcludes = Configure::read('AclMenu.excludes'))
+				
+				// TODO: tidy up here
+				$excludes = array_unique(array_merge($excludes, $appExcludes));
+				Configure::write('AclMenu.excludes', $excludes);
+					
+				if($plugin) {
+					if($pluginAppOverride) {
+						$pluginController = get_parent_class($controllerName);
+						$pluginAppController = get_parent_class($pluginController);
+					}else{
+						$pluginAppController = get_parent_class($controllerName);
+					}
+					$appController = get_parent_class($pluginAppController);
+				}else{
+					$appController = get_parent_class($controllerName);
+				}
+				$coreController = get_parent_class($appController);
+					
+				// we don't want the methods defined in Cake's core controller
+				$coreControllerMethods = get_class_methods($coreController);
+				$controllerMethods = get_class_methods($controllerName);
+				foreach($controllerMethods as $i => $method) {
+					if(	strpos($method, '_') === 0
+							||	in_array($method, $excludes)
+							||	in_array($method, $defaultMethods)		// cleaning against the default list
+							||	(!empty($coreControllerMethods) AND in_array($method, $coreControllerMethods))
+							) {
+								unset($controllerMethods[$i]);
+							}else{
+								$reflector = new ReflectionMethod($controllerName, $method);
+								if(!$reflector->isPublic()) unset($controllerMethods[$i]);
+								unset($reflector);
+							}
+				}
+		}
+		
+		
+		return array_unique(array_merge($defaultMethods, $controllerMethods));
+	}
 	
 }
 ?>
