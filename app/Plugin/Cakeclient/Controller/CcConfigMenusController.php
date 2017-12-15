@@ -6,20 +6,36 @@ class CcConfigMenusController extends CakeclientAppController {
 		'Cakeclient.AclMenu'
 	);
 	
+	public $uses = array('CcConfigMenu');
 	
 	
 	
-	public function create($aro_model = null, $aro_id = null) {
+	/**
+	 * This method will save freshly created default menu trees to the database.
+	 * These trees are not connected to any ARO in first place and will therefore not show up
+	 * as menus in the application unless you connect the menu groups to any ARO. 
+	 * Edit the menu tree structures as required for that ARO type beforehand. 
+	 */
+	public function create_default_trees() {
+		// get the available prefixes to populate the form options
+		$route_prefix = Configure::read('Cakeclient.prefixes');
 		
-		// #ToDo: set up a form or any thelike to generate menu groups
-		
-		$menuGroups = $this->AclMenu->defaultMenus;
-		
-		if(!empty($aro_model)) $this->CcConfigMenu->aro_model = $aro_model;
-		if(!empty($aro_id)) $this->CcConfigMenu->aro_id = $aro_id;
-		$this->CcConfigMenu->store($menuGroups, $aro_model, $aro_id);
-		
-		$this->redirect('index');
+		if(!empty($this->request->params['CcConfigMenu']) OR is_string($route_prefix)) {
+			if(!is_string($route_prefix))
+				$route_prefix = $this->request->params['CcConfigMenu']['route_prefix'];
+			
+			$this->CcConfigMenu->createDefaultTrees($route_prefix, $this->AclMenu->defaultMenus);
+			$this->Flash->set("Menu trees have been created based on default configuration, 
+					existing controller functions  and database structure");
+			// TODO: maintain route prefix
+			// current prefix?
+			$this->redirect(array(
+				'action' => 'index',
+				'controller' => $this->request->params['controller'],
+				'plugin' => $this->request->params['plugin']
+			));
+		}
+		$this->set('route_prefixes', Configure::read('Cakeclient.prefixes'));
 	}
 	
 	

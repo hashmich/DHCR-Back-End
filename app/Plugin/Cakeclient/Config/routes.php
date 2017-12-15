@@ -110,20 +110,23 @@
 			'cakeclient.route' => $prefix
 			// one would expect the parameter 'crud' here as well, but this is set by the router itself!
 		);
-		// Cakeclient exceptions
-		$cc_config_configurations_add = array(
-			'plugin' => 'cakeclient',
-			'controller' => 'cc_config_configurations',
-			'action' => 'add',
-			'cakeclient.route' => $prefix,
-			$prefix => 1
-		);
+		
+		// Cakeclient exceptions from the CRUD schema have to be defined before the CRUD routes are defined,
+		// so do the internal exceptions
+		// exceptions
 		$cc_config_actions_edit = array(
-			'plugin' => 'cakeclient',
-			'controller' => 'cc_config_actions',
-			'action' => 'edit',
-			'cakeclient.route' => $prefix,
-			$prefix => 1
+				'plugin' => 'cakeclient',
+				'controller' => 'cc_config_actions',
+				'action' => 'edit',
+				'cakeclient.route' => $prefix,
+				$prefix => 1
+		);
+		$cc_config_menus_create_default_trees = array(
+				'plugin' => 'cakeclient',
+				'controller' => 'cc_config_menus',
+				'action' => 'create_default_trees',
+				'cakeclient.route' => $prefix,
+				$prefix => 1
 		);
 		
 		if($prefix !== '' AND is_string($prefix)) {
@@ -133,7 +136,7 @@
 				unset($short_url_array[$prefix]);
 				unset($long_url_array[$prefix]);
 				// exceptions
-				unset($cc_config_configurations_add[$prefix]);
+				unset($cc_config_menus_create_default_trees[$prefix]);
 				unset($cc_config_actions_edit[$prefix]);
 			}
 			
@@ -144,20 +147,18 @@
 			unset($short_url_array[$prefix]);
 			unset($long_url_array[$prefix]);
 			// exceptions
-			unset($cc_config_configurations_add[$prefix]);
+			unset($cc_config_menus_create_default_trees[$prefix]);
 			unset($cc_config_actions_edit[$prefix]);
 		}
 		
-		// Cakeclient exceptions from the CRUD schema have to be defined before the CRUD routes are defined,
-		// so do the internal exceptions
-		Router::connect(
-			$url_prefix . '/cc_config_configurations/add/*', 
-			$cc_config_configurations_add
-		);
+		
 		Router::connect(
 			$url_prefix . '/cc_config_actions/edit/*', 
 			$cc_config_actions_edit
 		);
+		Router::connect(
+				$url_prefix . '/cc_config_menus/create_default_trees',
+				$cc_config_menus_create_default_trees);
 		
 		
 		// finally the "real" CRUD routes :)

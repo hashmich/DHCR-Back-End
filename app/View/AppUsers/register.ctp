@@ -34,6 +34,20 @@ function recaptchaCallback(token) {
 <div class="users_form">
 	<h2>User Registration</h2>
 	<p>Registration for the universities' maintainers of course information.</p>
+	
+	<div class="actions">
+		<ul>
+			<li>
+				<?php
+				echo $this->Html->link('Resend verification mail', array(
+						'action' => 'resend_email_verification',
+						'controller' => 'users'
+					), array(
+						'title' => 'If you already registered, but have not verified your email address, please click here.'));
+				?>
+			</li>
+		</ul>
+	</div>
 
 	<?php
 	echo $this->element('Utils.validation_errors');

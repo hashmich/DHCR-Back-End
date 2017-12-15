@@ -38,7 +38,8 @@ class User extends UsersAppModel {
 			),
 			'isUnique' => array(
 				'rule' => array('isUnique', 'email'),
-				'message' => 'An account with that email already exists.',
+				'message' => 'An account with that email already exists. 
+					Please try resending the verification mail if you have not verify your email address, yet.',
 				'on' => 'create'
 			)
 		),

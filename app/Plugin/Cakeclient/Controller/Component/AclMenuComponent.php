@@ -1,8 +1,6 @@
 <?php
 class AclMenuComponent extends Component {
 	
-	public $aroModelName = 'CcConfigAcosAro';	// this is not yet the actual ARO table, but the connection table
-	
 	public $menuModelName = 'CcConfigMenu';
 	
 	public $tableModelName = 'CcConfigTable';
@@ -10,7 +8,9 @@ class AclMenuComponent extends Component {
 	public $actionModelName = 'CcConfigAction';
 	
 
-	public $aroKeyName = 'User.user_role_id';
+	public $aclLookupModelName = 'CcConfigAcosAro';	// this is not yet the actual ARO table, but the connection table
+	
+	public $aroKeyName = 'AppUser.user_role_id';
 	
 	public $aroKeyValue = null;
 	
@@ -120,8 +120,30 @@ class AclMenuComponent extends Component {
 	}
 	
 	
+	/**
+	 * The passed ARO will be used to lookup matching menu trees. 
+	 * Permissions granted to an individual object will always extend the inherited 
+	 * permissions  bound to any parent object (eg UserRole).
+	 * 
+	 * Thus, the algorithm will first check for matches of this aroKeyName pattern, as specified in the settings: 
+	 * <AroModelName>.<parent_model_name>_id
+* TODO: move this key name to some configuration file!!!
+	 * Then, it will check following pattern, if there's no match and the firstly configured pattern is not the primary key of the AroModelName: 
+	 * <AroModelName>.id for the passed object.  (id doesn't need to be configured, as it is the model's primary key by convention)
+	 * 
+	 * @param array $arObject, optional
+	 * @return boolean
+	 */
+	public function check($aroObject = array()) {
+		// TODO: check against the menu tree for a given user/ARO
+		if($this->isAdmin())
+			return true;
+		return false;
+	}
+	
+	/*
 	public function getAcl($aro_key_value = null, $aro_key_name = null) {
-		$model = $this->getModel($this->aroModelName);
+		$model = $this->getModel($this->aclLookupModelName);
 		return $model->find('all', array(
 			'contain' => array(
 				$this->tableModelName => array(
@@ -135,13 +157,13 @@ class AclMenuComponent extends Component {
 			)
 		));
 	}
-	
+	*/
 	
 	/*
 	* requires: DefaultAuthComponent (includes AuthComponent)
 	* doing ACL authorisation in this method
 	*/
-	
+	/*
 	//public function checkPermission($aro_key_name = null, $aro_key_value = null) {
 	public function check($aro_key_value = null, $aro_key_name = null) {
 		if(empty($aro_key_value)) $aro_key_value = $this->aro_id;
@@ -179,7 +201,7 @@ class AclMenuComponent extends Component {
 											* but not the action without parameter...
 											* AS LONG THE ACTION IS MENTIONED IN THE PATH!!!
 											* But we might have a prefixed URL, like /admin routing
-											*/
+											*
 											if(strpos($checkPath, $action['url']) === 0) return true;
 										}else{
 											return true;
@@ -196,8 +218,12 @@ class AclMenuComponent extends Component {
 		
 		return false;
 	}
+	*/
 	
-	
+	/**
+	 * 
+	 * @param String $routePrefix	the current (or only prefix) to create default menus
+	 */
 	public function setMenu($routePrefix = null) {
 		$cakeclientMenu = $this->getMenu($routePrefix);
 		
@@ -211,7 +237,10 @@ class AclMenuComponent extends Component {
 		$this->controller->set(compact('cakeclientMenu'));
 	}
 	
-	
+	/**
+	 * 
+	 * @param String $routePrefix	the current (or only) prefix to create a default menu
+	 */
 	public function getMenu($routePrefix = null) {
 		$menu = array();
 		//$menuName = $this->acf.'_'.$aro_id.'_menu';
@@ -234,21 +263,17 @@ class AclMenuComponent extends Component {
 		return $menu;
 	}
 	
-	
 	public function getDefaultActions($args = array()) {
-		$args = $this->getActionOptions($args);
+		if(empty($args)) $args = $this->__getActionConditions();
 		foreach($args as $key => $value) $$key = $value;
 		
 		$actionModel = $this->getModel($this->actionModelName);
-		return $actionModel->getDefaultActions($tableName, $viewName, $tablePrefix, $urlPrefix);
+		return $actionModel->getDefaultActions($tableName, $tablePrefix, $viewName, $urlPrefix);
 	}
 	
-	
-	public function getActions($args = array()) {
-		$args = $this->getActionOptions($args);
+	public function getActions() {
+		$args = $this->__getActionConditions();
 		//foreach($args as $key => $value) $$key = $value;
-		
-		
 		$actions = array();
 		// #ToDo: try reading from config
 		
@@ -262,25 +287,26 @@ class AclMenuComponent extends Component {
 		return $actions;
 	}
 	
-	
-	public function getActionOptions($args = array()) {
-		$keys = array('aro_id','aro_model','tableName','viewName','urlPrefix');
-		$args = array_merge(array_fill_keys($keys, null), $args);
-		foreach($args as $key => $value) $$key = $value;
-		if(empty($aro_id)) $aro_id = $this->aro_id;
-		if(empty($aro_model)) $aro_model = $this->aro_model;
-		if(empty($tableName)) $tableName = $this->request->params['controller'];
-		if(empty($viewName)) $viewName = $this->request->params['action'];
-		if(empty($urlPrefix)) {
-			$role = $this->getRole($aro_id, $aro_model);
+	private function __getActionConditions() {
+		$aro_id = $this->aroKeyValue;
+		$aro_model = $this->aroKeyName;
+		$tableName = $this->request->params['controller'];
+		$viewName = $this->request->params['action'];
+		$urlPrefix = null;
+		$role = $this->getRole();
+		if(!empty($role)) {
 			$urlPrefix = (isset($role['cakeclient_prefix'])) ? $role['cakeclient_prefix'] : null;
 		}
 		// determine the table prefix
 		$tablePrefixes = Hash::extract($this->defaultMenus, '{n}.prefix');
 		$tablePrefix = null;
 		foreach($tablePrefixes as $prefix) if(strpos($prefix, $tableName) === 0) $tablePrefix = $prefix;
-		
-		return compact('aro_id','aro_model','tableName','viewName','urlPrefix','tablePrefix');
+		return array(
+				'tableName' => $this->request->params['controller'],
+				'viewName' => $this->request->params['action'],
+				'urlPrefix' => $urlPrefix,
+				'tablePrefix' => $tablePrefix
+		);
 	}
 	
 	/*
@@ -446,17 +472,17 @@ class AclMenuComponent extends Component {
 	}
 	
 	
-	public function getRole($aro_id = null, $aro_model = null) {
-		if(empty($aro_id)) 		$aro_id 	= $this->aro_id;
-		if(empty($aro_model)) 	$aro_model 	= $this->aro_model;
+	public function getRole() {
+		$split = explode('.', $this->aroKeyName);
+		$aro_model = $split[0];
 		$model = $this->getModel($aro_model);
 		$role = $model->find('first', array(
 			'contain' => array(),
 			'conditions' => array(
-				$aro_model.'.id' => $aro_id
+				$this->aroKeyName => $this->aroKeyValue
 			)
 		));
-		if(!empty($role)) return $role[$aro_model];
+		if(!empty($role) AND !empty($role[$aro_model])) return $role[$aro_model];
 		return array();
 	}
 	

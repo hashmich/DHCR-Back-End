@@ -90,7 +90,8 @@ class AppController extends Controller {
 				$this->AclMenu->initialize($this);
 			}
 			// there will be only one prefix in this application's config (db-webclient)
-			$this->AclMenu->setMenu(Configure::read('Cakeclient.prefixes'));
+			// otherwise, we would have to chose a prefix, that is assoziated to a role
+			$this->AclMenu->setMenu('db-webclient');
 		}
 		
 		$shibLogin = !empty($_SERVER['HTTP_EPPN']);

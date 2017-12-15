@@ -115,7 +115,7 @@ class CcConfigTable extends CakeclientAppModel {
 		$tablePrefix = (!empty($group['table_prefix'])) ? $group['table_prefix'] : null;
 		
 		if(!empty($tables)) foreach($tables as $i => &$table) {
-			$actions = $this->CcConfigAction->getDefaultActions($routePrefix, $table['name'], $tablePrefix, 'menu');
+			$actions = $this->CcConfigAction->getDefaultActions($table['name'], $tablePrefix, 'menu', $routePrefix);
 			$table['CcConfigAction'] = $actions;
 		}
 		return $tables;

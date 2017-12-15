@@ -30,6 +30,7 @@ class UsersController extends UsersAppController {
 				'login',
 				'verify_email',
 				'request_email_verification',
+				'resend_email_verification',
 				'approve'
 			));
 			if(!is_null(Configure::read('Users.allowRegistration')) && !Configure::read('Users.allowRegistration')) {
@@ -456,6 +457,29 @@ class UsersController extends UsersAppController {
 		
 		if(empty($user_id)) {
 			$this->redirect('/');
+		}
+	}
+	
+	
+	public function resend_email_verification($email = null) {
+		if(!empty($this->request->data[$this->modelClass])
+		AND !empty($email = $this->request->data[$this->modelClass]['email'])) {
+			$user = $this->{$this->modelClass}->find('first', array(
+				'contain' => array(),
+				'conditions' => array($this->modelClass.'.email' => $email)
+			));
+			if(!empty($user)) {
+				$this->_sendUserManagementMail(array(
+						'template' => 'Users.email_verification',
+						'subject' => 'Email Verification',
+						'email' => $email,
+						'data' => $user
+				));
+				$this->Flash->set('A new email verification mail has been sent to ' . $email);
+				$this->redirect('/');
+			}else{
+				$this->Flash-> set('No user with this email could be found on the system.');
+			}
 		}
 	}
 	

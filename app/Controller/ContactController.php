@@ -63,6 +63,7 @@ class ContactController extends AppController {
 					->cc(Configure::read('App.defaultCc'))
 					->subject('[DH-Registry Contact-Form] New Question')
 					->send($this->request->data['Contact']['message']);
+					$Email->addCc($this->request->data['Contact']['email']);
 				}
 				$this->Flash->set('Your message has been sent.');
 				$this->redirect('/');

@@ -89,7 +89,7 @@
 	$this->Html->scriptStart(array('inline' => false));
 	?>
 	function recaptchaCallback(token) {
-		document.getElementById("AppUserRegisterForm").submit();
+		document.getElementById("ContactUsForm").submit();
 	}
 	<?php $this->Html->scriptEnd(); ?>
 	

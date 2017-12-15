@@ -50,15 +50,12 @@ class CcConfigAction extends CakeclientAppModel {
 	
 	
 	
-	
-	protected function getDefaultAction($urlPrefix = null, $method = null, $tableName = null, $tablePrefix = null, $viewName = null, $data = array()) {
+	protected function getDefaultAction($tableName = null, $tablePrefix = null, $viewName = null, $urlPrefix = null, $method = null, $data = array()) {
 		if(empty($method) OR empty($tableName)) return array();
 		
 		if(empty($urlPrefix) AND $urlPrefix !== false)
 			$urlPrefix = Configure::read('Cakeclient.prefix');
-		$labelPrefix = null;
 		if(!empty($urlPrefix)) {
-			//$labelPrefix = Inflector::classify($urlPrefix).'-';
 			$urlPrefix = '/'.$urlPrefix;
 		}else{
 			$urlPrefix = null;
@@ -80,14 +77,14 @@ class CcConfigAction extends CakeclientAppModel {
 		if(in_array($method, array('delete')))
 			$bulk = 1;
 		
-		$label = $labelPrefix.Inflector::humanize($method);
-		if($method == 'index') $label = $labelPrefix.'List';
+		$label = Inflector::humanize($method);
+		if($method == 'index') $label = 'List';
 		if(empty($viewName) OR $viewName != 'menu') {
-			if($method == 'index') $label = $labelPrefix.'List '.$tableLabel;
+			if($method == 'index') $label = 'List '.$tableLabel;
 			if($viewName != 'index' AND in_array($method, array('add','edit','view','delete')))
-				$label = $labelPrefix.Inflector::humanize($method).' '.Inflector::singularize($tableLabel);
+				$label = Inflector::humanize($method).' '.Inflector::singularize($tableLabel);
 			if($viewName == 'index' AND !$contextual)
-				$label = $labelPrefix.Inflector::humanize($method).' '.Inflector::singularize($tableLabel);
+				$label = Inflector::humanize($method).' '.Inflector::singularize($tableLabel);
 		}
 		
 		return array(
@@ -108,7 +105,7 @@ class CcConfigAction extends CakeclientAppModel {
 	}
 	
 	
-	public function getDefaultActions($routePrefix = null, $tableName = null, $tablePrefix = null, $viewName = null) {
+	public function getDefaultActions($tableName = null, $tablePrefix = null, $viewName = null, $routePrefix = null) {
 		$actions = array();
 		// default CRUD actions
 		$methods = array('index','add','view','edit','delete');
@@ -121,9 +118,8 @@ class CcConfigAction extends CakeclientAppModel {
 		// get the existant controller functions
 		$union = $this->getMethods($tableName, $methods);
 		// we have an array-format conversion here...
-		
 		foreach($union as $method => $method_data) {
-			$action = $this->getDefaultAction($routePrefix, $method, $tableName, $tablePrefix, $viewName, $method_data);
+			$action = $this->getDefaultAction($tableName, $tablePrefix, $viewName, $routePrefix, $method, $method_data);
 			// special handling for the contextual property
 			if(	!in_array($method, array('add','index','reset_order'))
 			AND isset($method_data['contextual']))

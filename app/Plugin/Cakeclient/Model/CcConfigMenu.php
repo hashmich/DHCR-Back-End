@@ -7,11 +7,6 @@ if(file_exists(APP . 'Model' . DS . pathinfo(__FILE__, PATHINFO_BASENAME))) {
 
 class CcConfigMenu extends CakeclientAppModel {
 	
-	public $actsAs = array(
-		'Utils.Sortable' => array(
-			'parentId' => 'model.foreign_key'
-		)
-	);
 	
 	
 	public $hasMany = array(
@@ -31,21 +26,13 @@ class CcConfigMenu extends CakeclientAppModel {
 	
 	
 	
-	
-	protected  function getDefaultMenu($group = array(), $k = null) {
-		
-		$source = (!empty($group['data_source'])) ? $group['data_source'] : 'default';
-		$prefix = (!empty($group['table_prefix'])) ? $group['table_prefix'] : null;
-		$name = (!empty($group['name'])) ? $group['name'] : 'Menu '.$k;
-		
-		return array(
-			//'id',
-			'label' => $name,
-			'position' => $k,
-			'layout_block' => 'cakeclient_navbar'
-		);
-	}
-	
+	/**
+	 * 
+	 * @param string $routePrefix
+	 * @param bool   $isAdmin		- make sure the default menus are only available to admins!
+	 * @param array  $menuGroups
+	 * @return array
+	 */
 	public function getDefaultMenuTree($routePrefix = null, $isAdmin = false, $menuGroups = array()) {
 		$menu = array();
 		if(!empty($menuGroups)) {
@@ -61,6 +48,26 @@ class CcConfigMenu extends CakeclientAppModel {
 			}
 		}
 		return $menu;
+	}
+	
+	
+	protected  function getDefaultMenu($group = array(), $k = null) {
+		
+		$source = (!empty($group['data_source'])) ? $group['data_source'] : 'default';
+		$prefix = (!empty($group['table_prefix'])) ? $group['table_prefix'] : null;
+		$name = (!empty($group['name'])) ? $group['name'] : 'Menu '.$k;
+		
+		return array(
+			//'id',
+			'label' => $name,
+			'position' => $k,
+			'layout_block' => 'cakeclient_navbar'
+		);
+	}
+	
+	
+	public function createDefaultTrees($routePrefix = null, $menuGroups = array()) {
+		$menus = $this->getDefaultMenuTree($routePrefix, true, $menuGroups);
 	}
 	
 	

@@ -5,7 +5,7 @@ class CakeclientAppController extends AppController {
 		'Cakeclient.Crud',
 		'Session',
 		'Paginator',
-		//'Cakeclient.AclMenu'	// dynamically loaded on demand
+		'Cakeclient.AclMenu'	// dynamically loaded on demand
 	);
 	
 	public $helpers = array(

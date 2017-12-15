@@ -60,6 +60,7 @@ class CrudComponent extends Component {
 		$this->controller = $controller;
 		$this->table = $this->controller->request->params['controller'];
 		$this->virtualController = $controller->name;
+		$this->modelName = $this->controller->modelClass;
 		
 		// we're on a special route (#ToDo: could that be checked against cakeclient.route?)
 		if(!empty($this->controller->request->params['table'])) {
@@ -70,7 +71,7 @@ class CrudComponent extends Component {
 			
 			// if we're using a plugin model and the model has an app-level override, use it
 			$this->controller->modelClass = $this->modelName;
-			// avoi loading the modelClass, as it could be located outside the plugin, thus we need a dummy model
+			// avoid loading the modelClass, as it could be located outside the plugin, thus we need a dummy model
 			$virtual = $plugin = false;
 			if(method_exists($this->controller->Dummy, 'getAppClass'))
 				$this->modelName = $this->controller->Dummy->getAppClass($this->modelName, 'Model', $virtual, $plugin);

@@ -1,6 +1,18 @@
 <div class="auth">
 	<h2>User Registration</h2>
 	
+	<ul>
+		<li>
+			<?php
+			echo $this->Html->link('Resend verification mail', array(
+					'action' => 'resend_email_verification',
+					'controller' => 'users'
+				), array(
+					'title' => 'If you already registered, but have not verified your email address, please click here.'));
+			?>
+		</li>
+	</ul>
+	
 	<?php
 	echo $this->Form->create($modelName);
 	
