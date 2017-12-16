@@ -68,6 +68,7 @@ class CcConfigMenu extends CakeclientAppModel {
 	
 	public function createDefaultTrees($routePrefix = null, $menuGroups = array()) {
 		$menus = $this->getDefaultMenuTree($routePrefix, true, $menuGroups);
+		debug($menus);exit;
 	}
 	
 	

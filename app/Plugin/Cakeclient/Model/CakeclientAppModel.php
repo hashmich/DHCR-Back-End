@@ -28,7 +28,7 @@ class CakeclientAppModel extends AppModel {
 	/*
 	* If we are examining a plugin class, get the according App-class - if any
 	*/
-	public function getAppClass($className = null, $classType = null, &$virtual = false, &$plugin = false, &$pluginAppOverride = false) {
+	public function getAppClass($className = null, $classType = null, &$virtual = false, &$plugin = false, &$pluginAppOverride = null) {
 		if(empty($className) OR empty($classType)) return null;
 		
 		App::uses($className, $classType);
@@ -38,12 +38,11 @@ class CakeclientAppModel extends AppModel {
 		}
 		$reflector = new ReflectionClass($className);
 		$dir = dirname($reflector->getFileName());
-		$pluginName = null;
 		unset($reflector);
 		if(strpos($dir, 'Plugin')) {
 			$plugin = true;
 			$expl = explode(DS, $dir);
-			foreach($expl as $k => $d) if($d == 'Plugin') $pluginName = $expl[$k+1];
+			foreach($expl as $k => $d) if($d == 'Plugin') $plugin = $expl[$k+1];
 			// test for an app-level override
 			$_className = 'App'.$className;
 			App::uses($_className, $classType);
@@ -57,13 +56,15 @@ class CakeclientAppModel extends AppModel {
 	}
 	
 	
-	public function getControllerMethods($tableName = null, $plugin = false, $pluginAppOverride = false, $defaultMethods = array()) {
-		$plugin = $pluginAppOverride = false;
+	public function getControllerMethods($tableName = null, &$plugin = false, &$pluginAppOverride = null, $defaultMethods = array()) {
+		$plugin = false;
+		$pluginAppOverride = null;
 		$controllerMethods = array();
 		$controllerName = Inflector::camelize($tableName).'Controller';
 		
 		// plugins need to extend the App::paths() array in order to be detected
 		// App::build(array('Controller' => App::path('Controller', 'Plugin')));
+		
 		// if a plugin controller, get the app-level override, if any
 		$controllerName = $this->getAppClass($controllerName, 'Controller', $virtual, $plugin, $pluginAppOverride);
 		
@@ -83,13 +84,12 @@ class CakeclientAppModel extends AppModel {
 					$controllerName = $_controllerName;
 				}
 			}
-		
+			
+			// TODO: tidy up here
 			$excludes = array('reset_order',);
 			if($appExcludes = Configure::read('AclMenu.excludes'))
-				
-				// TODO: tidy up here
 				$excludes = array_unique(array_merge($excludes, $appExcludes));
-				Configure::write('AclMenu.excludes', $excludes);
+			Configure::write('AclMenu.excludes', $excludes);
 					
 				if($plugin) {
 					if($pluginAppOverride) {

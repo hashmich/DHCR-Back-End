@@ -19,6 +19,8 @@ class CcConfigMenusController extends CakeclientAppController {
 	public function create_default_trees() {
 		// get the available prefixes to populate the form options
 		$route_prefix = Configure::read('Cakeclient.prefixes');
+		if(is_array($route_prefix) AND count($route_prefix) === 1) 
+			$route_prefix = $route_prefix[0]; 
 		
 		if(!empty($this->request->params['CcConfigMenu']) OR is_string($route_prefix)) {
 			if(!is_string($route_prefix))

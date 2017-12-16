@@ -9,6 +9,6 @@
 
 <?php
 echo $this->Form->create('CcConfigMenu');
-echo $this->Form->input('route_prefixes', array('options' => $route_prefixes));
-echo $this->Form->end()
+echo $this->Form->input('route_prefix', array('options' => $route_prefixes));
+echo $this->Form->end("submit")
 ?>

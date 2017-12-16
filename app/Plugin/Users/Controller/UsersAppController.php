@@ -49,7 +49,10 @@ class UsersAppController extends AppController {
 					return $this->redirect('https://' . env('SERVER_NAME') . $this->here);
 				}
 			default:
-				throw new BadRequestException(__d('cake_dev', 'The request has been black-holed'));
+				throw new BadRequestException(__d('cake_dev', 
+						'The security token on the form you submitted is expired. 
+						To prevent cross request forgery (CRF), your request has been blocked.
+						Please reload the page and try again.'));
 		}
 	}
 	

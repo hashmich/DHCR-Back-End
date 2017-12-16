@@ -60,6 +60,14 @@ class CcConfigAction extends CakeclientAppModel {
 		}else{
 			$urlPrefix = null;
 		}
+		
+		// don't use the current prefix if the action does not belong to a plugin controller
+		if(isset($data['plugin_name']) AND $data['plugin_name'] === false) 
+			$urlPrefix = null;
+		// don't use the current prefix, if the action belongs to some other plugin
+		if(!empty($data['plugin_name']) AND $data['plugin_name'] != 'Cakeclient')
+			$urlPrefix = null;
+		
 		$i = (isset($data['position'])) ? $data['position'] : 0;
 		$contextual = (isset($data['contextual'])) ? $data['contextual'] : 1;
 		
@@ -146,7 +154,9 @@ class CcConfigAction extends CakeclientAppModel {
 	
 	private function getActions($tableName = null, $defaultMethods = array()) {
 		// method to identify existing controller methods in plugin's AppModel
-		$union = $this->getControllerMethods($tableName, $plugin = false, $pluginAppOverride = false, $defaultMethods);
+		$plugin = false;
+		$pluginAppOverride = null;
+		$union = $this->getControllerMethods($tableName, $plugin, $pluginAppOverride, $defaultMethods);
 		
 		$controllerName = Inflector::camelize($tableName).'Controller';
 		
@@ -172,13 +182,11 @@ class CcConfigAction extends CakeclientAppModel {
 					break;	// most likely we're only interested into the first parameter
 				}
 				unset($reflector);
-				$override = ($pluginAppOverride) ? 'yes' : 'no'; 
-				if(!$plugin) $override = null;
 				$out[$method] = array(
 					'position' => $position,
 					'controller_name' => $controllerName,
 					'plugin_name' => $plugin,
-					'plugin_app_override' => $override,
+					'plugin_app_override' => $pluginAppOverride,
 					'contextual' => $contextual
 				);
 			}
