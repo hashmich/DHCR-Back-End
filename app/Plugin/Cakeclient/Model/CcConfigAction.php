@@ -54,6 +54,7 @@ class CcConfigAction extends CakeclientAppModel {
 		if(empty($method) OR empty($tableName)) return array();
 		
 		if(empty($urlPrefix) AND $urlPrefix !== false)
+			// use the current prefix
 			$urlPrefix = Configure::read('Cakeclient.prefix');
 		if(!empty($urlPrefix)) {
 			$urlPrefix = '/'.$urlPrefix;
@@ -69,36 +70,40 @@ class CcConfigAction extends CakeclientAppModel {
 			$urlPrefix = null;
 		
 		$i = (isset($data['position'])) ? $data['position'] : 0;
-		$contextual = (isset($data['contextual'])) ? $data['contextual'] : 1;
+		$contextual = (isset($data['contextual'])) ? $data['contextual'] : true;
 		
 		$tableLabel = $this->makeTableLabel($tableName, $tablePrefix);
 		
 		if(in_array($method, array('add','index','reset_order')))
-			$contextual = 0;
-		$has_form = 0;
+			$contextual = false;
+		$has_form = false;
 		if(in_array($method, array('add','edit')))
-			$has_form = 1;
-		$has_view = 0;
+			$has_form = true;
+		$has_view = false;
 		if(in_array($method, array('add','index','edit','view')))
-			$has_view = 1;
-		$bulk = 0;
-		if(in_array($method, array('delete')))
-			$bulk = 1;
+			$has_view = true;
+		$bulk = false;
+		if(in_array($method, array('delete')) OR (!$has_form AND !$has_view))
+			$bulk = true;
 		
 		$label = Inflector::humanize($method);
 		if($method == 'index') $label = 'List';
 		if(empty($viewName) OR $viewName != 'menu') {
 			if($method == 'index') $label = 'List '.$tableLabel;
-			if($viewName != 'index' AND in_array($method, array('add','edit','view','delete')))
+			if(!empty($viewName) AND $viewName != 'index' AND in_array($method, array('add','edit','view','delete')))
 				$label = Inflector::humanize($method).' '.Inflector::singularize($tableLabel);
-			if($viewName == 'index' AND !$contextual)
+			if(!empty($viewName) AND $viewName == 'index' AND !$contextual)
 				$label = Inflector::humanize($method).' '.Inflector::singularize($tableLabel);
 		}
+		
+		$pattern = $urlPrefix.'/'.$tableName.'/'.$method;
+		if($contextual) $pattern .= '/+';
 		
 		return array(
 			//'id',
 			//'cc_config_table_id',
 			'url' => $urlPrefix.'/'.$tableName.'/'.$method,
+			'url_pattern' => $pattern,
 			'name' => $method,
 			'label' => $label,
 			'contextual' => $contextual,
@@ -133,6 +138,7 @@ class CcConfigAction extends CakeclientAppModel {
 			AND isset($method_data['contextual']))
 				$action['contextual'] = $method_data['contextual'];
 			unset($method_data['contextual']);
+			
 			// apply all method metadata from getMethods
 			foreach($method_data as $key => $value) $action[$key] = $value;
 			
@@ -156,13 +162,16 @@ class CcConfigAction extends CakeclientAppModel {
 		// method to identify existing controller methods in plugin's AppModel
 		$plugin = false;
 		$pluginAppOverride = null;
-		$union = $this->getControllerMethods($tableName, $plugin, $pluginAppOverride, $defaultMethods);
+		$controllerName = null;
+		$union = $this->getControllerMethods($tableName, $plugin, $pluginAppOverride, $defaultMethods, $controllerName);
 		
-		$controllerName = Inflector::camelize($tableName).'Controller';
+		if(empty($controllerName)) $controllerName = Inflector::camelize($tableName).'Controller';
 		
 		// format conversion!!!
 		$out = array();
 		foreach($union as $i => $method) {
+			$_plugin = $plugin;
+			$_pluginAppOverride = $pluginAppOverride;
 			$position = $i+1;
 			if(!method_exists($controllerName, $method)) {
 				$out[$method] = array(
@@ -172,6 +181,15 @@ class CcConfigAction extends CakeclientAppModel {
 					'plugin_app_override' => null
 				);
 			}else{
+				if(strpos($controllerName, 'App') === 0 AND $plugin) {
+					// check if the method exists in the plugin
+					if(!method_exists(get_parent_class($controllerName), $method)) {
+						$_plugin = false;
+						$_pluginAppOverride = null;
+					}
+					// we cannot check, if a particular method was NOT overridden by the AppControllerClass...
+				}
+				
 				$reflector = new ReflectionMethod($controllerName, $method);
 				$params = $reflector->getParameters();
 				$contextual = 0;
@@ -185,8 +203,8 @@ class CcConfigAction extends CakeclientAppModel {
 				$out[$method] = array(
 					'position' => $position,
 					'controller_name' => $controllerName,
-					'plugin_name' => $plugin,
-					'plugin_app_override' => $pluginAppOverride,
+					'plugin_name' => $_plugin,
+					'plugin_app_override' => $_pluginAppOverride,
 					'contextual' => $contextual
 				);
 			}

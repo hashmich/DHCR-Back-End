@@ -8,7 +8,6 @@ if(file_exists(APP . 'Model' . DS . pathinfo(__FILE__, PATHINFO_BASENAME))) {
 class CcConfigMenu extends CakeclientAppModel {
 	
 	
-	
 	public $hasMany = array(
 		'CcConfigTable' => array(
 			'className' => 'CcConfigTable'
@@ -33,7 +32,7 @@ class CcConfigMenu extends CakeclientAppModel {
 	 * @param array  $menuGroups
 	 * @return array
 	 */
-	public function getDefaultMenuTree($routePrefix = null, $isAdmin = false, $menuGroups = array()) {
+	public function getDefaultMenuTree($routePrefix = null, $isAdmin = false, $menuGroups = array(), $view = null) {
 		$menu = array();
 		if(!empty($menuGroups)) {
 			$tablePrefixes = Hash::extract($menuGroups, '{n}.table_prefix');
@@ -42,7 +41,7 @@ class CcConfigMenu extends CakeclientAppModel {
 					continue;
 				$menu[$k]['CcConfigMenu'] = $this->getDefaultMenu($group, $k + 1);
 				$source = (!empty($group['data_source'])) ? $group['data_source'] : 'default';
-				$tableTree = $this->CcConfigTable->getDefaultMenuTableTree($routePrefix, $group, $tablePrefixes, $source);
+				$tableTree = $this->CcConfigTable->getDefaultMenuTableTree($routePrefix, $group, $tablePrefixes, $source, $view);
 				if(!empty($tableTree['CcConfigTable'])) $tableTree['CcConfigTable'];
 				$menu[$k]['CcConfigMenu']['CcConfigTable'] = $tableTree;
 			}
@@ -61,14 +60,16 @@ class CcConfigMenu extends CakeclientAppModel {
 			//'id',
 			'label' => $name,
 			'position' => $k,
-			'layout_block' => 'cakeclient_navbar'
+			'layout_block' => 'cakeclient_navbar',
+			'comment' => 'auto-created menu tree'
 		);
 	}
 	
 	
 	public function createDefaultTrees($routePrefix = null, $menuGroups = array()) {
 		$menus = $this->getDefaultMenuTree($routePrefix, true, $menuGroups);
-		debug($menus);exit;
+		//debug($menus);exit;
+		$this->saveAll($menus, array('deep' => true));
 	}
 	
 	

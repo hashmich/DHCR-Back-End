@@ -28,7 +28,7 @@ class CakeclientAppModel extends AppModel {
 	/*
 	* If we are examining a plugin class, get the according App-class - if any
 	*/
-	public function getAppClass($className = null, $classType = null, &$virtual = false, &$plugin = false, &$pluginAppOverride = null) {
+	public function getAppClass(&$className = null, $classType = null, &$virtual = false, &$plugin = false, &$pluginAppOverride = null, $method = null) {
 		if(empty($className) OR empty($classType)) return null;
 		
 		App::uses($className, $classType);
@@ -48,6 +48,10 @@ class CakeclientAppModel extends AppModel {
 			App::uses($_className, $classType);
 			if(class_exists($_className, true)) {
 				$pluginAppOverride = true;
+				if(!empty($method) AND !method_exists($className, $method)) {
+					$pluginAppOverride = false;
+					$plugin = false;
+				}
 				$className = $_className;
 			}
 		}
@@ -56,7 +60,7 @@ class CakeclientAppModel extends AppModel {
 	}
 	
 	
-	public function getControllerMethods($tableName = null, &$plugin = false, &$pluginAppOverride = null, $defaultMethods = array()) {
+	public function getControllerMethods($tableName = null, &$plugin = false, &$pluginAppOverride = null, $defaultMethods = array(), &$controllerName = null) {
 		$plugin = false;
 		$pluginAppOverride = null;
 		$controllerMethods = array();

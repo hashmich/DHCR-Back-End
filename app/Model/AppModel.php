@@ -36,7 +36,7 @@ class AppModel extends Model {
 	public function beforeSave($options = array()) {
 		if(!empty($this->data[$this->alias])) {
 			foreach($this->data[$this->alias] as $field => &$value) {
-				$value = strip_tags($value);
+				if(!is_array($value)) $value = trim(strip_tags($value));
 			}
 		}
 		

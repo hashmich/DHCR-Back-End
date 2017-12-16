@@ -254,7 +254,7 @@ class AclMenuComponent extends Component {
 			// only if demanded or admin: get defaults if no menu available
 			if(empty($menu)) {
 				$menuModel = $this->getModel($this->menuModelName);
-				$menu = $menuModel->getDefaultMenuTree($routePrefix, $this->isAdmin(), $this->defaultMenus);
+				$menu = $menuModel->getDefaultMenuTree($routePrefix, $this->isAdmin(), $this->defaultMenus, 'menu');
 			}	
 			
 			//Cache::write($menuName, $menu, 'cakeclient');

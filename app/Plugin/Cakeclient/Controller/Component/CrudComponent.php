@@ -493,6 +493,13 @@ class CrudComponent extends Component {
 					$label = Inflector::camelize($modelRelation['foreignKey']);
 					// get the keys where the related values are stored
 					$displayField = $model->{$modelAlias}->displayField;
+					// if no displayField is provided, id will be the default
+					if($displayField == 'id') {
+						$schema = $model->{$modelAlias}->schema();
+						if(isset($schema['label'])) $displayField = 'label';
+						elseif(isset($schema['name'])) $displayField = 'name';
+						elseif(isset($schema['title'])) $displayField = 'title';
+					}
 					// update fieldlist - do not override form_options label
 					if(!is_array($fieldlist[$modelName . '.' . $foreignKey])) {
 						$fieldlist[$modelName . '.' . $foreignKey] = array();

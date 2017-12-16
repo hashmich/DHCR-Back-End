@@ -56,7 +56,9 @@ class CcConfigTable extends CakeclientAppModel {
 	 */
 	protected function getDefaultTable($tableName, $table_label = null, $position = null) {
 		$table_label = ($table_label == null) ? $tableName : $table_label;
-		$modelName = $this->getAppClass(Inflector::classify($tableName), 'Model');
+		
+		$controllerName = Inflector::classify($tableName);
+		$modelName = $this->getAppClass($controllerName, 'Model');
 		return array(
 			//'id' => '1',
 			//'cc_config_menu_id' => 1,
@@ -99,23 +101,12 @@ class CcConfigTable extends CakeclientAppModel {
 	}
 	
 	
-	public function getDefaultAcoTableTree($sources = array()) {
-		$tables = array();
-		foreach($sources as $source)
-			$tables = array_merge($tables, $this->getGroupTables($source));
-		if(!empty($tables)) foreach($tables as $i => &$table) {
-			$table['CcConfigAco'] = $this->CcConfigAco->getDefaultAcos($table['name'], null);
-		}
-		return $tables;
-	}
-	
-	
-	public function getDefaultMenuTableTree($routePrefix = null, $group = array(), $tablePrefixes = array(), $source = null) {
+	public function getDefaultMenuTableTree($routePrefix = null, $group = array(), $tablePrefixes = array(), $source = null, $view = null) {
 		$tables = $this->getDefaultGroupTables($source, $group, $tablePrefixes);
 		$tablePrefix = (!empty($group['table_prefix'])) ? $group['table_prefix'] : null;
 		
 		if(!empty($tables)) foreach($tables as $i => &$table) {
-			$actions = $this->CcConfigAction->getDefaultActions($table['name'], $tablePrefix, 'menu', $routePrefix);
+			$actions = $this->CcConfigAction->getDefaultActions($table['name'], $tablePrefix, $view, $routePrefix);
 			$table['CcConfigAction'] = $actions;
 		}
 		return $tables;

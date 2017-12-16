@@ -22,20 +22,21 @@ class CcConfigMenusController extends CakeclientAppController {
 		if(is_array($route_prefix) AND count($route_prefix) === 1) 
 			$route_prefix = $route_prefix[0]; 
 		
-		if(!empty($this->request->params['CcConfigMenu']) OR is_string($route_prefix)) {
-			if(!is_string($route_prefix))
-				$route_prefix = $this->request->params['CcConfigMenu']['route_prefix'];
+		if(!empty($this->request->data['CcConfigMenu']) OR is_string($route_prefix)) {
+			if(!is_string($route_prefix)) {
+				$index = $this->request->data['CcConfigMenu']['route_prefix'];
+				$route_prefix = Configure::read('Cakeclient.prefixes')[$index];
+			}
 			
-			$this->CcConfigMenu->createDefaultTrees($route_prefix, $this->AclMenu->defaultMenus);
+			// get the full action tree -> viewName = null
+			$this->CcConfigMenu->createDefaultTrees($route_prefix, $this->AclMenu->defaultMenus, $viewName = null);
 			$this->Flash->set("Menu trees have been created based on default configuration, 
 					existing controller functions  and database structure");
-			// TODO: maintain route prefix
-			// current prefix?
+			
 			$this->redirect(array(
-				'action' => 'index',
-				'controller' => $this->request->params['controller'],
-				'plugin' => $this->request->params['plugin']
-			));
+					'action' => 'index', 
+					'controller' => 'cc_config_menus',
+					'plugin' => $this->request->params['cakeclient.route']));
 		}
 		$this->set('route_prefixes', Configure::read('Cakeclient.prefixes'));
 	}
