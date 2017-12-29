@@ -59,6 +59,7 @@ class CcConfigTable extends CakeclientAppModel {
 		
 		$controllerName = Inflector::classify($tableName);
 		$modelName = $this->getAppClass($controllerName, 'Model');
+		$displayField = $this->getDisplayfield($modelName);
 		return array(
 			//'id' => '1',
 			//'cc_config_menu_id' => 1,
@@ -67,8 +68,8 @@ class CcConfigTable extends CakeclientAppModel {
 			'label' => $table_label,
 			'model' => $modelName,
 			'controller' => $tableName,
-			'displayfield' => null,
-			'displayfield_label' => null,
+			'displayfield' => $displayField,
+			'displayfield_label' => $table_label,
 			'show_associations' => true
 		);
 	}

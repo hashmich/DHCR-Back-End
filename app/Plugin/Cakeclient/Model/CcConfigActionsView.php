@@ -26,6 +26,45 @@ class CcConfigActionsView extends CakeclientAppModel {
 	
 	
 	
+	
+	public function createDefaultRelation($view) {
+		if((isset($view[$this->alias]))) $view = $view[$this->alias];
+		
+		if(!$view['has_view']) return;
+		
+		// lookup and link to all possible parent actions (except the passed action), that have a view
+		$actions = $this->CcConfigAction->find('all', array(
+			'contain' => array(),
+			'conditions' => array(
+				'CcConfigAction.id !=' => $view['id'],
+				'CcConfigAction.cc_config_table_id' => $view['cc_config_table_id']
+			)
+		));
+		
+		if($actions) foreach($actions['CcConfigAction'] as $action) {
+			// !contextual: link to all
+			$link = true;
+			if($view['contextual']) {
+				// contextual child: link only to contextual views
+				if(!$action['contextual']) $link = false;
+				if(in_array($action['name'], array('add'))) $link = true;
+			}else{
+				if($view['name'] == 'add' AND $action['name'] != 'index') $link = false;
+				if($view['name'] != 'add' AND $view['name'] != 'index') $link = false;
+			}
+			
+			if($link) {
+				$this->create(array(
+					'child_action_id' => $childAction['id'],
+					'parent_action_id' => $view['id']
+				));
+				$this->save(null, false);
+			}
+		}
+	}
+	
+	
+	
 	function afterFind($results = array(), $primary = false) {
 		// classVar $crud is set to false by default in CakeclientAppModel
 		// and manipulated by the CRUD methods for differentiation. 

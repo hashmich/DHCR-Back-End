@@ -59,12 +59,13 @@ class AclMenuComponent extends Component {
 	);
 	
 	
+	public $defaultRoute = 'db-webclient';
+	
 	public $settings = array();
 	
 	public $controller = null;
 	
 	public $request = null;
-	
 	
 	
 	
@@ -225,9 +226,13 @@ class AclMenuComponent extends Component {
 	 * @param String $routePrefix	the current (or only prefix) to create default menus
 	 */
 	public function setMenu($routePrefix = null) {
+		if($routePrefix !== false) {
+			$routePrefix = (Configure::read('Cakeclient.current_route'))
+			? Configure::read('Cakeclient.current_route') : $this->defaultRoute;
+		}
 		$cakeclientMenu = $this->getMenu($routePrefix);
-		
-		if(!$this->request->is('requested') AND Configure::read('Cakeclient.navbar')) {
+		// only run menu creation on non-AJAX requests
+		if(!$this->request->is('requested')) {
 			// load the AssetHelper which appends the top_nav Menu to whichever layout
 			if(	!in_array('Cakeclient.Asset', $this->controller->helpers)
 			AND	!isset($this->controller->helpers['Cakeclient.Asset']))
@@ -243,9 +248,9 @@ class AclMenuComponent extends Component {
 	 */
 	public function getMenu($routePrefix = null) {
 		$menu = array();
-		//$menuName = $this->acf.'_'.$aro_id.'_menu';
-		//$menu = Cache::read($menuName, 'cakeclient');
-		if(empty($menu)) {
+		$cacheName = $this->aroKeyName.'_'.$this->aroKeyValue.'_menu';
+		$menu = Cache::read($cacheName, 'cakeclient');
+		if(empty($menu) OR Configure::read('debug') > 0) {
 			
 			// try reading from the cc_config_tables tables
 			//$menu = $this->getAcl($aro_id);
@@ -257,14 +262,14 @@ class AclMenuComponent extends Component {
 				$menu = $menuModel->getDefaultMenuTree($routePrefix, $this->isAdmin(), $this->defaultMenus, 'menu');
 			}	
 			
-			//Cache::write($menuName, $menu, 'cakeclient');
+			Cache::write($cacheName, $menu, 'cakeclient');
 		}
 		
 		return $menu;
 	}
 	
 	public function getDefaultActions($args = array()) {
-		if(empty($args)) $args = $this->__getActionConditions();
+		if(empty($args)) $args = $this->__getMenuActionArguments();
 		foreach($args as $key => $value) $$key = $value;
 		
 		$actionModel = $this->getModel($this->actionModelName);
@@ -272,8 +277,8 @@ class AclMenuComponent extends Component {
 	}
 	
 	public function getActions() {
-		$args = $this->__getActionConditions();
-		//foreach($args as $key => $value) $$key = $value;
+		$args = $this->__getMenuActionArguments();
+		foreach($args as $key => $value) $$key = $value;
 		$actions = array();
 		// #ToDo: try reading from config
 		
@@ -287,16 +292,11 @@ class AclMenuComponent extends Component {
 		return $actions;
 	}
 	
-	private function __getActionConditions() {
-		$aro_id = $this->aroKeyValue;
-		$aro_model = $this->aroKeyName;
+	private function __getMenuActionArguments() {
 		$tableName = $this->request->params['controller'];
 		$viewName = $this->request->params['action'];
-		$urlPrefix = null;
-		$role = $this->getRole();
-		if(!empty($role)) {
-			$urlPrefix = (isset($role['cakeclient_prefix'])) ? $role['cakeclient_prefix'] : null;
-		}
+		$urlPrefix = (Configure::read('Cakeclient.current_route')) 
+			? Configure::read('Cakeclient.current_route') : $this->defaultRoute;
 		// determine the table prefix
 		$tablePrefixes = Hash::extract($this->defaultMenus, '{n}.prefix');
 		$tablePrefix = null;
@@ -316,7 +316,7 @@ class AclMenuComponent extends Component {
 		if(empty($table))
 			$table = $this->request->params['controller'];
 		
-		$prefix = Configure::read('Cakeclient.prefix');
+		$prefix = Configure::read('Cakeclient.current_route');
 		if(!$prefix) $prefix = false;
 		
 		$modelName = $this->controller->modelClass;
@@ -472,7 +472,8 @@ class AclMenuComponent extends Component {
 	}
 	
 	
-	public function getRole() {
+	/*
+	public function getAro() {
 		$split = explode('.', $this->aroKeyName);
 		$aro_model = $split[0];
 		$model = $this->getModel($aro_model);
@@ -485,7 +486,7 @@ class AclMenuComponent extends Component {
 		if(!empty($role) AND !empty($role[$aro_model])) return $role[$aro_model];
 		return array();
 	}
-	
+	*/
 	
 	
 }

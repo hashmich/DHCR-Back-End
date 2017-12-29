@@ -88,10 +88,9 @@ class AppController extends Controller {
 				$this->AclMenu = $this->Components->load('Cakeclient.AclMenu');
 				// if not loaded before beforeFilter, we need to initialize manually
 				$this->AclMenu->initialize($this);
+				
+				
 			}
-			// there will be only one prefix in this application's config (db-webclient)
-			// otherwise, we would have to chose a prefix, that is associated to a role
-			$this->AclMenu->setMenu('db-webclient');
 		}
 		
 		$shibLogin = !empty($_SERVER['HTTP_EPPN']);
@@ -132,6 +131,8 @@ class AppController extends Controller {
 			}
 		}
 	}
+	
+	
 	
 	
 	public function beforeRedirect($url, $status = null, $exit = true) {

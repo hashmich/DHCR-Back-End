@@ -60,6 +60,21 @@ class CakeclientAppModel extends AppModel {
 	}
 	
 	
+	public function getDisplayfield($model) {
+		if(is_string($model)) $model = ClassRegistry::init($model);
+		$displayField = $model->displayField;
+		// if no displayField is provided, id will be the default
+		if($displayField == 'id') {
+			$schema = $model->schema();
+			if(isset($schema['label'])) $displayField = 'label';
+			elseif(isset($schema['name'])) $displayField = 'name';
+			elseif(isset($schema['title'])) $displayField = 'title';
+		}
+		
+		return $displayField;
+	}
+	
+	
 	public function getControllerMethods($tableName = null, &$plugin = false, &$pluginAppOverride = null, $defaultMethods = array(), &$controllerName = null) {
 		$plugin = false;
 		$pluginAppOverride = null;

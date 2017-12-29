@@ -8,7 +8,7 @@
 	// that sends requests to the application logic instead.
 	Configure::write('Cakeclient.allowViewOverride',false);
 	// show or hide the navbar
-	Configure::write('Cakeclient.navbar', true);
+	Configure::write('Cakeclient.always_show_navbar', true);
 	// may contain either string or array('element' => 'path/to/element','text' => 'footer string')
 	Configure::write('Cakeclient.footer', '&copy; 2016 <a href="http://hendrikschmeer.de" target="_blank">Hendrik Schmeer</a>');
 	

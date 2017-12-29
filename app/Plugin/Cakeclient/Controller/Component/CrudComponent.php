@@ -115,7 +115,7 @@ class CrudComponent extends Component {
 				}
 			}
 			// make the current prefix alias available - used in the CRUD views
-			Configure::write('Cakeclient.prefix', $prefix);
+			Configure::write('Cakeclient.current_route', $prefix);
 			$this->controller->request->params['plugin'] = $prefix;
 			
 			// restore the request - prerequisite for AclMenuComponent to work properly when on CRUD-route
@@ -125,6 +125,12 @@ class CrudComponent extends Component {
 			
 			$this->onCrud = true;
 		}
+	}
+	
+	
+	public function beforeRender(Controller $controller) {
+		if(Configure::read('Cakeclient.always_show_navbar') OR $this->onCrud)
+			if(isset($controller->AclMenu)) $controller->AclMenu->setMenu();
 	}
 	
 	
@@ -148,7 +154,7 @@ class CrudComponent extends Component {
 				$this->controller->layout = Configure::read('Cakeclient.layout');
 			$this->defaultRedirect = array(
 				'action' => 'index',
-				'plugin' => Configure::read('Cakeclient.prefix')
+				'plugin' => Configure::read('Cakeclient.current_route')
 			);
 		}
 	}
@@ -174,7 +180,6 @@ class CrudComponent extends Component {
 		$this->setRelations();
 		$this->setFieldlist();	// overrides $this->hasForm
 		$this->setAssocFieldOptions($modelName);
-		$this->controller->AclMenu->setMenu();
 		$this->controller->AclMenu->setActions();
 		
 		// the domainname (+ subdomain)
@@ -492,14 +497,8 @@ class CrudComponent extends Component {
 					$foreignKey = $modelRelation['foreignKey'];
 					$label = Inflector::camelize($modelRelation['foreignKey']);
 					// get the keys where the related values are stored
-					$displayField = $model->{$modelAlias}->displayField;
-					// if no displayField is provided, id will be the default
-					if($displayField == 'id') {
-						$schema = $model->{$modelAlias}->schema();
-						if(isset($schema['label'])) $displayField = 'label';
-						elseif(isset($schema['name'])) $displayField = 'name';
-						elseif(isset($schema['title'])) $displayField = 'title';
-					}
+					$pluginModel = ClassRegistry::init('CakeclientAppModel');
+					$displayField = $pluginModel->getDisplayField($model->{$modelAlias});
 					// update fieldlist - do not override form_options label
 					if(!is_array($fieldlist[$modelName . '.' . $foreignKey])) {
 						$fieldlist[$modelName . '.' . $foreignKey] = array();
@@ -512,7 +511,7 @@ class CrudComponent extends Component {
 						// it's important to specify the correct controller name right here, as the classname might differ from the alias found in the data array
 						'url' => array(
 							'controller' => $relatedTable,
-							'plugin' => Configure::read('Cakeclient.prefix')
+							'plugin' => Configure::read('Cakeclient.current_route')
 							// action & ID have to be specified somewhere else, if required - this will link to index-action by default
 						)
 					);

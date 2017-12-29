@@ -55,7 +55,7 @@ class CcConfigAction extends CakeclientAppModel {
 		
 		if(empty($urlPrefix) AND $urlPrefix !== false)
 			// use the current prefix
-			$urlPrefix = Configure::read('Cakeclient.prefix');
+			$urlPrefix = Configure::read('Cakeclient.current_route');
 		if(!empty($urlPrefix)) {
 			$urlPrefix = '/'.$urlPrefix;
 		}else{

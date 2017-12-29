@@ -86,8 +86,9 @@ class CakeclientAppController extends AppController {
 	public function beforeRender() {
 		parent::beforeRender();
 		// we're on a CRUD route - set all the CRUD relevant variables (actions, menu, view, fieldlist, relations)
-		if(!in_array(strtolower($this->request->params['action']), array('delete','reset_order')))
+		if(!in_array(strtolower($this->request->params['action']), array('delete','reset_order'))) {
 			$this->Crud->setCRUDviewVars();
+		}
 	}
 	
 	
