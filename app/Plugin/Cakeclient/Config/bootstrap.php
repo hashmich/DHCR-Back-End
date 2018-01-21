@@ -15,6 +15,8 @@
 	Configure::write('Cakeclient.AclChecking', true);
 	Configure::write('Cakeclient.AuthComponent', 'Auth');
 	
+	Configure::write('Cakeclient.aroKeyName', array('user_role_id'));
+	
 	
 	
 	// make the plugin controllers & models available to the application

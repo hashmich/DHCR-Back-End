@@ -182,6 +182,10 @@ class CrudComponent extends Component {
 		$this->setAssocFieldOptions($modelName);
 		$this->controller->AclMenu->setActions();
 		
+		$currentViewIsNotContextual = !$this->getModel('CcConfigAction')->currentActionIsContextual($this->controller->request);
+		
+		$this->controller->set(compact('currentViewIsNotContextual'));
+		
 		// the domainname (+ subdomain)
 		$page_title = $this->controller->base;
 		// ... and a dynamic title about the context

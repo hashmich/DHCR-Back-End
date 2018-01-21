@@ -2,7 +2,7 @@
 if(!empty($crudActions)) {
 	$menu_actions = array();
 	// #ToDo: check if we need to filter contextual actions for this view
-	if(1) {
+	if(!empty($currentViewIsNotContextual)) {
 		// list views
 		foreach($crudActions as $k => $action) {
 			if(empty($action['contextual'])) {

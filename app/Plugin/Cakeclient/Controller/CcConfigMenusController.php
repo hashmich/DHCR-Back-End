@@ -19,13 +19,18 @@ class CcConfigMenusController extends CakeclientAppController {
 	public function create_default_trees() {
 		// get the available prefixes to populate the form options
 		$route_prefix = Configure::read('Cakeclient.prefixes');
+		if(is_string($route_prefix)) {
+			$route_prefix = array($route_prefix);
+		}
 		if(is_array($route_prefix) AND count($route_prefix) === 1) 
 			$route_prefix = $route_prefix[0]; 
 		
-		if(!empty($this->request->data['CcConfigMenu']) OR is_string($route_prefix)) {
-			if(!is_string($route_prefix)) {
+		if(!empty($this->request->data['CcConfigMenu'])) {
+			if(is_array(Configure::read('Cakeclient.prefixes'))) {
 				$index = $this->request->data['CcConfigMenu']['route_prefix'];
 				$route_prefix = Configure::read('Cakeclient.prefixes')[$index];
+			}else{
+				$route_prefix = Configure::read('Cakeclient.prefixes');
 			}
 			
 			// get the full action tree -> viewName = null
@@ -39,6 +44,18 @@ class CcConfigMenusController extends CakeclientAppController {
 					'plugin' => $this->request->params['cakeclient.route']));
 		}
 		$this->set('route_prefixes', Configure::read('Cakeclient.prefixes'));
+	}
+	
+	
+	public function add_aco($id = null) {
+		if(!empty($this->request->data['CcConfigAcosAro'])) {
+			$this->CcConfigAcosAro->set($this->request->data);
+			$this->CcConfigAcosAro->save();
+		}
+		$data = array(
+				'cc_config_menu_id' => $id
+		);
+		$this->request->data = $data;
 	}
 	
 	

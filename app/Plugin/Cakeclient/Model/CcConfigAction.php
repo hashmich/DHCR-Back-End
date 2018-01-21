@@ -50,7 +50,25 @@ class CcConfigAction extends CakeclientAppModel {
 	
 	
 	
-	protected function getDefaultAction($tableName = null, $tablePrefix = null, $viewName = null, $urlPrefix = null, $method = null, $data = array()) {
+	
+	public function loadCurrentAction($request = array()) {
+		// TODO: try to get this action from the menu tree...
+		return $this->__getDefaultAction($request['controller'], 	// tableName
+			null, 													// tablePrefix
+			null, 													// viewName (will determinate the action label)
+			Configure::read('Cakeclient.current_route'), 			// urlPrefix
+			$request['action'],										// the method being called
+			array()													// the action's properties
+		);
+	}
+	
+	
+	public function currentActionIsContextual($request = array()) {
+		return $this->loadCurrentAction($request)['contextual'];
+	}
+	
+	
+	protected function __getDefaultAction($tableName = null, $tablePrefix = null, $viewName = null, $urlPrefix = null, $method = null, $data = array()) {
 		if(empty($method) OR empty($tableName)) return array();
 		
 		if(empty($urlPrefix) AND $urlPrefix !== false)
@@ -82,19 +100,12 @@ class CcConfigAction extends CakeclientAppModel {
 		$has_view = false;
 		if(in_array($method, array('add','index','edit','view')))
 			$has_view = true;
+		
 		$bulk = false;
-		if(in_array($method, array('delete')) OR (!$has_form AND !$has_view))
+		if(in_array($method, array('delete')) OR (!$has_form AND !$has_view AND !in_array($method, array('add_aco'))))
 			$bulk = true;
 		
-		$label = Inflector::humanize($method);
-		if($method == 'index') $label = 'List';
-		if(empty($viewName) OR $viewName != 'menu') {
-			if($method == 'index') $label = 'List '.$tableLabel;
-			if(!empty($viewName) AND $viewName != 'index' AND in_array($method, array('add','edit','view','delete')))
-				$label = Inflector::humanize($method).' '.Inflector::singularize($tableLabel);
-			if(!empty($viewName) AND $viewName == 'index' AND !$contextual)
-				$label = Inflector::humanize($method).' '.Inflector::singularize($tableLabel);
-		}
+		$label = $this->makeActionLabel($method, $tableLabel, $viewName, $contextual);
 		
 		$pattern = $urlPrefix.'/'.$tableName.'/'.$method;
 		if($contextual) $pattern .= '/+';
@@ -132,7 +143,7 @@ class CcConfigAction extends CakeclientAppModel {
 		$union = $this->getActions($tableName, $methods);
 		
 		foreach($union as $method => $method_data) {
-			$action = $this->getDefaultAction($tableName, $tablePrefix, $viewName, $routePrefix, $method, $method_data);
+			$action = $this->__getDefaultAction($tableName, $tablePrefix, $viewName, $routePrefix, $method, $method_data);
 			// special handling for the contextual property
 			if(	!in_array($method, array('add','index','reset_order'))
 			AND isset($method_data['contextual']))

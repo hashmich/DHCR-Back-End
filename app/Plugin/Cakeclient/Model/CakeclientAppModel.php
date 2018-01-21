@@ -25,6 +25,23 @@ class CakeclientAppModel extends AppModel {
 	}
 	
 	
+	public function makeActionLabel($method, $tableLabel, $viewName = null, $label = null, $contextual = false) {
+		if(empty($label)) {
+			$label = Inflector::humanize($method);
+			if($method == 'index') $label = 'List';
+		}
+		if(empty($viewName) OR $viewName != 'menu') {
+			if($method == 'index') $label = 'List '.$tableLabel;
+			if(!empty($viewName) AND $viewName != 'index' AND in_array($method, array('add','edit','view','delete')))
+				$label = Inflector::humanize($method).' '.Inflector::singularize($tableLabel);
+				if(!empty($viewName) AND $viewName == 'index' AND !$contextual)
+					$label = Inflector::humanize($method).' '.Inflector::singularize($tableLabel);
+		}
+		
+		return $label;
+	}
+	
+	
 	/*
 	* If we are examining a plugin class, get the according App-class - if any
 	*/

@@ -63,7 +63,7 @@ class CakeclientAppController extends AppController {
 			}
 			// yet we do not have permission from the app-level controller
 			if(!$this->Auth->isAuthorized()) {
-				if($this->AclMenu->check()) {
+				if($this->AclMenu->authorize()) {
 					// allow the requested action
 					$this->Auth->allow();
 				}

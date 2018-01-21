@@ -128,6 +128,13 @@
 				'cakeclient.route' => $prefix,
 				$prefix => 1
 		);
+		$cc_config_menus_add_aco = array(
+				'plugin' => 'cakeclient',
+				'controller' => 'cc_config_menus',
+				'action' => 'add_aco',
+				'cakeclient.route' => $prefix,
+				$prefix => 1
+		);
 		
 		if($prefix !== '' AND is_string($prefix)) {
 			$url_prefix = '/' . $prefix;
@@ -137,6 +144,7 @@
 				unset($long_url_array[$prefix]);
 				// exceptions
 				unset($cc_config_menus_create_default_trees[$prefix]);
+				unset($cc_config_menus_add_aco[$prefix]);
 				unset($cc_config_actions_edit[$prefix]);
 			}
 			
@@ -148,6 +156,7 @@
 			unset($long_url_array[$prefix]);
 			// exceptions
 			unset($cc_config_menus_create_default_trees[$prefix]);
+			unset($cc_config_menus_add_aco[$prefix]);
 			unset($cc_config_actions_edit[$prefix]);
 		}
 		
@@ -159,6 +168,9 @@
 		Router::connect(
 				$url_prefix . '/cc_config_menus/create_default_trees',
 				$cc_config_menus_create_default_trees);
+		Router::connect(
+				$url_prefix . '/cc_config_menus/add_aco/*',
+				$cc_config_menus_add_aco);
 		
 		
 		// finally the "real" CRUD routes :)

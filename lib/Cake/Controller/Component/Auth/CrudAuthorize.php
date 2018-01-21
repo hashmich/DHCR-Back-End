@@ -89,13 +89,10 @@ class CrudAuthorize extends BaseAuthorize {
 			);
 			return false;
 		}
-		$user = array($this->settings['userModel'] => $user);
-		$Acl = $this->_Collection->load('Acl');
-		return $Acl->check(
-			$user,
-			$this->action($request, ':controller'),
-			$this->settings['actionMap'][$request->params['action']]
-		);
+		if(isset($this->_Controller->AclMenu)) {
+			return $this->_Controller->AclMenu->authorize();
+		}
+		return false;
 	}
 
 }
