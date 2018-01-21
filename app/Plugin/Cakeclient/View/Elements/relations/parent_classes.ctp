@@ -11,8 +11,7 @@ if(isset($crudRelations) AND !empty($crudRelations['belongsTo'])) {
 		}
 		$link_url = array(
 			'action' => 'index',
-			'controller' => $assoc['tablename'],
-			'plugin' => Configure::read('Cakeclient.prefix')
+			'controller' => $assoc['tablename']
 		);
 		if($actionName == 'view' AND $parent_id) {
 			$link_url['action'] = 'view';

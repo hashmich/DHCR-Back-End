@@ -7,6 +7,7 @@ if(file_exists(APP . 'Model' . DS . pathinfo(__FILE__, PATHINFO_BASENAME))) {
 
 class CcConfigMenu extends CakeclientAppModel {
 	
+	public $displayField = 'label';
 	
 	public $hasMany = array(
 		'CcConfigTable' => array(
@@ -42,7 +43,6 @@ class CcConfigMenu extends CakeclientAppModel {
 				$menu[$k]['CcConfigMenu'] = $this->getDefaultMenu($group, $k + 1);
 				$source = (!empty($group['data_source'])) ? $group['data_source'] : 'default';
 				$tableTree = $this->CcConfigTable->getDefaultMenuTableTree($routePrefix, $group, $tablePrefixes, $source, $view);
-				if(!empty($tableTree['CcConfigTable'])) $tableTree['CcConfigTable'];
 				$menu[$k]['CcConfigMenu']['CcConfigTable'] = $tableTree;
 			}
 		}
@@ -67,7 +67,7 @@ class CcConfigMenu extends CakeclientAppModel {
 	
 	
 	public function createDefaultTrees($routePrefix = null, $menuGroups = array()) {
-		$menus = $this->getDefaultMenuTree($routePrefix, true, $menuGroups, 'menu');
+		$menus = $this->getDefaultMenuTree($routePrefix, true, $menuGroups, null);
 		$this->saveAll($menus, array('deep' => true));
 	}
 	

@@ -30,9 +30,9 @@ class CakeclientAppModel extends AppModel {
 			$label = Inflector::humanize($method);
 			if($method == 'index') $label = 'List';
 		}
-		if(empty($viewName) OR $viewName != 'menu') {
+		if(!empty($viewName) AND $viewName != 'menu') {
 			if($method == 'index') $label = 'List '.$tableLabel;
-			if(!empty($viewName) AND $viewName != 'index' AND in_array($method, array('add','edit','view','delete')))
+			if($viewName != 'index' AND in_array($method, array('add','edit','view','delete')))
 				$label = Inflector::humanize($method).' '.Inflector::singularize($tableLabel);
 				if(!empty($viewName) AND $viewName == 'index' AND !$contextual)
 					$label = Inflector::humanize($method).' '.Inflector::singularize($tableLabel);

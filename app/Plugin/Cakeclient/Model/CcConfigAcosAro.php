@@ -107,22 +107,22 @@ class CcConfigAcosAro extends CakeclientAppModel {
 		}
 		
 		$results = $this->find('all', array(
-				'conditions' => array(
-						'CcConfigAcosAro.aro_key_name' => $keyName,
-						'CcConfigAcosAro.aro_key_value' => (isset($aro[$keyName]) ? $aro[$keyName] : null)
-				),
-				'contain' => array(
-						'CcConfigMenu' => array(
-								'CcConfigTable' => array(
-										'CcConfigAction' => array(
-												'conditions' => $conditions
-										)
-								)
-									
-						)
+			'conditions' => array(
+				'CcConfigAcosAro.aro_key_name' => $keyName,
+				'CcConfigAcosAro.aro_key_value' => (isset($aro[$keyName]) ? $aro[$keyName] : null)
+			),
+			'contain' => array(
+				'CcConfigMenu' => array(
+					'CcConfigTable' => array(
+						'CcConfigAction' => array(
+								'conditions' => $conditions,
+								'order' => 'CcConfigAction.position ASC'
+						),
+						'order' => 'CcConfigTable.position ASC'
+					)	
 				)
+			)
 		));
-		
 		if(!empty($results)) foreach($results as &$result) {
 			unset($result['CcConfigAcosAro']);
 			// adjust the action label based on context

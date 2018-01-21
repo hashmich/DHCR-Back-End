@@ -109,6 +109,7 @@ class CrudComponent extends Component {
 			// so the current route is set via a special router key: "cakeclient.route"
 			$prefix = null;
 			$routingPrefixes = Configure::read('Routing.prefixes');
+			
 			if(!empty($this->controller->request->params['cakeclient.route'])) {
 				if(empty($routingPrefixes) OR !empty($this->controller->request->params['crud'])) {
 					$prefix = $this->controller->request->params['cakeclient.route'];

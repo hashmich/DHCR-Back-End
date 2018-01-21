@@ -21,31 +21,10 @@ class CcConfigAction extends CakeclientAppModel {
 			'className' => 'CcConfigFielddefinition',
 			'foreignKey' => 'cc_config_action_id',
 			'dependent' => true
-		),
-		
-		// a "HasMany -hrough" HABTM Self Join
-		'CcConfigActionsView' => array(
-			'className' => 'CcConfigActionsView',
-			'foreignKey' => 'parent_action_id',
-			'dependent' => true,
-			'order' => 'CcConfigActionsView.position ASC'
 		)
 	);
 	
-	/**	Do not use HABTM relations to save data, as cake does not invoke the model behaviors on the joinTable, 
-	*	which is bad if the joinTable stores additional information, such as positioning.
-	*	Retrieval of data is fine, however. 
-	*/
-	var $hasAndBelongsToMany = array(
-		// the child
-		'CcConfigActionsViewsAction' => array(
-			'className' => 'CcConfigAction',
-			'foreignKey' => 'parent_action_id',
-			'associationForeignKey' => 'child_action_id',
-			'joinTable' => 'cc_config_actions_views',
-			'unique' => 'keepExisting'
-		)
-	);
+	
 	
 	
 	
@@ -105,7 +84,7 @@ class CcConfigAction extends CakeclientAppModel {
 		if(in_array($method, array('delete')) OR (!$has_form AND !$has_view AND !in_array($method, array('add_aco'))))
 			$bulk = true;
 		
-		$label = $this->makeActionLabel($method, $tableLabel, $viewName, $contextual);
+		$label = $this->makeActionLabel($method, $tableLabel, $viewName, null, $contextual);
 		
 		$pattern = $urlPrefix.'/'.$tableName.'/'.$method;
 		if($contextual) $pattern .= '/+';
