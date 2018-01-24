@@ -142,7 +142,8 @@ class AclMenuComponent extends Component {
 		
 		if($this->isAdmin())
 			return true;
-		return false;
+		
+		return $result;
 	}
 	
 	
@@ -194,9 +195,10 @@ class AclMenuComponent extends Component {
 	
 	public function getActions() {
 		$args = $this->__getMenuActionArguments();
-		foreach($args as $key => $value) $$key = $value;
 		$actions = array();
-		// #ToDo: try reading from config
+		
+		$aroAcoModel = $this->getModel($this->aclLookupModelName);
+		$actions = $aroAcoModel->getAcoList($this->aro, $this->aroKeyName, 'actions', $args);
 		
 		if(empty($actions)) {
 			// only if demanded or admin: get defaults if no menu available

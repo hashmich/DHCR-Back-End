@@ -39,13 +39,13 @@ class CcConfigAcosAro extends CakeclientAppModel {
 	 * @param unknown $keyNames
 	 * @return the full menu tree of allowed ACOs for that ARO
 	 */
-	public function getAcoTree($aro = array(), $keyNames = null, $use = null) {
-		return $this->getMergedAcosAro($aro, $keyNames, $use);
+	public function getAcoTree($aro = array(), $keyNames = null, $use = null, $action = array()) {
+		return $this->getMergedAcosAro($aro, $keyNames, $use, $action);
 	}
 	
 	
-	public function getAcoList($aro = array(), $keyNames = null) {
-		$tree = $this->getMergedAcosAro($aro, $keyNames, null);
+	public function getAcoList($aro = array(), $keyNames = null, $use = null, $action = array()) {
+		$tree = $this->getMergedAcosAro($aro, $keyNames, $use, $action);
 		$result = array();
 		foreach($tree as $menu) {
 			foreach($menu['CcConfigMenu']['CcConfigTable'] as $table) {
@@ -54,7 +54,7 @@ class CcConfigAcosAro extends CakeclientAppModel {
 				}
 			}
 		}
-		return $result; 
+		return $result;
 	}
 	
 	
@@ -77,17 +77,17 @@ class CcConfigAcosAro extends CakeclientAppModel {
 	}
 	
 	
-	public function getMergedAcosAro($aro, $keys = null, $use = null) {
+	public function getMergedAcosAro($aro, $keys = null, $use = null, $action = array()) {
 		if($keys == null) $keys = Configure::read('Cakeclient.aroKeyName');
 		$result = array();
 		
 		if(is_string($keys)) {
-			$result = $this->__getAcosAro($aro, $keys, $use);
+			$result = $this->__getAcosAro($aro, $keys, $use, $action);
 		}
 		elseif(is_array($keys)) {
 			$result = array();
 			foreach($keys as $name) {
-				$tmp = $this->__getAcosAro($aro, $name, $use);
+				$tmp = $this->__getAcosAro($aro, $name, $use, $action);
 				$result = array_merge($result, $tmp);
 			}
 		}
@@ -95,15 +95,17 @@ class CcConfigAcosAro extends CakeclientAppModel {
 		return $result;
 	}
 	
-	private function __getAcosAro($aro, $keyName, $use) {
-		$conditions = array();
+	private function __getAcosAro($aro, $keyName, $use = null, $action = array()) {
+		$table_conditions = $conditions = array();
+		
 		switch($use) {
-			case 'index': $conditions = array(
-			'CcConfigAction.contextual' => false,
-			'CcConfigAction.name !=' => 'index'
-					);
+		case 'menu': 	$conditions = array('CcConfigAction.contextual' => false); break;
+		case 'actions':
+			if($action) {
+				$conditions = array('CcConfigAction.name !=' => $action['viewName']);
+				$table_conditions = array('CcConfigTable.name' => $action['tableName']);
+			}
 			break;
-			case 'menu': $conditions = array('CcConfigAction.contextual' => false); break;
 		}
 		
 		$results = $this->find('all', array(
@@ -114,6 +116,7 @@ class CcConfigAcosAro extends CakeclientAppModel {
 			'contain' => array(
 				'CcConfigMenu' => array(
 					'CcConfigTable' => array(
+						'conditions' => $table_conditions,
 						'CcConfigAction' => array(
 								'conditions' => $conditions,
 								'order' => 'CcConfigAction.position ASC'
