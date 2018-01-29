@@ -136,10 +136,12 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 	
 	echo $this->Form->input('info_url', array(
 		'label' => 'Information URL',
-		'title' => 'Course information URL.'
+		'title' => 'Course information URL.',
+		'type' => 'text'
 	));
 	echo $this->Form->input('guide_url', array(
 		'label' => 'Curriculum URL',
+		'type' => 'text',
 		'title' => 'URL of a course guide (eg a .pdf), that describes the course modules and structure.'
 	));
 	?>
