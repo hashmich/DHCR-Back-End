@@ -778,6 +778,12 @@ class CrudComponent extends Component {
 			// catching out-of-paging range exceptions, ie. when on the last page, a filter is being set
 			$this->controller->redirect('index');
 		}
+		
+		/* TODO
+		if(isset($this->RequestHandler) AND $this->RequestHandler->accepts(array('xml', 'json'))) {
+			$this->set('_serialize', array('data'));
+		}
+		*/
 		$this->controller->set(Inflector::variable($this->virtualController) . 'List', $data);
 		$this->controller->set('filter', $conditions);
 	}
@@ -824,6 +830,11 @@ class CrudComponent extends Component {
 		$this->controller->$modelName->crud = 'view';
 		$record = $this->controller->$modelName->read(null, $id);
 		
+		/* TODO
+		if(isset($this->RequestHandler) AND $this->RequestHandler->accepts(array('xml', 'json'))) {
+			$this->set('_serialize', array('record'));
+		}
+		*/
 		$this->controller->set(compact('record'));
 	}
 	

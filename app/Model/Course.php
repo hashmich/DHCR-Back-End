@@ -44,12 +44,87 @@ class Course extends AppModel {
 	
 	
 	
+	
+	/**
+	 * belongsTo associations
+	 *
+	 * @var array
+	 */
+	public $belongsTo = array(
+			'Country' => array(
+					'className' => 'Country',
+					'foreignKey' => 'country_id'
+			),
+			'City' => array(
+					'className' => 'City',
+					'foreignKey' => 'city_id'
+			),
+			'Institution' => array(
+					'className' => 'Institution',
+					'foreignKey' => 'institution_id',
+					'counterCache' => true
+			),
+			'CourseParentType' => array(
+					'className' => 'CourseParentType',
+					'foreignKey' => 'course_parent_type_id'
+			),
+			'CourseType' => array(
+					'className' => 'CourseType',
+					'foreignKey' => 'course_type_id'
+			),
+			'Language' => array(
+					'className' => 'Language',
+					'foreignKey' => 'language_id'
+			),
+			'AppUser' => array(
+					'className' => 'AppUser',
+					'foreignKey' => 'user_id'
+			)
+	);
+	
+	/*
+	 public $hasMany = array(
+	 'Comment' => array('className' => 'Comment')
+	 );
+	 */
+	
+	/**
+	 * hasAndBelongsToMany associations
+	 *
+	 * @var array
+	 */
+	public $hasAndBelongsToMany = array(
+			'TadirahTechnique' => array(
+					'className' => 'TadirahTechnique',
+					'joinTable' => 'courses_tadirah_techniques',
+					'foreignKey' => 'course_id',
+					'associationForeignKey' => 'tadirah_technique_id',
+					'unique' => 'keepExisting'
+			),
+			'TadirahObject' => array(
+					'className' => 'TadirahObject',
+					'joinTable' => 'courses_tadirah_objects',
+					'foreignKey' => 'course_id',
+					'associationForeignKey' => 'tadirah_object_id',
+					'unique' => 'keepExisting'
+			),
+			'Discipline' => array(
+					'className' => 'Discipline',
+					'joinTable' => 'courses_disciplines',
+					'foreignKey' => 'course_id',
+					'associationForeignKey' => 'discipline_id',
+					'unique' => 'keepExisting'
+			)
+	);
+	
+	
+	
 
-/**
- * Validation rules
- *
- * @var array
- */
+	/**
+	 * Validation rules
+	 *
+	 * @var array
+	 */
 	public $validate = array(
 		'name' => array(
 			'notEmpty' => array(
@@ -150,13 +225,7 @@ class Course extends AppModel {
 		'lon' => array(
 			'notEmpty' => array(
 				'rule' => array('notBlank')
-			),/*
-			'decimal' => array(
-				'rule' => array('decimal', 6),
-				'message' => 'Enter a decimal with 6 digits after the decimal point.',
-				'allowEmpty' => false,
-				'required' => true
-			),*/
+			),
 			'range' => array(
 				'rule' => array('range', -180, 180),
 				'message' => 'The longitude value is out of range.'
@@ -165,13 +234,7 @@ class Course extends AppModel {
 		'lat' => array(
 			'notEmpty' => array(
 				'rule' => array('notBlank')
-			),/*
-			'decimal' => array(
-				'rule' => array('decimal', 6),
-				'message' => 'Enter a decimal with 6 digits after the decimal point.',
-				'allowEmpty' => false,
-				'required' => true
-			),*/
+			),
 			'range' => array(
 				'rule' => array('range', -90, 90),
 				'message' => 'The latitude value is out of range.'
@@ -278,74 +341,7 @@ class Course extends AppModel {
 	
 	
 
-/**
- * belongsTo associations
- *
- * @var array
- */
-	public $belongsTo = array(
-		'Country' => array(
-			'className' => 'Country',
-			'foreignKey' => 'country_id'
-		),
-		'City' => array(
-			'className' => 'City',
-			'foreignKey' => 'city_id'
-		),
-		'Institution' => array(
-			'className' => 'Institution',
-			'foreignKey' => 'institution_id',
-			'counterCache' => true
-		),
-		'CourseParentType' => array(
-			'className' => 'CourseParentType',
-			'foreignKey' => 'course_parent_type_id'
-		),
-		'CourseType' => array(
-			'className' => 'CourseType',
-			'foreignKey' => 'course_type_id'
-		),
-		'Language' => array(
-			'className' => 'Language',
-			'foreignKey' => 'language_id'
-		),
-		'AppUser' => array(
-			'className' => 'AppUser',
-			'foreignKey' => 'user_id'
-		)
-	);
-	
-	
-/**
- * hasAndBelongsToMany associations
- *
- * @var array
- */
-	public $hasAndBelongsToMany = array(
-		'TadirahTechnique' => array(
-			'className' => 'TadirahTechnique',
-			'joinTable' => 'courses_tadirah_techniques',
-			'foreignKey' => 'course_id',
-			'associationForeignKey' => 'tadirah_technique_id',
-			'unique' => 'keepExisting'
-		),
-		'TadirahObject' => array(
-			'className' => 'TadirahObject',
-			'joinTable' => 'courses_tadirah_objects',
-			'foreignKey' => 'course_id',
-			'associationForeignKey' => 'tadirah_object_id',
-			'unique' => 'keepExisting'
-		),
-		'Discipline' => array(
-			'className' => 'Discipline',
-			'joinTable' => 'courses_disciplines',
-			'foreignKey' => 'course_id',
-			'associationForeignKey' => 'discipline_id',
-			'unique' => 'keepExisting'
-		)
-	);
-	
-	
+
 	
 	
 	public function beforeValidate($options = array()) {
@@ -410,10 +406,6 @@ class Course extends AppModel {
 			$this->maxHttpCode = 400;
 			foreach($courses as $k => $record) {
 				$fieldlist = array('info_url','guide_url');
-				//if($record['Course']['skip_info_url'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
-				//	$fieldlist[] = 'info_url';
-				//if($record['Course']['skip_guide_url'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
-				//	$fieldlist[] = 'guide_url';
 				$this->set($record);
 				if(!empty($fieldlist) AND !$this->validates(array('fieldList' => $fieldlist))) {
 					$errors = $this->validationErrors;

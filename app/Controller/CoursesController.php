@@ -190,6 +190,13 @@ class CoursesController extends AppController {
 		if($this->Auth->user('is_admin')) $this->set('edit', true);
 		
 		// set results to view
+		if($this->RequestHandler->accepts(array('xml', 'json'))) {
+			// remove sensible data first
+			if($courses) foreach($courses as &$course) {
+				unset($course['AppUser']);
+			}
+			$this->set('_serialize', array('courses'));
+		}
 		$this->set(compact('courses'));
     }
 	
@@ -202,6 +209,13 @@ class CoursesController extends AppController {
 		if(	$this->Auth->user('id') == $course['Course']['user_id']
 		||	$this->Auth->user('is_admin'))
 			$this->set('edit', true);
+		
+			
+		if($this->RequestHandler->accepts(array('xml', 'json'))) {
+			// remove sensible data first
+			unset($course['AppUser']);
+			$this->set('_serialize', array('course'));
+		}
 		$this->set(compact('course'));
 	}
 	

@@ -200,9 +200,9 @@ class UsersController extends UsersAppController {
 			$result = $this->{$this->modelClass}->saveProfile($this->request->data, $admin);
 			if($result) {
 				if(empty($id)) {
-					$this->Session->setFlash('Please log out and in again to let the changes take effect.');
+					$this->Flash->set('Please log out and in again to let the changes take effect.');
 				}else{
-					$this->Session->setFlash('Profile updated');
+					$this->Flash->set('Profile updated');
 				}
 				$this->redirect(array(
 					'plugin' => null,
@@ -235,11 +235,11 @@ class UsersController extends UsersAppController {
 				));
 				if($result) {
 					if(!$this->Auth->user()) $this->Auth->flash('We have sent an email with further instructions to ' . $email . '.');
-					else $this->Session->setFlash('We have sent an email with further instructions to ' . $email . '.');
+					else $this->Flash->set('We have sent an email with further instructions to ' . $email . '.');
 				}else{
-					$this->Session->setFlash('Error while sending the password reset email.');
+					$this->Flash->set('Error while sending the password reset email.');
 				}
-				if($this->Auth->loggedIn()) $this->redirect(array(
+				if($this->Auth->user()) $this->redirect(array(
 					'plugin' => null,
 					'controller' => 'users',
 					'action' => 'dashboard'
