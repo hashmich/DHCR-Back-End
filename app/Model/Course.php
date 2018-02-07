@@ -82,11 +82,8 @@ class Course extends AppModel {
 			)
 	);
 	
-	/*
-	 public $hasMany = array(
-	 'Comment' => array('className' => 'Comment')
-	 );
-	 */
+	
+	 
 	
 	/**
 	 * hasAndBelongsToMany associations
