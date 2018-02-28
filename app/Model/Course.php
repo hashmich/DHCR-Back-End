@@ -402,7 +402,11 @@ class Course extends AppModel {
 			// if we use a more rigid limit than in the form, users will never see the error there!
 			$this->maxHttpCode = 400;
 			foreach($courses as $k => $record) {
-				$fieldlist = array('info_url','guide_url');
+				$fieldlist = array();
+				if($record['Course']['skip_info_url'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
+					$fieldlist[] = 'info_url';
+				if($record['Course']['skip_guide_url'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
+					$fieldlist[] = 'guide_url';
 				$this->set($record);
 				if(!empty($fieldlist) AND !$this->validates(array('fieldList' => $fieldlist))) {
 					$errors = $this->validationErrors;

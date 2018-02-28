@@ -25,21 +25,30 @@ Due to the returned http status code, we suspect there might be something wrong.
 
 As we want to prevent showing dead links to our audience, 
 please have a look at the listed erroneous records and update the information soon.
-Log in firstly to find a handy edit link ("review") next to the linked course descriptions.
-<?php
-echo Router::url(array(
-	'admin' => false,
-	'plugin' => null,
-	'controller' => 'users',
-	'action' => 'login'
-), $full = true);
-echo "\n\n";
+Please review all data thoroughly and submit the form. The validation logic will
+highlight all found errors. Additional options will appear, to get an
+URL past the validation, that you proved to be functional.
 
+In rare cases, this checking algorithm reports errors where
+human users can still visit the reported URLs.
+If you happen to find your carefully checked URL reported invalid by this
+email, please submit the form, find the reported errors and make sure to tick
+the "skip url validation" tickboxes. This choice will be remembered until the
+course record's valid date has expired.
+
+If you are not logged in to the DH-Course Registry, you will be redirected to
+the login form before accessing the according course edit form.
+
+Many thanks!
+
+
+
+<?php
 foreach($data as $id => $course) {
 	if($id == 'maintainer') continue;
 	
 	echo "Course: \n".$course['Course']['name']."\n";
-	echo Router::url('/view/' . $id, $full = true);
+	echo Router::url('/edit/' . $id, $full = true);
 	echo "\n";
 	foreach($course['errors'] as $field => $errors) {
 		$fieldname = $field;
@@ -54,13 +63,3 @@ foreach($data as $id => $course) {
 	echo "\n";
 }
 ?>
-
-In rare cases, this checking algorithm reports errors where 
-human users can still successfully visit the reported URLs. 
-If you happen to find your carefully checked URL reported invalid by this 
-email, we are sorry to bother you. 
-In case your course information has not changed and the data is still up to date, 
-(status green) you may ignore this email. 
-
-Many thanks! 
-
