@@ -4,3 +4,5 @@ tmp
 .sass-cache
 .svn
 logs
+
+\.idea/
