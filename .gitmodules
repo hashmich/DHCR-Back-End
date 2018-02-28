@@ -2,3 +2,12 @@
 	path = app/Config
 	url = https://sturmfrisur@bitbucket.org/sturmfrisur/dh-registry.git
 	branch = master
+[submodule "app/Plugin/Utils"]
+	path = app/Plugin/Utils
+	url = https://github.com/hashmich/CakeUtils.git
+[submodule "app/Plugin/Users"]
+	path = app/Plugin/Users
+	url = https://github.com/hashmich/CakeUser.git
+[submodule "app/Plugin/Cakeclient"]
+	path = app/Plugin/Cakeclient
+	url = https://github.com/hashmich/CakeClient.git
