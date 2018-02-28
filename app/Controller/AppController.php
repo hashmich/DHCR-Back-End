@@ -69,8 +69,10 @@ class AppController extends Controller {
 			$this->layout = 'iframe';
 		}
 		
-		// disable SSL on the dariah.uni-koeln.de server (bad configuration...)
-		if(isset($this->Security))	$this->Security->requireSecure = array();
+		if(isset($this->Security))	{
+			$this->Security->requireSecure = array();
+			$this->Security->unlockedFields[] = 'g-recaptcha-response';
+		}
 		
 		$this->set('modelName', $this->modelClass);
 		
@@ -185,6 +187,7 @@ class AppController extends Controller {
 	
 	
 	protected function _checkCaptcha(&$errors = array()) {
+		
 		$ip = $_SERVER['REMOTE_ADDR'];
 		if(!empty($_SERVER['HTTP_CLIENT_IP'])) 
 			$ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -209,12 +212,10 @@ class AppController extends Controller {
 		$result = json_decode($result, true);
 		if(!empty($result['error-codes'])) $errors = $result['error-codes'];
 		if(!empty($result['success'])) return true;
+		
 		return false;
 	}
 	
 }
-
-
-
 
 

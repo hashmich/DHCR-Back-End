@@ -24,12 +24,16 @@ class ContactController extends AppController {
 		'AppUser'
 	);
 	
+	public $components = array(
+		// need to add Security component, as it is only being used from the users plugin
+		//'Security'
+	);
+	
 	
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
 		
-		$this->Security->unlockedFields[] = 'g-recaptcha-response';
 		$this->Auth->allow(array('us'));
 		$this->set('title_for_layout', 'Contact');
 	}
@@ -55,15 +59,15 @@ class ContactController extends AppController {
 				foreach($admins as $admin) {
 					// email logic
 					$Email = new CakeEmail();
+					$Email->addCc($this->request->data['Contact']['email']);
+					$Email->addCc(Configure::read('App.defaultCc'));
 					$Email->replyTo($this->request->data['Contact']['email'])
 					->sender($this->request->data['Contact']['email'], trim(
 							$this->request->data['Contact']['first_name'].' '
 							.$this->request->data['Contact']['last_name']))
 					->to($admin['AppUser']['email'])
-					->cc(Configure::read('App.defaultCc'))
 					->subject('[DH-Registry Contact-Form] New Question')
 					->send($this->request->data['Contact']['message']);
-					$Email->addCc($this->request->data['Contact']['email']);
 				}
 				$this->Flash->set('Your message has been sent.');
 				$this->redirect('/');
