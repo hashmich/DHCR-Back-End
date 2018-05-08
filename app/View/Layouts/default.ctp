@@ -24,59 +24,32 @@ $this->start('header');
 ?>
 <div id="header">
 	<?php
-	$logo1 = array(
-		'file' => 'clarin-small.png',
-		'alt' => 'CLARIN Logo',
-		'url' => 'https://www.clarin.eu/',
-		'width' => 67,
-		'height' => 55,
-		'style' => 'margin-left: 25px;'
-	);
-	$logo2 = array(
-		'file' => 'dariah-small.png',
-		'alt' => 'DARIAH Logo',
-		'url' => 'http://dariah.eu/',
-		'width' => 133,
-		'height' => 55,
-		'style' => 'margin-left: 10px;'
+	$logo = array(
+		'file' => 'DARIAH-CLARIN-joint-logo.jpg',
+		'alt' => 'CLARIN-DARIAIH joint Logo',
+		'url' => '/',
+		'width' => 115,
+		'height' => 90
 	);
 	
-	$file = '/img/logos/' . $logo1['file'];
-	$url = $logo1['url'];
-	unset($logo1['file']);
-	unset($logo1['url']);
-	echo $this->Html->link($this->Html->image($file, $logo1), $url, array(
+	$file = '/img/logos/' . $logo['file'];
+	$url = $logo['url'];
+	unset($logo['file']);
+	unset($logo['url']);
+	echo $this->Html->link($this->Html->image($file, $logo), $url, array(
 			'target' => '_blank',
 			'escape' => false));
-	
-	$file = '/img/logos/' . $logo2['file'];
-	$url = $logo2['url'];
-	unset($logo2['url']);
-	unset($logo2['file']);
-	echo $this->Html->link($this->Html->image($file, $logo2), $url, array(
-			'target' => '_blank',
-			'escape' => false));
+
 	
 	
 	?>
 	<div>
 		<h1>
-			<?php
-			$title1 = 'Digital Humanities Registry';
-			$title = $this->fetch('title');
-			if(!empty($title) AND $title == 'Courses') {
-				$title1 = 'Digital Humanities Registry - Courses';
-				$title = null;
-			}
-			echo $this->Html->link($title1, '/');
-			if(!empty($title)) echo ' - ' . $title;
-			?>
+			<a href="<?php echo Router::url('/'); ?>">
+                <span id="h1">Digital Humanities</span><br>
+                <span id="h2">Course</span><span id="h3">Registry</span>
+            </a>
 		</h1>
-		
-		<p>
-			Courseregistry <strong>2.1</strong> |
-			<?php echo $this->Html->link('About', '/pages/about'); ?>
-		</p>
 			
 	</div>
 </div>

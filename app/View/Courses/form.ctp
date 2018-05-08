@@ -160,6 +160,14 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 		$opts = array('default' => $auth_user['institution_id']);
 	echo $this->Form->input('institution_id', $opts);
 	echo $this->Form->input('department');
+
+
+    // picker is rendered using javascript, hiding the underlying lat,lon fields
+    // need to render this before the bridging script from institution selector to map
+    echo $this->element('locationpicker', array(
+        'lonId' => '#CourseLon',
+        'latId' => '#CourseLat'
+    ));
 	?>
 	<p>
 		Coordinates can be drawn in from the institution selector above. 
@@ -176,14 +184,27 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 	var institution_id = null;
 	var locations = <?php echo json_encode($locations); ?>
 
+    function selectionToMap() {
+        institution_id = selector.val();
+        if(institution_id != '' && typeof(institution_id) != 'undefined') {
+            lon.val(locations[institution_id].lon);
+            lat.val(locations[institution_id].lat);
+            setMarker(locationMap);
+        }
+    }
+
 	selector.change(function() {
-		institution_id = selector.val();
-		if(institution_id != '' && typeof(institution_id) != 'undefined') {
-			lon.val(locations[institution_id].lon);
-			lat.val(locations[institution_id].lat);
-			setMarker(locationMap);
-		}
+		selectionToMap();
 	});
+
+    jQuery(document).ready(function() {
+        var lon = $('#CourseLon');
+        var lat = $('#CourseLat');
+        if(lat.val() == '' || lon.val() == '') {
+            selectionToMap();
+        }
+    });
+
 	<?php
 	$this->Html->scriptEnd();
 
@@ -203,11 +224,7 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 echo $this->Form->end('submit');
 
 
-// picker is rendered using javascript, hiding the underlying lat,lon fields
-echo $this->element('locationpicker', array(
-	'lonId' => '#CourseLon',
-	'latId' => '#CourseLat'
-));
+
 ?>
 
 

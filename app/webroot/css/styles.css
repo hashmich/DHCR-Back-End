@@ -1,6 +1,12 @@
 @charset "UTF-8";
 /* for any kind of accentuation, eg. table rows */
 /* DARIAH style */
+@font-face {
+  font-family: metropolis;
+  src: url(../fonts/metropolis/Metropolis-SemiBold.otf); }
+@font-face {
+  font-family: bebas;
+  src: url(../fonts/bebas_neue/BebasNeue-Regular.otf); }
 /*!
  * Bootstrap v3.3.6 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -1110,32 +1116,37 @@ div.auth {
     clear: both;
     height: 0; }
   #header img {
-    margin-top: 30px;
     display: block;
-    float: left; }
+    float: left;
+    margin: 10px; }
   #header div {
     background-color: #fff;
     min-height: 61px;
     margin: 0;
-    margin-left: 260px;
-    border-left: 2px solid #ccc;
+    margin-left: 10px;
     width: auto;
-    padding: 27px 50px 20px; }
+    padding: 10px; }
     #header div h1 {
-      margin-bottom: 0.5em; }
+      margin: 12px 0 0; }
     #header div a {
-      color: #555;
       text-decoration: none; }
-    #header div p {
-      font-weight: bold;
-      margin: 0; }
-      #header div p strong {
-        color: red; }
-      #header div p a {
-        text-decoration: underline;
-        color: #00265a; }
-        #header div p a:hover {
-          color: #9FBAED; }
+    #header div span#h1 {
+      color: #60a845;
+      font-family: bebas, sans-serif;
+      font-size: 45px;
+      vertical-align: bottom;
+      line-height: 30px; }
+    #header div span#h2 {
+      color: #07426e;
+      margin-right: 15px; }
+    #header div span#h3 {
+      color: #1e6ba3; }
+    #header div #h2, #header div #h3 {
+      letter-spacing: 3px;
+      font-family: metropolis, sans-serif; }
+    #header div #h1, #header div #h2, #header div #h3 {
+      text-transform: uppercase;
+      font-weight: normal; }
 
 /* equal height fake column for menu & content - see http://css-tricks.com/fluid-width-equal-height-columns/ - the Nicolas Gallagher Method */
 .columns, #menu, #content {
@@ -1452,7 +1463,7 @@ div.auth {
         vertical-align: middle;
         padding: 4px 11px;
         color: #fff;
-        background-color: #203a6b; }
+        background-color: #07426e; }
         .columns #content table th a {
           color: #fff;
           text-decoration: none;
@@ -1516,7 +1527,7 @@ div.auth {
             text-align: center;
             top: 0;
             left: 0;
-            background-color: #6ab81f; }
+            background-color: #60a845; }
             .columns #content table tr td.state .ribbon span {
               margin-top: 3px;
               display: block; }

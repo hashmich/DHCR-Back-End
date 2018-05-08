@@ -6,3 +6,9 @@ tmp
 logs
 
 \.idea/
+
+\.settings/
+
+\.buildpath
+
+\.project
