@@ -75,9 +75,9 @@ echo '<fieldset>';
 <p>If the new users' Institution is not available, you have to create that entry in the database and reload this page afterwards.</p>
 <p>Adding a new institution requires the institution's city and the city's country to be pre-existant.</p>
 <p>
-	Start here to check whether the country exists: <?php echo $this->Html->link('Countries List', '/moderator/countries/index', array('target' => '_blank')); ?>,<br>
-	then check if the city exists: <?php echo $this->Html->link('Cities List', '/moderator/cities/index', array('target' => '_blank')); ?>.<br>
-	Finally, you can add a missing institution here, if you cannot find it in the list beyond: <?php echo $this->Html->link('Add Institution', '/moderator/institutions/add', array('target' => '_blank')); ?>.
+	Start here to check whether the country exists: <?php echo $this->Html->link('Countries List', '/db-webclient/countries/index', array('target' => '_blank')); ?>,<br>
+	then check if the city exists: <?php echo $this->Html->link('Cities List', '/db-webclient/cities/index', array('target' => '_blank')); ?>.<br>
+	Finally, you can add a missing institution here, if you cannot find it in the list beyond: <?php echo $this->Html->link('Add Institution', '/db-webclient/institutions/add', array('target' => '_blank')); ?>.
 </p>
 <?php
 echo $this->Form->input('institution_id', array(
