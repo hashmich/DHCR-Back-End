@@ -91,18 +91,51 @@ class AppUsersController extends UsersController {
 						$this->Flash->set('You successfully logged in via external identity.');
 						$this->redirect($this->Auth->loginRedirect);
 					}
-					// else: handle every other login errors in parent login method
+
 				}else{
-					// account has not yet been linked to the DHCR - or not yet registered!!!
-					$this->Flash->set('You have been successfully verified by your identity provider (IDP),
-							but we could not find a matching account in our user management system.
-							If you did not register yourself to the Courseregistry before, please register now. 
+					/*
+					// try searching for persons with the same name
+					$user = $this->{$this->modelClass}->find('all', array(
+						'contain' => array(),
+						'conditions' => array(
+							$this->modelClass . '.first_name' => $this->shibUser['first_name'],
+							$this->modelClass . '.last_name' => $this->shibUser['last_name'],
+							$this->modelClass . '.active' => true
+						)
+					));
+					//TODO: provide an overview of the results and ask for password, create a new account if no match or no password.
+
+					if(!empty($user)) {
+						$c = count($user);
+						$msg = 'You have been successfully verified by your identity provider (IDP).
+							Please provide the password of your Course Registry account once, 
+							to link your external identity to the local account.
+							If you forgot your password, you may reset your password.';
+						if(count($user) > 1) $msg = 'You have been successfully verified by your identity provider (IDP),
+							but we found more than one account with the same name. 
+							Please pick your account from the list, and provide the password to link 
+							account and external identity.';
+
+						$user = $user[0];
+						$this->set('shib_users', $user);
+						$this->Flash->set($msg);
+
+					}else{
+                        // account has not yet been linked to the DHCR - or not yet registered!!!
+						//TODO: try autocreating an account
+						*/
+                        $this->Flash->set('You have been successfully verified by your identity provider (IDP),
+							but we could not find a matching account in our system.
 							In case you already have an account, please login once using your existing account 
-							to link your external identity to the DH-Course Registry.');
+							to link your external identity to the DH-Course Registry.
+							If you did not register yourself to the Course Registry before, please register now.');
+					//}
+
 				}
 			}
 		}
-		
+
+        // handle any other login errors in parent login method
 		parent::login();
 	}
 	
@@ -443,7 +476,7 @@ class AppUsersController extends UsersController {
 				}
 			}
 			$this->redirect('/users/dashboard');
-			
+
 		}else{
 			// add a new user
 			if(!empty($this->request->data[$this->modelClass])) {
