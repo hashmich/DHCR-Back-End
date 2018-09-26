@@ -68,6 +68,7 @@
         In case of problems, you may contact a user administrator directly.
     </p>
 </div>
+
 <hr>
 
 <?php
