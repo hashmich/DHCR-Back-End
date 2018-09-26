@@ -12,3 +12,5 @@ logs
 \.buildpath
 
 \.project
+
+app/webroot/css/styles\.css\.map
