@@ -1,0 +1,101 @@
+
+
+
+#header {
+	color: $header_font_color;
+	padding: 0;
+	background-color: $content_background_color;
+	margin-bottom: 2px;
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+
+	#logo {
+		width: 430px;
+		flex-shrink: 0;
+
+		img {
+			display: block;
+			float: left;
+			margin: 10px;
+		}
+		
+		.title {
+			background-color: $content_background_color;
+			min-height: 61px;
+			margin: 0;
+			margin-left: 10px;
+			width: auto;
+			padding: 10px;
+			
+			h1 {
+				margin: 12px 0 0;
+			}
+			a {
+				//color: $header_font_color;
+				text-decoration: none;
+			}
+
+			span#h1 {
+				color: $dhGreen;
+				font-family: bebas, sans-serif;
+				font-size: 45px;
+				vertical-align: bottom;
+				line-height: 30px;
+			}
+			span#h2 {
+				color: $clarinBlue;
+				margin-right: 15px;
+			}
+			span#h3 {
+				color: $dariahBlue;
+			}
+			#h2,#h3 {
+				letter-spacing: 3px;
+				font-family: metropolis, sans-serif;
+			}
+			#h1,#h2,#h3 {
+				text-transform: uppercase;
+				font-weight: normal;
+			}
+		}
+	}
+	
+	#tabbing {
+		position: relative;
+		width: auto;
+		min-width: 550px;
+		height: 50px;
+		align-self: flex-end;	// bottom
+		display: flex;
+		justify-content: space-between;
+
+		.tab {
+			padding: 15px;
+			color: $clarinBlue;
+			font-weight: bold;
+			text-decoration: none;
+			white-space: nowrap;
+			margin-right: 10px;
+			width: auto;
+			height: 100%;
+			background-color: #fff;
+			border: 2px solid #ccc;
+			border-bottom: none;
+			border-radius: 5px 5px 0 0;
+			&:first-child {
+				margin-left: 10px;
+			}
+			&:hover {
+				color: $menu_main_link_hover_color;
+			}
+			&.active {
+				background-color: #eee;
+			}
+		}
+	}
+}
+
+

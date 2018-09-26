@@ -1107,46 +1107,72 @@ div.auth {
   background-color: #fff;
   margin-bottom: 2px;
   position: relative;
-  overflow: hidden; }
-  #header:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    content: " ";
-    clear: both;
-    height: 0; }
-  #header img {
-    display: block;
-    float: left;
-    margin: 10px; }
-  #header div {
-    background-color: #fff;
-    min-height: 61px;
-    margin: 0;
-    margin-left: 10px;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; }
+  #header #logo {
+    width: 430px;
+    flex-shrink: 0; }
+    #header #logo img {
+      display: block;
+      float: left;
+      margin: 10px; }
+    #header #logo .title {
+      background-color: #fff;
+      min-height: 61px;
+      margin: 0;
+      margin-left: 10px;
+      width: auto;
+      padding: 10px; }
+      #header #logo .title h1 {
+        margin: 12px 0 0; }
+      #header #logo .title a {
+        text-decoration: none; }
+      #header #logo .title span#h1 {
+        color: #60a845;
+        font-family: bebas, sans-serif;
+        font-size: 45px;
+        vertical-align: bottom;
+        line-height: 30px; }
+      #header #logo .title span#h2 {
+        color: #07426e;
+        margin-right: 15px; }
+      #header #logo .title span#h3 {
+        color: #1e6ba3; }
+      #header #logo .title #h2, #header #logo .title #h3 {
+        letter-spacing: 3px;
+        font-family: metropolis, sans-serif; }
+      #header #logo .title #h1, #header #logo .title #h2, #header #logo .title #h3 {
+        text-transform: uppercase;
+        font-weight: normal; }
+  #header #tabbing {
+    position: relative;
     width: auto;
-    padding: 10px; }
-    #header div h1 {
-      margin: 12px 0 0; }
-    #header div a {
-      text-decoration: none; }
-    #header div span#h1 {
-      color: #60a845;
-      font-family: bebas, sans-serif;
-      font-size: 45px;
-      vertical-align: bottom;
-      line-height: 30px; }
-    #header div span#h2 {
+    min-width: 550px;
+    height: 50px;
+    align-self: flex-end;
+    display: flex;
+    justify-content: space-between; }
+    #header #tabbing .tab {
+      padding: 15px;
       color: #07426e;
-      margin-right: 15px; }
-    #header div span#h3 {
-      color: #1e6ba3; }
-    #header div #h2, #header div #h3 {
-      letter-spacing: 3px;
-      font-family: metropolis, sans-serif; }
-    #header div #h1, #header div #h2, #header div #h3 {
-      text-transform: uppercase;
-      font-weight: normal; }
+      font-weight: bold;
+      text-decoration: none;
+      white-space: nowrap;
+      margin-right: 10px;
+      width: auto;
+      height: 100%;
+      background-color: #fff;
+      border: 2px solid #ccc;
+      border-bottom: none;
+      border-radius: 5px 5px 0 0; }
+      #header #tabbing .tab:first-child {
+        margin-left: 10px; }
+      #header #tabbing .tab:hover {
+        color: #9FBAED; }
+      #header #tabbing .tab.active {
+        background-color: #eee; }
 
 /* equal height fake column for menu & content - see http://css-tricks.com/fluid-width-equal-height-columns/ - the Nicolas Gallagher Method */
 .columns, #menu, #content {

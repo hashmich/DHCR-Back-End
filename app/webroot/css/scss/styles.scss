@@ -75,63 +75,7 @@ $menu_width: 236px;
 	position: relative;
 }
 
-#header {
-	color: $header_font_color;
-	padding: 0;
-	background-color: $content_background_color;
-	margin-bottom: 2px;
-	position: relative;
-	overflow: hidden;
-	
-	@include clearfix;
-	
-	img {
-		display: block;
-		float: left;
-		margin: 10px;
-	}
-	
-	div {
-		background-color: $content_background_color;
-		min-height: 61px;
-		margin: 0;
-		margin-left: 10px;
-		//border-left: 2px solid $background_color;
-		width: auto;
-		padding: 10px;
-		
-		h1 {
-			margin: 12px 0 0;
-		}
-		a {
-			//color: $header_font_color;
-			text-decoration: none;
-		}
-
-		span#h1 {
-			color: $dhGreen;
-			font-family: bebas, sans-serif;
-			font-size: 45px;
-			vertical-align: bottom;
-			line-height: 30px;
-		}
-		span#h2 {
-			color: $clarinBlue;
-			margin-right: 15px;
-		}
-		span#h3 {
-			color: $dariahBlue;
-		}
-		#h2,#h3 {
-			letter-spacing: 3px;
-			font-family: metropolis, sans-serif;
-		}
-		#h1,#h2,#h3 {
-			text-transform: uppercase;
-			font-weight: normal;
-		}
-	}
-}
+@import "_header";
 
 /* equal height fake column for menu & content - see http://css-tricks.com/fluid-width-equal-height-columns/ - the Nicolas Gallagher Method */
 $col_min_height: 400px;
