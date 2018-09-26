@@ -109,7 +109,7 @@ $col_min_height: 400px;
 		width: $menu_width;
 		padding: 20px 12px;
 		@include clearfix;
-		min-height: $col_min_height - 30px;
+		min-height: 0;
 		
 		ul {
 			list-style: none;
@@ -167,6 +167,18 @@ $col_min_height: 400px;
 				&:hover {
 					color: $menu_main_link_hover_color
 				}
+			}
+		}
+	}
+
+	#menu {
+		.login_link {
+			border-bottom: 2px solid $header_background_color;
+			padding-bottom: 15px;
+			font-size: 12px;
+			li {
+				font-size: 12px;
+				padding-bottom: 0;
 			}
 		}
 	}

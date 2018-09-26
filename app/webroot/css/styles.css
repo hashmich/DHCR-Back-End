@@ -864,7 +864,7 @@
 /* basics */
 body {
   font-family: Verdana, Helvetica, Arial, sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   color: #666;
   background-color: #ccc; }
 
@@ -897,6 +897,12 @@ ol {
 
 p {
   margin: 0 0 1em 0; }
+
+hr {
+  margin: 15px 0 10px;
+  height: 2px;
+  background-color: #ccc;
+  border: none; }
 
 img {
   border: none; }
@@ -1028,30 +1034,75 @@ div.notice {
     outline: none;
     cursor: pointer; }
 
+.css-columns {
+  column-width: 30em;
+  column-gap: 30px;
+  width: 100%;
+  margin-top: 3em; }
+  .css-columns h1, .css-columns h2 {
+    column-span: all;
+    -webkit-column-span: all;
+    -webkit-column-break-after: avoid;
+    break-after: avoid-column; }
+  .css-columns h3 {
+    column-span: 1;
+    -webkit-column-span: 1;
+    -webkit-column-break-after: avoid;
+    break-after: avoid-column; }
+
+.css-columns-2 {
+  column-count: 2; }
+
+.css-columns-3 {
+  column-count: 3;
+  column-gap: 40px; }
+
+.iframe-container {
+  overflow: hidden;
+  padding-top: 56.25%;
+  position: relative;
+  margin-bottom: 1em; }
+  .iframe-container iframe {
+    border: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%; }
+
+/* 4x3 Aspect Ratio */
+.iframe-container-4x3 {
+  padding-top: 75%; }
+
 /* Users plugin */
 /* defined as a mixin to possibly include it somewhere else, where !important is not strong enough */
-div.login_link {
-  padding-bottom: 23px;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #203a6b; }
-  div.login_link:after {
+.login_link {
+  list-style: none; }
+  .login_link:after {
     visibility: hidden;
     display: block;
     font-size: 0;
     content: " ";
     clear: both;
     height: 0; }
-  div.login_link p {
+  .login_link p {
     font-weight: bold; }
-  div.login_link ul li {
+  .login_link li {
+    margin: 2px 0;
+    display: block;
+    font-weight: bold;
+    font-size: 12px;
     float: left;
     border-left: 2px solid #203a6b;
-    padding: 0 10px !important;
-    margin: 2px 0 !important;
-    font-size: 12px !important; }
-    div.login_link ul li:first-child {
+    padding: 0 10px; }
+    .login_link li:first-child {
       border: none;
       padding-left: 0 !important; }
+    .login_link li a {
+      text-decoration: none;
+      color: #00265a; }
+      .login_link li a:hover {
+        color: #9FBAED; }
 
 /* auth forms - centered */
 div.auth {
@@ -1102,6 +1153,7 @@ div.auth {
   position: relative; }
 
 #header {
+  font-size: 12px;
   color: #555;
   padding: 0;
   background-color: #fff;
@@ -1200,7 +1252,7 @@ div.auth {
     position: relative;
     width: 236px;
     padding: 20px 12px;
-    min-height: 370px; }
+    min-height: 0; }
     .columns #menu:after {
       visibility: hidden;
       display: block;
@@ -1426,6 +1478,13 @@ div.auth {
         color: #00265a; }
         .columns #menu li a:hover {
           color: #9FBAED; }
+  .columns #menu .login_link {
+    border-bottom: 2px solid #203a6b;
+    padding-bottom: 15px;
+    font-size: 12px; }
+    .columns #menu .login_link li {
+      font-size: 12px;
+      padding-bottom: 0; }
   .columns #content {
     padding: 10px 10px 20px;
     background-color: #fff;

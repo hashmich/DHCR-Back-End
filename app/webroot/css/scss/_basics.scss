@@ -9,7 +9,7 @@
 /* basics */
 body {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
-	font-size: 12px;
+	font-size: 14px;
 	color: $font_color;
 	background-color: $background_color;
 }
@@ -42,6 +42,12 @@ ol {
 }
 p {
 	margin: 0 0 1em 0;
+}
+hr {
+	margin: 15px 0 10px;
+	height: 2px;
+	background-color: #ccc;
+	border: none;
 }
 img {
 	border: none;
@@ -156,5 +162,55 @@ div.notice {
 		outline: none;
 		cursor:pointer;
 	}
+}
+
+
+.css-columns {
+	column-width: 30em;
+	column-gap: 30px;
+	width: 100%;
+	margin-top: 3em;
+	
+	h1, h2 {
+		column-span: all;
+		-webkit-column-span: all;
+		-webkit-column-break-after: avoid;
+		break-after: avoid-column;
+	}
+	h3 {
+		column-span: 1;
+		-webkit-column-span: 1;
+		-webkit-column-break-after: avoid;
+		break-after: avoid-column;
+	}
+}
+.css-columns-2 {
+	column-count: 2;
+}
+.css-columns-3 {
+	column-count: 3;
+	column-gap: 40px;
+}
+
+
+.iframe-container {
+	overflow: hidden;
+	padding-top: 56.25%;
+	position: relative;
+	margin-bottom: 1em;
+
+	iframe {
+		border: 0;
+		height: 100%;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
+	}
+}
+
+/* 4x3 Aspect Ratio */
+.iframe-container-4x3 {
+  padding-top: 75%;
 }
 

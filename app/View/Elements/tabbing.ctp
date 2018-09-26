@@ -2,10 +2,13 @@
 <?php
 $items = array(
     array('Home', '/'),
-    array('Students &amp; Researchers', '/pages/students'),
-    array('Lecturers &amp; Programme Directors', '/pages/lecturers'),
+    array('Students', '/pages/students'),
+    array('Lecturers', '/pages/lecturers'),
+    array('Downloads', '/pages/downloads'),
+    //array('About', '/pages/about'),
     array('Contact', '/contact/us'),
-    array('Statistics', '/statistic')
+    array('Statistics', '/statistic'),
+    array('Login', '/users/login')
 );
 
 $here = $this->params->here;

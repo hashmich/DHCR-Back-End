@@ -64,26 +64,30 @@
 	<div id="container">
 
         <div id="header">
-            <?php
-            $logo = array(
-                'alt' => 'CLARIN-DARIAIH joint Logo',
-                'width' => 115,
-                'height' => 90);
-            
-            $file = '/img/logos/DARIAH-CLARIN-joint-logo.jpg';
-            echo $this->Html->link($this->Html->image($file, $logo), '/', array(
-                'target' => '_blank',
-                'escape' => false));
-            ?>
-            <div>
-                <h1>
-                    <a href="<?php echo Router::url('/'); ?>">
-                        <span id="h1">Digital Humanities</span><br>
-                        <span id="h2">Course</span><span id="h3">Registry</span>
-                    </a>
-                </h1>
+            <div id="logo">
+                <?php
+                $logo = array(
+                    'alt' => 'CLARIN-DARIAIH joint Logo',
+                    'width' => 115,
+                    'height' => 90);
 
+                $file = '/img/logos/DARIAH-CLARIN-joint-logo.jpg';
+                echo $this->Html->link($this->Html->image($file, $logo), '/', array(
+                    'target' => '_blank',
+                    'escape' => false));
+                ?>
+                <div class="title">
+                    <h1>
+                        <a href="<?php echo Router::url('/'); ?>">
+                            <span id="h1">Digital Humanities</span><br>
+                            <span id="h2">Course</span><span id="h3">Registry</span>
+                        </a>
+                    </h1>
+
+                </div>
             </div>
+
+            <?php echo $this->element('tabbing'); ?>
         </div>
 		
 		<div class="columns">
@@ -91,26 +95,9 @@
 				<?php
 				echo $this->element('login_info');
 				?>
-				<div class="login_link">
-					<ul>
-						<li>
-							<?php echo $this->Html->link('Home', '/'); ?>
-						</li><li>
-							<?php echo $this->Html->link('Contact', '/contact/us'); ?>
-						</li><li>
-							<?php echo $this->Html->link('About', '/pages/about'); ?>
-						</li><li>
-							<?php echo $this->Html->link('Statistic', '/statistic'); ?>
-						</li>
-					</ul>
-				</div>
+
 				<ul>
-				<?php
-				if($this->request->params['controller'] != 'courses')
-					echo '<li>' . $this->Html->link('Courses', array('controller' => 'courses', 'action' => 'index', 'plugin' => null)) . '</li>';
-				
-				echo $this->fetch('menu');
-				?>
+				    <?php echo $this->fetch('menu'); ?>
 				</ul>
 			</div>
 			
