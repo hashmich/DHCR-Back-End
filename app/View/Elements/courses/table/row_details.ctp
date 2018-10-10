@@ -82,14 +82,14 @@ if($state !== 'Green' AND !empty($edit)) {
 						?>
 					</dd>
 					
-					<dt>PID</dt>
+					<dt>Link to Detail Page</dt>
 					<dd>
 						<?php
 						$url = array(
 							'controller' => 'courses',
 							'action' => 'view',
 							$record['Course']['id']);
-						echo $this->Html->link(Router::url($url, true), $url);
+						echo $this->Html->link(Router::url($url, $full = true), $url);
 						?>
 					</dd>
 					
