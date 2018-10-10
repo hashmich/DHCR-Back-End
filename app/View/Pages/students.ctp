@@ -1,24 +1,24 @@
 <div class="css-columns-3">
     <h2>Students &amp; Researchers</h2>
     <p>
-        Students who want to start a university program in Digital Humanities
+        Students who want to start a university programme in Digital Humanities
         or want to do a student exchange and study one semester abroad
-        can find information about the programs offered in various places and institutions.
+        can find information about the programmes and courses offered in various places and institutions.
         Students can browse the collection of courses
-        and programs without the need to be registered.
+        and programs without registering.
     </p>
     <p>
         Decision makers and researchers who need numbers in order to decide,
         if they are going to fund DH activities can also find valuable information
         about DH teaching activities for particular disciplines or specific regions.
         <br>
-        They all don’t need an account.
+        They all do not need an account.
     </p>
     <p>
         The registry is designed to have all course meta data actively
         maintained by the data contributors themselves.
-        This way, we ensure to only show valuable and most up to date content.
-        The most recent added or reviewed courses will appear first
+        This way, we ensure to only show useful and up to date content.
+        The most recently added or reviewed courses will appear first
         in the listing and have a green flag.
         Links to external course information pages and curricula are regularly
         checked by the system, errors are reported to the maintainers automatically.
@@ -32,13 +32,13 @@
             array('target' => '_blank')); ?> and
         <?php echo $this->Html->link('DARIAH-EU', 'http://dariah.eu/',
             array('target' => '_blank')); ?>.
-        In future, it will be further developed and maintained as a
+        In the future, it will be further developed and maintained as a
         collaboration of the two ERICs. The Course Registry started as a
         selection of DH courses offered by European academic organizations. An
-        extension of the registry content beyond Europe is currently going on.
-        Students, lecturers and researchers can search the database on the basis of
+        extension of the registry content beyond Europe is currently underway.
+        Students, lecturers and researchers can search the database based on
         disciplines, topographical information (location), ECTS credits or the
-        academic degrees that are awarded. In addition, courses can be searched for
+        academic degrees awarded. In addition, courses can be searched for
         using TaDiRAH, a Taxonomy of Digital Research Activities in the Humanities
         (including labels for techniques and objects) and sub-disciplines from the
         Social Sciences and the Humanities.
@@ -47,21 +47,21 @@
     <div style="display: inline-block">
         <h2>Introductory Video Lectures</h2>
         <p>
-            Following videos give a short introduction about the Digital Humanities Course Registry.
+            The following videos give a short introduction to the Digital Humanities Course Registry.
         </p>
     </div>
 
     <p>
-        The first one gives an overview about the intention of the registry and
+        The first one provides an overview of the intention of the registry and
         the institutions involved,
-        while the second expands on the data model and how to find stuff.
+        while the second expands on the data model and how to find content.
         Courses in the registry are tagged by country, city, institution, targeted reward
         and discipline. In addition, the course data is also tagged using the
         <?php echo $this->Html->link('TaDiRah', 'http://tadirah.dariah.eu/vocab/index.php', array(
             'target' => 'blank'
         )); ?>
         categories of objects and techniques, which have been agreed upon to classify activities in
-        Digital Humanities.
+        the digital humanities.
     </p>
     <p>
         The registration process involves confirmation of your email address.
@@ -74,7 +74,7 @@
     </p>
 </div>
 <hr>
-<div class="css-columns-2">
+<div class="css-columns-2" style="width: 75%">
     <div class="iframe-container">
         <iframe src="https://www.youtube.com/embed/pvFKq67-21I?rel=0"
                 allow="encrypted-media" allowfullscreen></iframe>

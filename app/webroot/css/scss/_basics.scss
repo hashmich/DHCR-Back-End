@@ -167,11 +167,12 @@ div.notice {
 
 .css-columns-2, .css-columns-3 {
 	column-width: 30em;
-	column-gap: 30px;
+	column-gap: 40px;
 	width: 100%;
-	margin-top: 3em;
+	margin-top: 2em;
+	max-width: 1700px;
 	
-	h1, h2 {
+	h1, h2, h3 {
 		column-span: all;
 		-webkit-column-span: all;
 		-webkit-column-break-after: avoid;
@@ -180,16 +181,14 @@ div.notice {
 	h3 {
 		column-span: 1;
 		-webkit-column-span: 1;
-		-webkit-column-break-after: avoid;
-		break-after: avoid-column;
 	}
 }
 .css-columns-2 {
 	column-count: 2;
+	column-width: 20em;
 }
 .css-columns-3 {
 	column-count: 3;
-	column-gap: 40px;
 }
 
 

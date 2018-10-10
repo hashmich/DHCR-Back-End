@@ -9,14 +9,14 @@
     </p>
     <p>
         After registration, new courses can be added to the registry.
-        In order to show only valuable, up to date content, we require all contributors to
+        In order to show only useful, up to date content, we require all contributors to
         actively maintain their data.
-        Maintenance obliges to the person that originally added the record.
+        Maintenance is the responsibility of the user who originally added the record.
         The system will regularly send out email reminders to them,
         whenever an entry is about to expire.
         Course data not revised for a year will be flagged yellow in the course listing.
         After one a half year, the course will be marked red and will disappear from the
-        public listing short time after.
+        public listing shortly after.
         The system also performs regular link checking on URLs provided within the course meta data.
         Maintainers will retrieve an email request to correct dead URLs in that case.
     </p>
@@ -24,7 +24,7 @@
         Though we support a single sign-on process that is connected to most major institutions,
         we still require new users to register first and provide specific metadata,
         that we can not retrieve otherwise. <br>
-        We are working on solutions to make this process more comfortable.
+        We are working on solutions to make this process more convenient.
     </p>
     <p>
         The DH Course Registry is a joint effort of two European research
@@ -33,13 +33,13 @@
             array('target' => '_blank')); ?> and
         <?php echo $this->Html->link('DARIAH-EU', 'http://dariah.eu/',
             array('target' => '_blank')); ?>.
-        In future, it will be further developed and maintained as a
+        In the future, it will be further developed and maintained as a
         collaboration of the two ERICs. The Course Registry started as a
         selection of DH courses offered by European academic organizations. An
-        extension of the registry content beyond Europe is currently going on.
-        Students, lecturers and researchers can search the database on the basis of
+        extension of the registry content beyond Europe is currently underway.
+        Students, lecturers and researchers can search the database based on
         disciplines, topographical information (location), ECTS credits or the
-        academic degrees that are awarded. In addition, courses can be searched for
+        academic degrees awarded. In addition, courses can be searched for
         using TaDiRAH, a Taxonomy of Digital Research Activities in the Humanities
         (including labels for techniques and objects) and sub-disciplines from the
         Social Sciences and the Humanities.
@@ -48,10 +48,10 @@
     <div style="display: inline-block">
         <h2>Introductory Video Lectures</h2>
         <p>
-            Following videos give a short introduction about the Digital Humanities Course Registry.
+            The following videos give a short introduction to the Digital Humanities Course Registry.
         </p>
         <p>
-            The first one gives an overview about the intention of the registry and
+            The first one provides an overview of the intention of the registry and
             the institutions involved,
             while the second shows the registration process for lecturers and other data contributors,
             such as programme directors at institutes and faculty departments.
@@ -105,7 +105,7 @@ if(empty($auth_user)) {
 }
 ?>
 
-<div class="css-columns-2">
+<div class="css-columns-2" style="width: 75%">
     <div class="iframe-container">
         <iframe src="https://www.youtube.com/embed/pvFKq67-21I?rel=0"
                 allow="encrypted-media" allowfullscreen></iframe>
