@@ -43,9 +43,32 @@
         </p>
         <p>
             The basic URL for iframe embedding is:<br>
-            <?php echo Router::ur('/iframe'); ?>
+            <?php echo $this->Html->link(Router::url('/iframe', $full = true), '/iframe'); ?>
         </p>
-
+        <p>
+            You can also pass filter parameters via the URL
+            by adding <em>[key:value]</em> pairs to the end of the URL string, whereas the key
+            refers to the database field and the value is the ID of that particular course attribute value.
+            Be aware, that you have to provide the full <em>[/controller/action]</em> combo in that case: <br>
+            <?php echo $this->Html->link(Router::url('/iframe/courses/index/country_id:1', $full = true), '/iframe/courses/index/country_id:1'); ?>
+        </p>
+        <p>
+            The available filter parameters are:
+        </p>
+        <ul>
+            <li><em>country_id</em></li>
+            <li><em>city_id</em></li>
+            <li><em>institution_id</em></li>
+            <li><em>course_type_id</em> (Education)</li>
+            <li><em>tadirah_object_id</em></li>
+            <li><em>tadirah_technique_id</em></li>
+            <li><em>discipline_id</em></li>
+        </ul>
+        <p>
+            You can lookup the id of any attribute of interest
+            with any HTML inspection tool in the filter form on the lefmost side on the homepage.
+            Otherwise, you may send us an email and ask for help.  
+        </p>
     </div>
 
 </div>

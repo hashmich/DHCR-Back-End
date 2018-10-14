@@ -39,7 +39,7 @@ class TadirahObject extends AppModel {
 		)
 	);
 	
-	function checkTags() {
+	public function checkTags() {
 		if(!empty($this->data['TadirahObject']['TadirahObject'])) return true;
 		return false;
 	}

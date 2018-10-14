@@ -26,12 +26,13 @@ class CoursesController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		
-		$this->Auth->allow(array('index', 'view', 'reset', 'statistic'));
+		$this->Auth->allow(array('index', 'view', 'reset_filter', 'statistic'));
 		
 		if($this->Auth->user()) {
 			$this->Auth->allow(array('edit', 'add', 'delete', 'revalidate'));
 		}
 	}
+
 
 
 	public function statistic() {
@@ -45,13 +46,7 @@ class CoursesController extends AppController {
 		$institutionsList = $this->Course->Institution->find('list');
 		$institutions = array();
 		foreach($institutionsList as $id => $label) {
-			$c = $this->Course->find('count', array(
-				'conditions' => array(
-					'Course.active' => 1,
-					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod')),
-					'Course.institution_id' => $id
-				)
-			));
+			$c = $this->Course->getCount('institution_id', $id);
 			if($c > 0)
 				$institutions[] = array(
 					'label' => $label,
@@ -63,13 +58,7 @@ class CoursesController extends AppController {
 		$countriesList = $this->Course->Country->find('list');
 		$countries = array();
 		foreach($countriesList as $id => $label) {
-			$c = $this->Course->find('count', array(
-				'conditions' => array(
-					'Course.active' => 1,
-					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod')),
-					'Course.country_id' => $id
-				)
-			));
+			$c = $this->Course->getCount('country_id', $id);
 			if($c > 0)
 				$countries[] = array(
 					'label' => $label,
@@ -81,21 +70,7 @@ class CoursesController extends AppController {
 		$disciplinesList = $this->Course->Discipline->find('list');
 		$disciplines = array();
 		foreach($disciplinesList as $id => $label) {
-			$c = $this->Course->find('count', array(
-				'conditions' => array(
-					'Course.active' => 1,
-					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod')),
-					'CoursesDiscipline.discipline_id' => $id
-				),
-				'joins' => array(
-					array(
-						'alias' => 'CoursesDiscipline',
-						'table' => 'courses_disciplines',
-						'type' => 'INNER',
-						'conditions' => 'CoursesDiscipline.course_id = Course.id'
-					)
-				)
-			));
+			$c = $this->Course->getCount('CoursesDiscipline.discipline_id', $id);
 			if($c > 0)
 				$disciplines[] = array(
 					'label' => $label,
@@ -107,21 +82,7 @@ class CoursesController extends AppController {
 		$techniquesList = $this->Course->TadirahTechnique->find('list');
 		$techniques = array();
 		foreach($techniquesList as $id => $label) {
-			$c = $this->Course->find('count', array(
-				'conditions' => array(
-					'Course.active' => 1,
-					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod')),
-					'CoursesTadirahTechnique.tadirah_technique_id' => $id
-				),
-				'joins' => array(
-					array(
-						'alias' => 'CoursesTadirahTechnique',
-						'table' => 'courses_tadirah_techniques',
-						'type' => 'INNER',
-						'conditions' => 'CoursesTadirahTechnique.course_id = Course.id'
-					)
-				)
-			));
+            $c = $this->Course->getCount('CoursesTadirahTechnique.tadirah_technique_id', $id);
 			if($c > 0)
 				$techniques[] = array(
 					'label' => $label,
@@ -133,21 +94,7 @@ class CoursesController extends AppController {
 		$objectsList = $this->Course->TadirahObject->find('list');
 		$objects = array();
 		foreach($objectsList as $id => $label) {
-			$c = $this->Course->find('count', array(
-				'conditions' => array(
-					'Course.active' => 1,
-					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod')),
-					'CoursesTadirahObject.tadirah_object_id' => $id
-				),
-				'joins' => array(
-					array(
-						'alias' => 'CoursesTadirahObject',
-						'table' => 'courses_tadirah_objects',
-						'type' => 'INNER',
-						'conditions' => 'CoursesTadirahObject.course_id = Course.id'
-					)
-				)
-			));
+            $c = $this->Course->getCount('CoursesTadirahObject.tadirah_object_id', $id);
 			if($c > 0)
 				$objects[] = array(
 					'label' => $label,
@@ -250,6 +197,41 @@ class CoursesController extends AppController {
 			'controller' => 'users',
 			'action' => 'dashboard'
 		));
+	}
+
+
+	public function approve($token = null) {
+        $success = $proceed = false;
+        if( ($this->Auth->user() AND $this->Auth->user('user_role_id') < 3)
+            AND !empty($token) AND ctype_digit($token)) {
+            $course = $this->Course->find('first', array(
+                'contain' => array(),
+                'conditions' => array(
+                    'Course.id' => $token,
+                    'Course.approved' => 0
+                )
+            ));
+            if($course) {
+                $proceed = true;
+            }
+        }else{
+            // not authenticated!
+            // admins retrieve a link in their notification email to approve directly
+            $course = $this->Course->find('first', array(
+                'contain' => array(),
+                'conditions' => array(
+                    'Course.approval_token' => $token,
+                    'Course.approved' => 0
+                )
+            ));
+            if($course) {
+                $proceed = true;
+            }
+        }
+
+        if($proceed) {
+
+		}
 	}
 	
 	
@@ -469,22 +451,36 @@ class CoursesController extends AppController {
 			$namedKeys = preg_replace('/[^a-zA-Z0-9_-]/', '', array_keys($named));
 			$columns = $this->Course->schema();
 			foreach($namedKeys as $namedField) {
+				// if it's not a valid field name after the replacement any more:
 				if(!isset($named[$namedField])) continue;
 				// don't pull in the pagination sort keys
 				if(in_array(strtolower($namedField), array('sort','direction'))) continue;
 				// if a named parameter is present, check if it is a valid fieldname
-				if(isset($columns[$namedField]))
-					$this->filter['Course.' . $namedField] = $named[$namedField];
+				if(isset($columns[$namedField])) {
+                    $this->filter['Course.' . $namedField] = $named[$namedField];
+                }else{
+                    // the HABTM filters
+                    if($namedField == 'tadirah_object_id') {
+                        $this->filter['CoursesTadirahObject.tadirah_object_id'] = $named[$namedField];
+                    }
+                    elseif($namedField == 'tadirah_technique_id') {
+                        $this->filter['CoursesTadirahTechnique.tadirah_technique_id'] = $named[$namedField];
+                    }
+                    elseif($namedField == 'discipline_id') {
+                       $this->filter['CoursesDiscipline.discipline_id'] = $named[$namedField];
+                    }
+				}
 			}
 			
 			if(isset($named['country'])) {
 				if(!ctype_digit($named['country'])) {
 					$value = $this->Course->Country->field('id', array('Country.name' => $named['country']));
 				}
-				$this->filter['Course.country_id'] = $named['country'];
+				$this->filter['Course.country_id'] = $value;
 				unset($this->filter['Course.country']);
 			}
 		}
+		$this->request->named = null;
 	}
 	
 	// from ['Model']['field'] notation to Model.field notation...
@@ -519,11 +515,6 @@ class CoursesController extends AppController {
 				if(!empty($this->request->data['TadirahTechnique']['TadirahTechnique']))
 					$this->filter['CoursesTadirahTechnique.tadirah_technique_id'] = $this->request->data['TadirahTechnique']['TadirahTechnique'];
 				else unset($this->filter['CoursesTadirahTechnique.tadirah_technique_id']);
-			}
-			if(!empty($this->request->data['TadirahActivity'])) {
-				if(!empty($this->request->data['TadirahActivity']['TadirahActivity']))
-					$this->filter['CoursesTadirahActivity.tadirah_activity_id'] = $this->request->data['TadirahActivity']['TadirahActivity'];
-				else unset($this->filter['CoursesTadirahActivity.tadirah_activity_id']);
 			}
 			if(!empty($this->request->data['Discipline'])) {
 				if(!empty($this->request->data['Discipline']['Discipline']))
@@ -633,27 +624,56 @@ class CoursesController extends AppController {
 		// filter logic: if minor doesn't fit major, remove minor from filter
 		// get option lists for the filter
 		$courseParentTypes = $this->Course->CourseParentType->find('list');
-		$conditions = (empty($this->filter['Course.course_parent_type_id'])) ? array() : array('CourseType.course_parent_type_id' => $this->filter['Course.course_parent_type_id']);
+		$conditions = (empty($this->filter['Course.course_parent_type_id']))
+			? array()
+			: array('CourseType.course_parent_type_id' => $this->filter['Course.course_parent_type_id']);
 		$courseTypes = $this->Course->CourseType->find('list', array('conditions' => $conditions));
-		if(!empty($this->filter['Course.course_type_id']) AND !isset($courseTypes[$this->filter['Course.course_type_id']])) unset($this->filter['Course.course_type_id']);
-		$types = $this->Course->CourseType->find('list', array(
+		foreach($courseTypes as $k => &$v) {
+			$v .= ' ('.$this->Course->getCount('course_type_id', $k).')';
+		}
+		unset($v);
+
+		if(!empty($this->filter['Course.course_type_id']) AND !isset($courseTypes[$this->filter['Course.course_type_id']]))
+			unset($this->filter['Course.course_type_id']);
+		/*$types = $this->Course->CourseType->find('list', array(
 			'contain' => array('CourseParentType'),
 			'fields' => array('CourseType.id', 'CourseType.name', 'CourseParentType.name'),
 			'conditions' => $conditions
-		));
+		));*/
 		
 		$countries = $this->Course->Country->find('list');
-		$conditions = (empty($this->filter['Course.country_id'])) ? array() : array('City.country_id' => $this->filter['Course.country_id']);
+		foreach($countries as $k => &$v) {
+            $c = $this->Course->getCount('country_id', $k);
+			$v .= ' ('.$c.')';
+			if($c == 0) unset($countries[$k]);
+		}
+		unset($v);
+
+		$conditions = (empty($this->filter['Course.country_id']))
+			? array()
+			: array('City.country_id' => $this->filter['Course.country_id']);
 		$cities = $this->Course->City->find('list', array('conditions' => $conditions));
-		
-		if(!empty($this->filter['Course.city_id']) AND !isset($cities[$this->filter['Course.city_id']])) unset($this->filter['Course.city_id']);
+		if(!empty($this->filter['Course.city_id']) AND !isset($cities[$this->filter['Course.city_id']]))
+			unset($this->filter['Course.city_id']);
+
 		// make a structured list
 		$cities = $this->Course->City->find('list', array(
 			'contain' => array('Country'),
 			'fields' => array('City.id', 'City.name', 'Country.name'),
 			'conditions' => $conditions
 		));
-		ksort($cities);
+        ksort($cities);
+		foreach($cities as $country => &$cs) {
+            foreach ($cs as $k => &$v) {
+            	$c = $this->Course->getCount('city_id', $k);
+                $v .= ' ('.$c.')';
+            	if($c == 0) unset($cities[$country][$k]);
+			}
+			if(empty($cities[$country])) unset($cities[$country]);
+            unset($v);
+		}
+		unset($cs);
+
 		
 		// filter logic 2 - avoid redundant conditions
 		if(!empty($this->filter['Course.city_id'])) unset($this->filter['Course.country_id']);
@@ -667,27 +687,72 @@ class CoursesController extends AppController {
 			$conditions['Institution.city_id'] = $this->filter['Course.city_id'];
 		$institutions = $this->Course->Institution->find('list', array('conditions' => $conditions));
 		// filter logic 1
-		if(!empty($this->filter['Course.institution_id']) AND !isset($institutions[$this->filter['Course.institution_id']])) unset($this->filter['Course.institution_id']);
+		if(!empty($this->filter['Course.institution_id']) AND !isset($institutions[$this->filter['Course.institution_id']]))
+			unset($this->filter['Course.institution_id']);
+
+
 		$institutions = $this->Course->Institution->find('list', array(
 			'contain' => array('Country'),
 			'fields' => array('Institution.id', 'Institution.name', 'Country.name'),
 			'conditions' => $conditions
 		));
 		ksort($institutions);
+        foreach($institutions as $country => &$is) {
+            foreach ($is as $k => &$v) {
+                $c = $this->Course->getCount('institution_id', $k);
+                $v .= ' ('.$c.')';
+            	if($c == 0) unset($institutions[$country][$k]);
+            }
+            unset($v);
+            if(empty($institutions[$country])) unset($institutions[$country]);
+        }
+        unset($is);
+
 		// filter logic 2
 		if(!empty($this->filter['Course.institution_id'])) {
 			unset($this->filter['Course.country_id']);
 			unset($this->filter['Course.city_id']);
 		}
-		
-		$this->_setTaxonomy();
+
+
+        $tadirahObjects = $this->Course->TadirahObject->find('all', array('contain' => array()));
+        $tadirahTechniques = $this->Course->TadirahTechnique->find('all', array('contain' => array()));
+        $disciplines = $this->Course->Discipline->find('all', array(
+            'contain' => array(),
+            'order' => 'Discipline.name ASC'
+        ));
+        foreach($disciplines as $k => &$v) {
+            $id = $v['Discipline']['id'];
+            $c = $this->Course->getCount('CoursesDiscipline.discipline_id', $id);
+            $v['Discipline']['name'] .= ' ('.$c.')';
+            if($c == 0) unset($disciplines[$k]);
+		}
+        unset($v);
+        foreach($tadirahObjects as $k => &$v) {
+            $id = $v['TadirahObject']['id'];
+        	$c = $this->Course->getCount('CoursesTadirahObject.tadirah_object_id', $id);
+            $v['TadirahObject']['name'] .= ' ('.$c.')';
+            if($c == 0) unset($tadirahObjects[$k]);
+        }
+        unset($v);
+        foreach($tadirahTechniques as $k => &$v) {
+            $id = $v['TadirahTechnique']['id'];
+        	$c = $this->Course->getCount('CoursesTadirahTechnique.tadirah_technique_id', $id);
+            $v['TadirahTechnique']['name'] .= ' ('.$c.')';
+            if($c == 0) unset($tadirahTechniques[$k]);
+        }
+        unset($v);
+
 		// set all option lists to view
 		$this->set(compact(
 			'countries',
 			'cities',
 			'courseParentTypes',
 			'courseTypes',
-			'institutions'
+			'institutions',
+			'tadirahObjects',
+			'tadirahTechniques',
+			'disciplines'
 		));
 	}
 	

@@ -55,7 +55,7 @@ $filter = $this->Session->read('filter');
 if(!empty($filter))
 	echo '<li class="filter">' . $this->Html->link('Reset all Filters', array(
 		'controller' => 'courses',
-		'action' => 'reset'
+		'action' => 'reset_filter'
 	),
 	array('class' => 'form-button')) . '</li>';
 ?>

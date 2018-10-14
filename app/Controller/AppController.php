@@ -45,8 +45,6 @@ class AppController extends Controller {
 		'maxLimit' => 200
 	);
 	
-	public $filter = array();
-	
 	public $shibUser = array();
 	
 	
@@ -62,6 +60,13 @@ class AppController extends Controller {
 				$this->Session->write('Paginate.limit', $form['limit']);
 			}
 		}
+
+		// reset filter if moving somewhere else
+        if( $this->request->controller != 'courses' AND $this->request->action != 'index'
+        AND empty($this->Auth->user())) {
+            $this->_resetFilter();
+        }
+
 		
 		if(	!empty($this->request->params['layout'])
 		AND	$this->request->params['layout'] == 'iframe'
@@ -153,37 +158,22 @@ class AppController extends Controller {
 	
 	
 	// reset filter function
-	public function reset($filter = null) {
-		if(!empty($filter)) {
-			// Only remove a single filter key. As the filter keys contain find-conditions in "."-notation, Session::delete() doesn't handle it correctly
-			$store = $this->Session->read('filter');
-			unset($store[$filter]);
-			$this->Session->write('filter', $store);
-		}else{
-			// remove all filters
-			$this->Session->delete('filter');
-		}
+	public function reset_filter($filter = null) {
+		$this->_resetFilter($filter);
 		$this->redirect(array('action' => 'index'));
 	}
-	
-	
-	
-	protected function _getFilter() {
-		$filter = $this->filter;
-		if(empty($filter)) $filter = $this->_setupFilter();
-		return $filter;
-	}
-	
-	protected function _setupFilter() {
-		// check for previously set filters
-		$this->filter = $this->Session->read('filter');
-		$this->_postedFilters();
-		$this->Session->write('filter', $this->filter);
-		return $this->filter;
-	}
-	
-	
-	protected function _postedFilter() {}
+
+	protected function _resetFilter($filter = null) {
+        if(!empty($filter)) {
+            // Only remove a single filter key. As the filter keys contain find-conditions in "."-notation, Session::delete() doesn't handle it correctly
+            $store = $this->Session->read('filter');
+            unset($store[$filter]);
+            $this->Session->write('filter', $store);
+        }else{
+            // remove all filters
+            $this->Session->delete('filter');
+        }
+    }
 	
 	
 	protected function _checkCaptcha(&$errors = array()) {

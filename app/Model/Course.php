@@ -211,14 +211,14 @@ class Course extends AppModel {
 				'required' => false
 			),
 		),
-		'contact_mail' => array(
+		/*'contact_mail' => array(
 			'email' => array(
 				'rule' => array('email', true),
 				'message' => 'This address is not valid.',
 				'allowEmpty' => true,
 				'required' => false
 			),
-		),
+		),*/
 		'lon' => array(
 			'notEmpty' => array(
 				'rule' => array('notBlank')
@@ -269,6 +269,43 @@ class Course extends AppModel {
 		}
 		return true;
 	}
+
+	public function afterSave($created, $options = array()) {
+        // trigger moderator notification for new courses, that are published
+        if( empty($this->data['Course']['approved']) AND !empty($this->data['Course']['active'])
+        AND empty($this->data['Course']['mod_mailed'])
+        ) {
+            $admins = $this->AppUser->getModerators($this->data['Course']['country_id'], $user_admin = true);
+            if($admins) {
+                // get the current course
+                $course = $this->read();
+
+                debug($course);
+                exit;
+                $this->saveField('mod_mailed', true, array(
+                        'validate' => false,
+                        'callbacks' => false)
+                );
+            }
+/*
+                App::uses('CakeEmail', 'Network/Email');
+                foreach($admins as $admin) {
+                    // email logic
+                    $Email = new CakeEmail();
+                    $Email->addCc(Configure::read('App.defaultCc'));
+
+                    $Email->sender($this->request->data['Course']['email'], trim(
+                            $this->request->data['Contact']['first_name'].' '
+                            .$this->request->data['Contact']['last_name']))
+                        ->to($admin['AppUser']['email'])
+                        ->subject('[DH-Registry] New Course')
+                        ->send('Hello '.$admin['AppUser']['first_name'].', a new course has been published!');
+                }
+            }
+
+*/
+        }
+    }
 
 	// custom validation
 	public function checkList($check, $listModel = null) {
@@ -472,11 +509,34 @@ class Course extends AppModel {
 	}
 	
 	
-	
-	
-	
-	
-	
+	public function getCount($key = null, $value = null) {
+	    $conditions = array(
+            $key => $value,
+            'Course.active' => true,
+            'Course.updated >' => date("Y-m-d H:i:s", time() - Configure::read('App.CourseExpirationPeriod'))
+        );
+        if(strpos($key, '.') === false) {
+            unset($conditions[$key]);
+            $conditions['Course.'.$key] = $value;
+            return $this->find('count', array('conditions' => $conditions));
+        }else{
+            $expl = explode('.', $key);
+            $model = $expl[0];
+            return $this->find('count', array(
+                'conditions' => $conditions,
+                'joins' => array(
+                    array(
+                        'alias' => $model,
+                        'table' => Inflector::tableize($model),
+                        'type' => 'INNER',
+                        'conditions' => $model.'.course_id = Course.id'
+                    )
+                )
+            ));
+        }
+    }
+
+
 	
 	
 }
