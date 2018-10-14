@@ -243,27 +243,8 @@ class AppUsersController extends UsersController {
 		}
 		
 		// find the moderators in charge
-		if(!empty($country_id)) {
-			$admins = $this->{$this->modelClass}->find('all', array(
-				'contain' => array(),
-				'conditions' => array(
-					$this->modelClass.'.country_id' => $country_id,
-					$this->modelClass.'.user_role_id' => 2,	// moderators
-					$this->modelClass . '.active' => 1
-				)
-			));
-		}
-		
-		// if no country or then escalate to user_admin
-		if(empty($country_id) OR empty($admins)) {
-			$admins = $this->{$this->modelClass}->find('all', array(
-				'contain' => array(),
-				'conditions' => array(
-					$this->modelClass . '.user_admin' => 1,
-					$this->modelClass . '.active' => 1
-				)
-			));
-		}
+        $admins = $this->AppUser->getModerators($country_id, $user_admin = true);
+
 		if($admins) {
 			foreach($admins as $admin) {
 				$mailOpts['email'] = $admin[$this->modelClass]['email']; 
