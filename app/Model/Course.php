@@ -282,28 +282,46 @@ class Course extends AppModel {
 
                 debug($course);
                 exit;
+
+                App::uses('CakeEmail', 'Network/Email');
+
+                foreach($admins as $admin) {
+                    $Email = new CakeEmail('default');
+                    $subject_prefix = (Configure::read('App.EmailSubjectPrefix'))
+                        ? trim(Configure::read('App.EmailSubjectPrefix')) . ' '
+                        : '';
+                    $options = array(
+                        'subject_prefix' => $subject_prefix,
+                        'subject' => 'New course waiting for approval',
+                        'emailFormat' => 'text',
+                        'template' => 'new_course',
+                        'layout' => 'default',
+                        'email' => $admin['AppUser']['email']
+                    );
+
+                    if(is_string($options['email'])) {
+                        $Email->to($options['email']);
+                        $Email->addCc(Configure::read('App.defaultCc'));
+                        $Email->emailFormat($options['emailFormat']);
+                        $Email->subject($options['subject_prefix'] . $options['subject']);
+                        $Email->template($options['template'], $options['layout']);
+                        $Email->viewVars(array(
+                            'course' => $course,
+                            'admin' => $admin
+                        ));
+                        if(Configure::read('debug') > 0) {
+                            $Email->transport('Debug');
+                        }
+                        $Email->send();
+                    }
+                    unset($Email);
+                }
+
                 $this->saveField('mod_mailed', true, array(
                         'validate' => false,
                         'callbacks' => false)
                 );
             }
-/*
-                App::uses('CakeEmail', 'Network/Email');
-                foreach($admins as $admin) {
-                    // email logic
-                    $Email = new CakeEmail();
-                    $Email->addCc(Configure::read('App.defaultCc'));
-
-                    $Email->sender($this->request->data['Course']['email'], trim(
-                            $this->request->data['Contact']['first_name'].' '
-                            .$this->request->data['Contact']['last_name']))
-                        ->to($admin['AppUser']['email'])
-                        ->subject('[DH-Registry] New Course')
-                        ->send('Hello '.$admin['AppUser']['first_name'].', a new course has been published!');
-                }
-            }
-
-*/
         }
     }
 
