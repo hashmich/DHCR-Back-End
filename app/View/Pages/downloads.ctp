@@ -34,6 +34,10 @@
                 '/courses/view/123.json', array('target' => 'blank')); ?>.
         </p>
 
+
+    </div>
+
+    <div style="display: inline-block">
         <h3>iFrame Embedding</h3>
         <p>
             The course registry can be embedded into any other website by using an iframe.
@@ -67,7 +71,7 @@
         <p>
             You can lookup the id of any attribute of interest
             with any HTML inspection tool in the filter form on the lefmost side on the homepage.
-            Otherwise, you may send us an email and ask for help.  
+            Otherwise, you may send us an email and ask for help.
         </p>
     </div>
 

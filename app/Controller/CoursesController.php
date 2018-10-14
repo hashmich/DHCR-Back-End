@@ -461,13 +461,16 @@ class CoursesController extends AppController {
                 }else{
                     // the HABTM filters
                     if($namedField == 'tadirah_object_id') {
-                        $this->filter['CoursesTadirahObject.tadirah_object_id'] = $named[$namedField];
+                        $this->filter['CoursesTadirahObject.tadirah_object_id'][] = $named[$namedField];
+                        //$this->request->data['TadirahObject']['TadirahObject'] = $named[$namedField];
                     }
                     elseif($namedField == 'tadirah_technique_id') {
-                        $this->filter['CoursesTadirahTechnique.tadirah_technique_id'] = $named[$namedField];
+                        $this->filter['CoursesTadirahTechnique.tadirah_technique_id'][] = $named[$namedField];
+                        //$this->request->data['TadirahTechnique']['TadirahTechnique'] = $named[$namedField];
                     }
                     elseif($namedField == 'discipline_id') {
-                       $this->filter['CoursesDiscipline.discipline_id'] = $named[$namedField];
+                       	$this->filter['CoursesDiscipline.discipline_id'][] = $named[$namedField];
+                        //$this->request->data['Discipline']['Discipline'] = $named[$namedField];
                     }
 				}
 			}
