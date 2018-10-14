@@ -109,7 +109,7 @@
                     if(!empty($layout) AND $layout == 'iframe') {
                         echo '<li class="info-text">';
                         echo $this->Html->link('The Digital Humanities Course Registry','/',
-                            array('target' => 'blank', 'escape' => false));
+                            array('target' => '_blank'));
                         echo '</li>';
                     }
                     echo $this->fetch('menu');
