@@ -34,6 +34,18 @@
                 '/courses/view/123.json', array('target' => 'blank')); ?>.
         </p>
 
+        <h3>iFrame Embedding</h3>
+        <p>
+            The course registry can be embedded into any other website by using an iframe.
+            The additional route parameter "iframe" in the URL string will cause the layout to render
+            without the upper logo bar and tabbing menu.
+            Thus, it will integrate seamlessly into foreign institution pages.
+        </p>
+        <p>
+            The basic URL for iframe embedding is:<br>
+            <?php echo Router::ur('/iframe'); ?>
+        </p>
+
     </div>
 
 </div>

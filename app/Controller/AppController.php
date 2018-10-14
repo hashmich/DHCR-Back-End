@@ -66,7 +66,7 @@ class AppController extends Controller {
 		if(	!empty($this->request->params['layout'])
 		AND	$this->request->params['layout'] == 'iframe'
 		) {
-			$this->layout = 'iframe';
+			$this->set('layout', 'iframe');
 		}
 		
 		if(isset($this->Security))	{

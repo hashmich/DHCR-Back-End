@@ -63,41 +63,57 @@
 <body>
 	<div id="container">
 
-        <div id="header">
-            <div id="logo">
-                <?php
-                $logo = array(
-                    'alt' => 'CLARIN-DARIAIH joint Logo',
-                    'width' => 115,
-                    'height' => 90);
+        <?php
+        if(empty($layout)) {
+            ?>
+            <div id="header">
+                <div id="logo">
+                    <?php
+                    $logo = array(
+                        'alt' => 'CLARIN-DARIAIH joint Logo',
+                        'width' => 115,
+                        'height' => 90);
 
-                $file = '/img/logos/DARIAH-CLARIN-joint-logo.jpg';
-                echo $this->Html->link($this->Html->image($file, $logo), '/', array(
-                    'target' => '_blank',
-                    'escape' => false));
-                ?>
-                <div class="title">
-                    <h1>
-                        <a href="<?php echo Router::url('/'); ?>">
-                            <span id="h1">Digital Humanities</span><br>
-                            <span id="h2">Course</span><span id="h3">Registry</span>
-                        </a>
-                    </h1>
+                    $file = '/img/logos/DARIAH-CLARIN-joint-logo.jpg';
+                    echo $this->Html->link($this->Html->image($file, $logo), '/', array(
+                        'target' => '_blank',
+                        'escape' => false));
+                    ?>
+                    <div class="title">
+                        <h1>
+                            <a href="<?php echo Router::url('/'); ?>">
+                                <span id="h1">Digital Humanities</span><br>
+                                <span id="h2">Course</span><span id="h3">Registry</span>
+                            </a>
+                        </h1>
 
+                    </div>
                 </div>
-            </div>
 
-            <?php echo $this->element('tabbing'); ?>
-        </div>
+                <?php echo $this->element('tabbing'); ?>
+            </div>
+        <?php
+        }elseif(!empty($layout) AND $layout == 'iframe') {
+            echo '<div id="header" style="display: none;"><h1>The Digital Humanities Course Registry</h1></div>';
+        }
+        ?>
 		
 		<div class="columns">
-			<div id="menu">
+			<div id="left">
 				<?php
 				echo $this->element('login_info');
-				?>
+                ?>
 
 				<ul>
-				    <?php echo $this->fetch('menu'); ?>
+				    <?php
+                    if(!empty($layout) AND $layout == 'iframe') {
+                        echo '<li class="info-text">';
+                        echo $this->Html->link('The Digital Humanities Course Registry','/',
+                            array('target' => 'blank', 'escape' => false));
+                        echo '</li>';
+                    }
+                    echo $this->fetch('menu');
+                    ?>
 				</ul>
 			</div>
 			

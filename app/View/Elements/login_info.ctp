@@ -2,7 +2,7 @@
 	<?php
 	if(!empty($auth_user)) {
 		?>
-        <div class="login_link">
+        <div class="info-text">
             <p>
                 <?php
                 $name = (empty($auth_user['name']))

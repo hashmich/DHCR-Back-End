@@ -1,6 +1,6 @@
 /* defined as a mixin to possibly include it somewhere else, where !important is not strong enough */
-@mixin loginLink {
-	.login_link {
+@mixin info-text {
+	.info-text {
 		//margin: 10px 0 15px;
 		@include clearfix;
 		
@@ -33,7 +33,7 @@
 		}
 	}
 }
-@include loginLink;
+@include info-text;
 
 
 /* auth forms - centered */

@@ -103,7 +103,7 @@ $col_min_height: 400px;
 		left: $menu_width + 24px + 2px;
 	}
 	
-	#menu {
+	#left {
 		float: left;
 		position: relative;
 		width: $menu_width;
@@ -171,10 +171,11 @@ $col_min_height: 400px;
 		}
 	}
 
-	#menu {
-		.login_link {
+	#left {
+		.info-text {
 			border-bottom: 2px solid $header_background_color;
 			padding-bottom: 15px;
+			margin-bottom: 15px;
 			font-size: 12px;
 			li {
 				font-size: 12px;
