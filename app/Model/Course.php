@@ -211,14 +211,14 @@ class Course extends AppModel {
 				'required' => false
 			),
 		),
-		/*'contact_mail' => array(
+		'contact_mail' => array(
 			'email' => array(
 				'rule' => array('email', true),
 				'message' => 'This address is not valid.',
 				'allowEmpty' => true,
 				'required' => false
 			),
-		),*/
+		),
 		'lon' => array(
 			'notEmpty' => array(
 				'rule' => array('notBlank')
@@ -279,9 +279,6 @@ class Course extends AppModel {
             if($admins) {
                 // get the current course
                 $course = $this->read();
-
-                //debug($course);
-                //exit;
 
                 App::uses('CakeEmail', 'Network/Email');
 
