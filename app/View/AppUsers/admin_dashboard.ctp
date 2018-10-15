@@ -64,7 +64,7 @@ if(!empty($moderated)) {
 	<h3>Moderated Courses</h3>
 	<?php
 	if(empty($moderated)) {
-		echo '<p>There are no courses in the registry moderated by you.</p>';
+		echo '<p>You have no moderated courses.</p>';
 	}else{
 		$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
 		echo $this->element('courses/index', array('courses' => $moderated));

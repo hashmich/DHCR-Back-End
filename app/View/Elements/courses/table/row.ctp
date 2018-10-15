@@ -35,7 +35,10 @@ OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() 
 	<?php
 	if(!empty($edit)) {
 		echo '<td class="actions">';
-			echo $this->Html->link('review', array(
+            if($auth_user['user_role_id'] < 3 AND !$record['Course']['approved']) {
+                echo $this->Html->link('approve', '/courses/approve/'.$record['Course']['approval_token']);
+            }
+            echo $this->Html->link('edit', array(
 				'controller' => 'courses',
 				'action' => 'edit',
 				$record['Course']['id']

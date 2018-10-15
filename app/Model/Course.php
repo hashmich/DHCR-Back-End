@@ -280,8 +280,8 @@ class Course extends AppModel {
                 // get the current course
                 $course = $this->read();
 
-                debug($course);
-                exit;
+                //debug($course);
+                //exit;
 
                 App::uses('CakeEmail', 'Network/Email');
 

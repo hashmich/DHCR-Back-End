@@ -26,7 +26,7 @@ class CoursesController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		
-		$this->Auth->allow(array('index', 'view', 'reset_filter', 'statistic'));
+		$this->Auth->allow(array('index', 'view', 'reset_filter', 'statistic', 'approve'));
 		
 		if($this->Auth->user()) {
 			$this->Auth->allow(array('edit', 'add', 'delete', 'revalidate'));
@@ -201,37 +201,23 @@ class CoursesController extends AppController {
 
 
 	public function approve($token = null) {
-        $success = $proceed = false;
-        if( ($this->Auth->user() AND $this->Auth->user('user_role_id') < 3)
-            AND !empty($token) AND ctype_digit($token)) {
-            $course = $this->Course->find('first', array(
-                'contain' => array(),
-                'conditions' => array(
-                    'Course.id' => $token,
-                    'Course.approved' => 0
-                )
-            ));
-            if($course) {
-                $proceed = true;
-            }
-        }else{
-            // not authenticated!
-            // admins retrieve a link in their notification email to approve directly
-            $course = $this->Course->find('first', array(
-                'contain' => array(),
-                'conditions' => array(
-                    'Course.approval_token' => $token,
-                    'Course.approved' => 0
-                )
-            ));
-            if($course) {
-                $proceed = true;
-            }
-        }
+       // admins retrieve a link in their notification email to approve directly
+		$course = $this->Course->find('first', array(
+			'contain' => array(),
+			'conditions' => array(
+				'Course.approval_token' => $token,
+				'Course.approved' => 0
+			)
+		));
 
-        if($proceed) {
-
+        if($course) {
+			$course['Course']['approved'] = true;
+            $course['Course']['approval_token'] = null;
+            $this->Course->save($course, array('validate' => false));
+            $this->Flash->set('The record has been marked as approved!');
 		}
+		if($this->Auth->user()) $this->redirect('/users/dashboard');
+		else $this->redirect('/');
 	}
 	
 	
