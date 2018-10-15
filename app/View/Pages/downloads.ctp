@@ -22,7 +22,7 @@
     <div style="display: inline-block">
         <h3>API and Data Download</h3>
         <p>
-            Yet, we only have a rudimentary API online, which serves either a full dump of the course database
+            Yet, we have a rudimentary API online, which serves either a full dump of the course database
             or a single course. The data is available as JSON or XML.<br>
             <?php echo $this->Html->link('JSON',
                 '/courses/index.json', array('target' => '_blank')); ?><br>
@@ -50,9 +50,25 @@
             <?php echo $this->Html->link(Router::url('/iframe', $full = true), '/iframe'); ?>
         </p>
         <p>
-            You can also pass filter parameters via the URL
-            by adding <em>[key:value]</em> pairs to the end of the URL string, whereas the key
-            refers to the database field and the value is the ID of that particular course attribute value.
+            Using the provided code snippet beyond, the iframe will expand to 100% of the parent container.
+            The height is adjusted by some javascript from the page loaded within the iframe,
+            thus you have to keep the provided id.
+            Embedding code:
+        </p>
+        <p>
+            <code>
+                &lt;iframe src="<?php echo Router::url('/iframe', $full = true); ?>"<br>
+                        width="100%" id="dhcr-iframe"/&gt;
+            </code>
+        </p>
+    </div>
+    <div style="display:inline-block">
+        <h3>URL Filter Parameters</h3>
+        <p>
+            You can also pass filter parameters via the URL, which is handy to filter for a specific country or
+            discipline in the iframe-embedded application or to provide a link with preset filter settings.
+            By adding <em>[key:value]</em> pairs to the end of the URL string, the results will be filtered
+            for a particular numeric ID-value of an attribute field.
             Be aware, that you have to provide the full <em>[/controller/action]</em> combo in that case: <br>
             <?php echo $this->Html->link(Router::url('/iframe/courses/index/country_id:1', $full = true), '/iframe/courses/index/country_id:1'); ?>
         </p>
@@ -70,7 +86,7 @@
         </ul>
         <p>
             You can lookup the id of any attribute of interest
-            with any HTML inspection tool in the filter form on the lefmost side on the homepage.
+            with any HTML inspection tool in the filter form on the leftmost side on the homepage.
             Otherwise, you may send us an email and ask for help.
         </p>
     </div>

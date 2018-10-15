@@ -55,6 +55,18 @@
 	// custom CSS
 	echo $this->Html->css('styles.css');
 	echo $this->fetch('css');
+
+	if(!empty($layout) AND $layout == 'iframe') {
+	    ?>
+        <script type="text/javascript">
+            window.onload = function () {
+                var iframe = window.parent.document.getElementById('dhcr-iframe');
+                var container = document.getElementById('container');
+                iframe.style.height = container.offsetHeight + 'px';
+            }
+        </script>
+        <?php
+    }
 	?>
 	
 </head>
