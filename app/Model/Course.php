@@ -279,6 +279,8 @@ class Course extends AppModel {
             if($admins) {
                 // get the current course
                 $course = $this->read();
+                $token = $this->generateToken('approval_token');
+                $course['Course']['approval_token'] = $token;
 
                 App::uses('CakeEmail', 'Network/Email');
 
@@ -308,9 +310,7 @@ class Course extends AppModel {
                             'course' => $course,
                             'admin' => $admin
                         ));
-                        if(Configure::read('debug') > 0) {
-                            $Email->transport('Debug');
-                        }
+
                         $Email->send();
                     }
                     unset($Email);
@@ -318,8 +318,10 @@ class Course extends AppModel {
 
                 $this->saveField('mod_mailed', true, array(
                         'validate' => false,
-                        'callbacks' => false)
-                );
+                        'callbacks' => false));
+                $this->saveField('approval_token', $token, array(
+                        'validate' => false,
+                        'callbacks' => false));
             }
         }
     }

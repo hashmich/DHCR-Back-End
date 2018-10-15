@@ -42,9 +42,25 @@ class AppModel extends Model {
 		
 		return true;
 	}
-	
-	
-	
+
+
+    public function generateToken($fieldname = null, $length = 16) {
+        $time = substr((string)time(), -6, 6);
+        $possible = '0123456789abcdefghijklmnopqrstuvwxyz';
+        // create an unique token
+        for($c = 1; $c > 0; ) {
+            $token = '';
+            for($i = 0; $i < $length - 6; $i++) {
+                $token .= substr($possible, mt_rand(0, strlen($possible) - 1), 1);
+            }
+            $token = $time . $token;
+            if(empty($fieldname)) break;
+            $c = $this->find('count', array('conditions' => array(
+                $this->alias . '.' . $fieldname => $token
+            )));
+        }
+        return $token;
+    }
 	
 	
 }
