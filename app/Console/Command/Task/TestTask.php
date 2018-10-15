@@ -32,7 +32,7 @@ class TestTask extends Shell {
 							'data' => $data
 					);
 					if(is_string($options['email'])) {
-						$Email->to('mail@hendrikschmeer.de');
+						$Email->to(Configure::read('debug.mail'));
 						$Email->emailFormat($options['emailFormat']);
 						$Email->subject($options['subject_prefix'] . $options['subject']);
 						$Email->template($options['template'], $options['layout']);
@@ -52,7 +52,7 @@ class TestTask extends Shell {
 	public function execute($to = null) {
 		$this->out("Executing TestTask...");
 		
-		if($to == null) $to = 'mail@hendrikschmeer.de';
+		if($to == null) $to = Configure::read('debug.mail');
 		App::uses('CakeEmail', 'Network/Email');
 		$Email = new CakeEmail('default');
 		$subject_prefix = (Configure::read('App.EmailSubjectPrefix'))

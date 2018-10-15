@@ -48,7 +48,7 @@ class CronShell extends AppShell {
 				$this->SendReminders->execute($this->sendMails, $this->to);
 			}
 			elseif(strtolower($task) == 't') {
-				$this->to = $this->in('Send an Email to: ', null, 'mail@hendrikschmeer.de');
+				$this->to = $this->in('Send an Email to: ', null, Configure::read('debug.mail'));
 				$this->Test->execute($this->to);
 			}
 		}else{

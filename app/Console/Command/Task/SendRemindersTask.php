@@ -24,7 +24,7 @@ class SendRemindersTask extends Shell {
 		Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
 		
 		$collection = $this->Course->getReminderCollection();
-		if(Configure::read('debug') > 0) $to = 'mail@hendrikschmeer.de';
+		if(Configure::read('debug') > 0) $to = Configure::read('debug.mail');
 		$this->out('Debug level: ' . Configure::read('debug'));
 		$this->out('Alternative addressee (debug): ' . $to);
 		if(!empty($collection)) {
