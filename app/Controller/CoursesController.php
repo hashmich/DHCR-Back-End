@@ -29,7 +29,7 @@ class CoursesController extends AppController {
 		$this->Auth->allow(array('index', 'view', 'reset_filter', 'statistic', 'approve'));
 		
 		if($this->Auth->user()) {
-			$this->Auth->allow(array('edit', 'add', 'delete', 'revalidate'));
+			$this->Auth->allow(array('edit', 'add', 'delete', 'revalidate', 'unpublish'));
 		}
 	}
 
@@ -218,6 +218,35 @@ class CoursesController extends AppController {
 		}
 		if($this->Auth->user()) $this->redirect('/users/dashboard');
 		else $this->redirect('/');
+	}
+
+
+	public function unpublish($id = null) {
+        if(empty($id)) $this->redirect(array(
+            'controller' => 'users',
+            'action' => 'dashboard'
+        ));
+
+        $conditions = array('Course.id' => $id);
+		if($this->Auth->user('user_role_id') >= 3)
+			$conditions['Course.user_id'] = $this->Auth->user('id');
+
+        $this->Course->updateAll(
+        	array(
+        		'Course.active' => false,
+				'Course.mod_mailed' => false,
+				'Course.approved' => false,
+				'Course.approval_token' => null
+			),
+			$conditions
+		);
+
+        $this->Flash->set('The record has been unpublished');
+
+        $this->redirect(array(
+            'controller' => 'users',
+            'action' => 'dashboard'
+        ));
 	}
 	
 	

@@ -1,4 +1,4 @@
-Dear Moderator,
+Dear <?php echo $admin['AppUser']['first_name']; ?>,
 
 a new course has been published!
 
@@ -7,47 +7,56 @@ Please check, if the course is related to DH and if the chosen tags are appropri
 A guideline about which courses can be regarded as DH will be available soon.
 
 # EXPECTED ACTIONS:
-You may either edit the course data or unpublish the record in case there is something wrong.
-However, you should contact the person that added the data or the lecturer.
+Hit "Approve" if you think this is a proper DH course.
+In case you think there is something wrong, you may either edit the course data or unpublish the record.
+However, you should contact the lecturer or the person that added the data.
 
 The course has been added by:
-<?php echo $this->Html->link($course['AppUser']['name'], 'mailto:'.$course['AppUser']['email']); ?>
-The provided lecturer contact is:
-<?php echo $this->Html->link($course['Course']['contact_name'], 'mailto:'.$course['Course']['contact_mail']); ?>
+<?php echo $course['AppUser']['name'].', '.$course['AppUser']['email']; ?>
 
---
+The provided lecturer contact is:
+<?php echo $course['Course']['contact_name'].', '.$course['Course']['contact_mail']; ?>
+
+
+====================================================
 
 # Quick Links:
-<?php echo $this->Html->link('Approve', '/courses/approve/'.$couse['approval_token']); ?> |
-<?php echo $this->Html->link('Edit', '/courses/edit/'.$course['id']); ?> |
-<?php echo $this->Html->link('Unpublish', '/courses/unpublish/'.$course['id']); ?>
+Approve:    <?php echo Router::url('/courses/approve/'.$course['Course']['approval_token'], true); ?>
 
---
+Login required:
+Edit:       <?php echo Router::url('/courses/edit/'.$course['Course']['id'], true); ?>
+
+Unpublish:  <?php echo Router::url('/courses/unpublish/'.$course['Course']['id'], true); ?>
+
+
+====================================================
 
 #The course details:
 <?php
 foreach($course['Course'] as $field => $value) {
-    if(in_array($field, array('user_id','active','approved','approval_token','mod_mailed',
-        'last_reminder','course_parent_type_id','skip_info_url','skip_guide_url',
-        'contact_mail','contact_name','lon','lat'))) continue;
+    if(in_array($field, array('updated','user_id','active','approved',
+        'approval_token','mod_mailed','last_reminder','course_parent_type_id',
+        'skip_info_url','skip_guide_url','contact_mail','contact_name','lon','lat')))
+        continue;
     // handle foreign keys
-    if(strpos($field, '_id', -3) !== false) {
+    if(strpos($field, '_id') !== false) {
         $model = Inflector::camelize(substr($field, 0, strlen($field) - 3));
         $value = $course[$model]['name'];
+        $field = $model;
     }
-    echo $field.': \t\t'.$value.'\n';
+    echo str_pad($field . ':', 24, " ") . "     ".$value."\n";
 }
-echo '\n#Disciplines:\n';
+echo "\n#Disciplines:\n";
 foreach($course['Discipline'] as $k => $item) {
     if($k > 0) echo ', ';
     echo $item['name'];
 }
-echo '\n\n#Techniques\n';
+echo "\n\n#Techniques\n";
 foreach($course['TadirahTechnique'] as $k => $item) {
     if($k > 0) echo ', ';
     echo $item['name'];
 }
-echo '\n\n#Objects\n';
+echo "\n\n#Objects\n";
 foreach($course['TadirahObject'] as $k => $item) {
     if($k > 0) echo ', ';
     echo $item['name'];
