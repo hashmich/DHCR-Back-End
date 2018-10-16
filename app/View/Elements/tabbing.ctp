@@ -7,9 +7,9 @@ $items = array(
     array('Downloads', '/pages/downloads'),
     //array('About', '/pages/about'),
     array('Contact', '/contact/us'),
-    array('Statistics', '/statistic'),
-    array('Login', '/users/login')
+    array('Statistics', '/statistic')
 );
+if(empty($auth_user)) $items[] = array('Login', '/users/login');
 
 $here = $this->params->here;
 if(!empty($this->params->base)) {

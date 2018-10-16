@@ -57,8 +57,9 @@
         </p>
         <p>
             <code>
-                &lt;iframe src="<?php echo Router::url('/iframe', $full = true); ?>"<br>
-                        width="100%" id="dhcr-iframe"/&gt;
+                &lt;iframe <br>
+                src="<?php echo Router::url('/iframe', $full = true); ?>"<br>
+                width="100%" id="dhcr-iframe"/&gt;
             </code>
         </p>
     </div>
