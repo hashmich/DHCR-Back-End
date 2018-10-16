@@ -298,7 +298,7 @@ class Course extends AppModel {
                         'email' => $admin['AppUser']['email']
                     );
 
-                    if(Configure::read('debug') > 0) $options['email'] = Configure::read('debug.mail');
+                    if(Configure::read('debug') > 0) $options['email'] = Configure::read('debugging.mail');
 
                     if(is_string($options['email'])) {
                         $Email->to($options['email']);
