@@ -43,11 +43,12 @@ OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() 
 				'action' => 'edit',
 				$record['Course']['id']
 			));
-			echo $this->Html->link('revalidate', array(
-					'controller' => 'courses',
-					'action' => 'revalidate',
-					$record['Course']['id']
-			));
+            if($auth_user['user_role_id'] < 3 OR $record['Course']['approved'])
+                echo $this->Html->link('revalidate', array(
+                        'controller' => 'courses',
+                        'action' => 'revalidate',
+                        $record['Course']['id']
+                ));
 		echo '</td>';
 	}
 	?>

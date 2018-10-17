@@ -58,17 +58,21 @@ echo $this->element('dashboard/admin_account_requests');
 
 echo $this->element('dashboard/admin_invited_users');
 
-
+if(!empty($new_courses)) {
+    ?>
+    <h3>New Courses</h3>
+    <p>These courses have been published, but should be reviewed for meeting the DH Course Registry standards.</p>
+    <?php
+    $this->set('edit', true);	// displays the "Actions" column in all subsequent elements
+    echo $this->element('courses/index', array('courses' => $new_courses));
+}
 if(!empty($moderated)) {
 	?>
 	<h3>Moderated Courses</h3>
-	<?php
-	if(empty($moderated)) {
-		echo '<p>You have no moderated courses.</p>';
-	}else{
-		$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
-		echo $this->element('courses/index', array('courses' => $moderated));
-	}
+    <?php
+	$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
+    echo $this->element('courses/index', array('courses' => $moderated));
+
 }
 ?>
 
