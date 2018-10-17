@@ -234,16 +234,19 @@ form {
 		line-height: 14px;
 	}
 	input[type=radio] + label {
-		margin: -1px 4px 6px 20px;
+		margin: -2px 4px 6px 20px;
+		float: left;
+		clear: none;
+		width: 100px;
 	}
 	
 	
 	div.input.checkbox,
 	div.input.radio {
-		input[type=radio], input[type=checkbox] {
+		input[type=checkbox] {
 			float:none;
 		}
-		input[type=checkbox] + label, input[type=radio] + label {
+		input[type=checkbox] + label {
 			float: left;
 			font-weight:bold;
 			font-size: inherit;

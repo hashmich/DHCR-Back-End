@@ -33,7 +33,8 @@ class PagesController extends AppController {
  *
  * @var array
  */
-	public $uses = array();
+	public $uses = array(
+	    'Course');
 	
 	
 	public function beforeFilter() {
@@ -50,7 +51,7 @@ class PagesController extends AppController {
  * @throws NotFoundException When the view file could not be found
  *	or MissingViewException in debug mode.
  */
-	public function display() {
+    public function display() {
 		$path = func_get_args();
 
 		$count = count($path);
@@ -70,6 +71,8 @@ class PagesController extends AppController {
 		}
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
 
+		if($page == 'downloads') $this->setOptionLists();
+
 		try {
 			$this->render(implode('/', $path));
 		} catch (MissingViewException $e) {
@@ -79,4 +82,26 @@ class PagesController extends AppController {
 			throw new NotFoundException();
 		}
 	}
+
+
+	private function setOptionLists() {
+        $countries = $this->Course->Country->find('list');
+        $cities = $this->Course->City->find('list', array(
+            'contain' => array('Country'),
+            'fields' => array('City.id','City.name','Country.name')));
+        ksort($cities);
+        $institutions = $this->Course->Institution->find('list', array(
+            'contain' => array('Country'),
+            'fields' => array('Institution.id','Institution.name','Country.name')));
+        ksort($institutions);
+        $course_types = $this->Course->CourseType->find('list', array('contain' => array()));
+        $disciplines = $this->Course->Discipline->find('list', array('contain' => array()));
+        $objects = $this->Course->TadirahObject->find('list', array('contain' => array()));
+        $techniques = $this->Course->TadirahTechnique->find('list', array('contain' => array()));
+
+        $this->set(compact('countries','cities',
+            'institutions','course_types','disciplines',
+            'objects','techniques'));
+    }
+
 }

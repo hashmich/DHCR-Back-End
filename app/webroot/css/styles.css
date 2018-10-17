@@ -1987,14 +1987,15 @@ div.auth {
         font-weight: normal;
         line-height: 14px; }
       .columns #content form input[type=radio] + label {
-        margin: -1px 4px 6px 20px; }
-      .columns #content form div.input.checkbox input[type=radio], .columns #content form div.input.checkbox input[type=checkbox],
-      .columns #content form div.input.radio input[type=radio],
+        margin: -2px 4px 6px 20px;
+        float: left;
+        clear: none;
+        width: 100px; }
+      .columns #content form div.input.checkbox input[type=checkbox],
       .columns #content form div.input.radio input[type=checkbox] {
         float: none; }
-      .columns #content form div.input.checkbox input[type=checkbox] + label, .columns #content form div.input.checkbox input[type=radio] + label,
-      .columns #content form div.input.radio input[type=checkbox] + label,
-      .columns #content form div.input.radio input[type=radio] + label {
+      .columns #content form div.input.checkbox input[type=checkbox] + label,
+      .columns #content form div.input.radio input[type=checkbox] + label {
         float: left;
         font-weight: bold;
         font-size: inherit;
