@@ -343,7 +343,7 @@ class AppUsersController extends UsersController {
 			$user_id = $this->Auth->user('id');
 			$assist = false;
 		}
-		$moderated = array();
+		$moderated = $new_courses = array();
 		$courses = $this->AppUser->Course->find('all', array(
 			'conditions' => array(
 				'Course.user_id' => $user_id,
@@ -355,14 +355,26 @@ class AppUsersController extends UsersController {
 			$moderated = $this->AppUser->Course->find('all', array(
 				'conditions' => array(
 					'Course.country_id' => $this->Auth->user('country_id'),
+					'Course.approved' => true,
 					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
 				),
 				'order' => array(
 						'Course.updated' => 'ASC'
 				)
 			));
+
+			$new_courses = $moderated = $this->AppUser->Course->find('all', array(
+                'conditions' => array(
+                    'Course.country_id' => $this->Auth->user('country_id'),
+                    'Course.approved' => false,
+                    'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
+                ),
+                'order' => array(
+                    'Course.updated' => 'ASC'
+                )
+            ));
 		}
-		$this->set(compact('courses', 'moderated'));
+		$this->set(compact('courses', 'moderated', 'new_courses'));
 		
 		if($this->DefaultAuth->isAdmin() OR $this->Auth->user('user_role_id') == 2) {
 			$conditionsUnapproved = array($this->modelClass . '.approved' => 0);
