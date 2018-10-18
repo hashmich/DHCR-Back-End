@@ -23,7 +23,6 @@
     function createResult() {
         readGeneratorForm()
         createUrl()
-        console.log(generatorOutput)
         switch (generatorOutput) {
             case 'link':
             case 'xml':

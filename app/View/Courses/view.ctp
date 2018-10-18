@@ -3,7 +3,7 @@
 
 <div class="actions">
 	<ul>
-		<li><?php echo $this->Html->link('list', '/'); ?></li>
+		<li><?php echo $this->Html->link('list', array('controller' => 'courses', 'action' => 'index')); ?></li>
 		
 		<?php
 		if(!empty($edit)) {

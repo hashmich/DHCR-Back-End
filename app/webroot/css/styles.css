@@ -875,6 +875,9 @@ h1, h2, h3, h4 {
   h1:first-child, h2:first-child, h3:first-child, h4:first-child {
     margin-top: 0; }
 
+h1 + h2, h2 + h3, h3 + h4 {
+  margin-top: 0; }
+
 h1 {
   font-size: 2em; }
 
@@ -1048,6 +1051,8 @@ div.notice {
   .css-columns-2 h3, .css-columns-3 h3 {
     column-span: 1;
     -webkit-column-span: 1; }
+  .css-columns-2 div, .css-columns-3 div {
+    margin-bottom: 2em; }
 
 .css-columns-2 {
   column-count: 2;

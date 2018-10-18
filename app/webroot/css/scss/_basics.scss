@@ -21,6 +21,9 @@ h1, h2, h3, h4 {
 		margin-top: 0;
 	}
 }
+h1 + h2, h2 + h3, h3 + h4 {
+	margin-top: 0;
+}
 h1 {
 	font-size: 2em;
 }
@@ -33,6 +36,7 @@ h3 {
 h4 {
 	font-size: 1em;
 }
+
 ol, ul, li {
 	margin: 0;
 }
@@ -181,6 +185,10 @@ div.notice {
 	h3 {
 		column-span: 1;
 		-webkit-column-span: 1;
+	}
+
+	div {
+		margin-bottom: 2em;
 	}
 }
 .css-columns-2 {

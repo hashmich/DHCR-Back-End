@@ -1,6 +1,6 @@
 
 <div class="css-columns-2">
-    <h2>Downloads &amp; Information</h2>
+    <h2>Downloads &amp; Data APIs</h2>
 
     <div style="display: inline-block">
         <h3>Dissemination Material</h3>
@@ -20,23 +20,32 @@
     </div>
 
     <div style="display: inline-block">
-        <h3>API and Data Download</h3>
+        <h3>API, Data Download and Embedding</h3>
+        <h4>JSON &amp; XML Views</h4>
         <p>
-            Yet, we have a rudimentary API online, which serves either a full dump of the course database
-            or a single course. The data is available as JSON or XML.<br>
-            <?php echo $this->Html->link('JSON',
+            We have a rudimentary API available, which either serves a full list of the course database
+            or a single course. The data is available as JSON or XML.
+            To render the data in the format of interest, one just needs to add <em>.json</em> or
+            <em>.xml</em> to the end of the URL string.
+            Use <em>/courses/index</em> for a full list of courses or
+            <em>/courses/view/[id]</em> to view a single course.
+        </p>
+        <p>
+            <?php echo $this->Html->link(Router::url('/courses/index.json', true),
                 '/courses/index.json', array('target' => '_blank')); ?><br>
-            <?php echo $this->Html->link('XML',
-                '/courses/index.json', array('target' => '_blank')); ?><br>
-            To retrieve a single course only, the schema is as follows, where [format] has to be either json or xml:
-            <?php echo Router::url('/courses/view/[id].[format]'); ?>.<br>
-            <?php echo $this->Html->link('Single course example',
+            <?php echo $this->Html->link(Router::url('/courses/index.xml', true),
+                '/courses/index.xml', array('target' => '_blank')); ?><br>
+            Single course format: <em><?php echo Router::url('/courses/view/[id].[format]'); ?></em><br>
+            <?php echo $this->Html->link(Router::url('/courses/view/123.json', true),
                 '/courses/view/123.json', array('target' => '_blank')); ?>.
         </p>
-
+        <p>
+            The courses listed in the <em>index</em> views contain only recent, actively maintained data.
+            Currently, there is no API available to list historical courses, which still exist in the database
+            but have been removed from display after their expiration.
+        </p>
 
     </div>
-
     <div style="display: inline-block">
         <h3>iFrame Embedding</h3>
         <p>
@@ -50,27 +59,21 @@
             <?php echo $this->Html->link(Router::url('/iframe', $full = true), '/iframe'); ?>
         </p>
         <p>
-            Using the provided code snippet beyond, the iframe will expand to 100% of the parent container.
+            Using the code snippet provided through the generator form,
+            the iframe will expand to 100% of the parent container.
             The height is adjusted by some javascript from the page loaded within the iframe,
             thus you have to keep the provided id.
-            Embedding code:
-        </p>
-        <p>
-            <code>
-                &lt;iframe <br>
-                src="<?php echo Router::url('/iframe', $full = true); ?>"<br>
-                width="100%" id="dhcr-iframe"/&gt;
-            </code>
         </p>
     </div>
     <div style="display:inline-block">
         <h3>URL Filter Parameters</h3>
         <p>
-            You can also pass filter parameters via the URL, which is handy to filter for a specific country or
-            discipline in the iframe-embedded application or to provide a link with preset filter settings.
+            You can also pass filter parameters using the URL, which is handy to filter
+            for a specific country or discipline in the iframe-embedded application or
+            to provide a link with preset filter settings.
             By adding <em>[key:value]</em> pairs to the end of the URL string, the results will be filtered
             for a particular numeric ID-value of an attribute field.
-            Be aware, that you have to provide the full <em>[/controller/action]</em> combo in that case: <br>
+            Parameters can only be passed to the <em>index</em> method: <br>
             <?php echo $this->Html->link(Router::url('/iframe/courses/index/country_id:1', $full = true), '/iframe/courses/index/country_id:1'); ?>
         </p>
         <p>
@@ -87,9 +90,13 @@
         </ul>
         <p>
             You can lookup the id of any attribute of interest
-            with any HTML inspection tool in the filter form on the leftmost side on the homepage.
-            Otherwise, you may send us an email and ask for help.
+            using the URL generator below.
         </p>
+    </div>
+
+    <div style="display:inline-block">
+        <h3>Filter URL API, Link &amp; Embedding Code Generator</h3>
+        <?php echo $this->element('filter_generator'); ?>
     </div>
 
 </div>
