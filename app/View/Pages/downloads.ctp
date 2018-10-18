@@ -47,7 +47,7 @@
 
     </div>
     <div style="display: inline-block">
-        <h3>iFrame Embedding</h3>
+        <h3>Iframe Embedding</h3>
         <p>
             The course registry can be embedded into any other website by using an iframe.
             The additional route parameter "iframe" in the URL string will cause the layout to render
@@ -95,7 +95,7 @@
     </div>
 
     <div style="display:inline-block">
-        <h3>Filter URL API, Link &amp; Embedding Code Generator</h3>
+        <h3>Data API, Filter URL &amp; Embedding Code Generator</h3>
         <?php echo $this->element('filter_generator'); ?>
     </div>
 

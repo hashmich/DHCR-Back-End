@@ -261,8 +261,11 @@ form {
 	.radio > fieldset	{
 		border:1px solid #999;
 		background: #e4e4e4;
-		width: 180px;
-		margin-left: 208px;
+		width: 260px;
+		// if radio is used with legend, we need the margin-left!
+		// #TODO: override the Form Helper method to output a proper label,
+		// no legend within the fieldset
+		//margin-left: 208px;
 		margin-top: 17px;
 		padding: 10px 10px 8px 15px;
 	}

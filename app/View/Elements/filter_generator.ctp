@@ -158,13 +158,19 @@ $this->Html->scriptBlock(
         'options' => $countries,
         'div' => array('id' => 'generator-filter-value-div')
     ));
+    echo '<div class="input radio" id="generator-filter-output-div">';
+    echo '<label>Output Format</label>';
+    echo '<fieldset>';
     echo $this->Form->input('output', array(
-        'label' => 'Output Format',
+        'div' => false,
+        'legend' => false,
         'type' => 'radio',
         'value' => 'link',
         'options' => array(
-            'link'=>'link','iframe'=>'iframe','json'=>'json','xml'=>'xml')
+            'link'=>'URL','iframe'=>'Iframe','json'=>'JSON-URL','xml'=>'XML-URL')
     ));
+    echo '</fieldset>';
+    echo '</div>';
     echo $this->Form->input('result', array(
         'label' => 'Result',
         'id' => 'generator-result',
