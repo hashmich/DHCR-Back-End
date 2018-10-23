@@ -352,23 +352,27 @@ class AppUsersController extends UsersController {
 		));
 		// moderators
 		if($this->Auth->user('user_role_id') == 2 AND !empty($this->Auth->user('country_id'))) {
-			$moderated = $this->AppUser->Course->find('all', array(
-				'conditions' => array(
-					'Course.country_id' => $this->Auth->user('country_id'),
-					'Course.approved' => true,
-					'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
-				),
-				'order' => array(
-						'Course.updated' => 'ASC'
-				)
-			));
-
-			$new_courses = $moderated = $this->AppUser->Course->find('all', array(
+            $moderated = $this->AppUser->Course->find('all', array(
                 'conditions' => array(
                     'Course.country_id' => $this->Auth->user('country_id'),
-                    'Course.approved' => false,
+                    'Course.approved' => true,
                     'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
                 ),
+                'order' => array(
+                    'Course.updated' => 'ASC'
+                )
+            ));
+        }
+        // new courses
+        if($this->Auth->user('user_role_id') <= 2) {
+			$conditions = array(
+                'Course.approved' => false,
+                'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
+            );
+        	if($this->Auth->user('user_role_id') == 2 AND !empty($this->Auth->user('country_id')))
+        		$conditions['Course.country_id'] = $this->Auth->user('country_id');
+			$new_courses = $this->AppUser->Course->find('all', array(
+                'conditions' => $conditions,
                 'order' => array(
                     'Course.updated' => 'ASC'
                 )
