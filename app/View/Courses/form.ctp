@@ -71,13 +71,7 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 				'value' => 1
 			));	// do or not update the timestamp 
 		}
-	}
-	?>
-	<p>If you leave this box unchecked, the course will not appear in the public listing. </p>
-	<?php
-	echo $this->Form->input('active', array('label' => 'Publish'));	
-	
-	if(!empty($admin)) {
+
 		echo $this->Form->input('user_id', array(
 			'label' => 'Maintainer',
 			'empty' => ' -- nobody -- '
@@ -220,11 +214,18 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 	?>
 </fieldset>
 
+<fieldset>
+    <p>
+        If you leave this box unchecked, the course will not appear in the public listing,
+        so you can complete editing later.
+    </p>
+    <?php
+    echo $this->Form->input('active', array('label' => 'Publish'));
+    ?>
+</fieldset>
+
 <?php
 echo $this->Form->end('submit');
-
-
-
 ?>
 
 
