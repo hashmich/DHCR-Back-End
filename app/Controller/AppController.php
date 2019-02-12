@@ -45,7 +45,7 @@ class AppController extends Controller {
 		'maxLimit' => 200
 	);
 	
-	public $shibUser = array();
+	public $shibUser = null;
 	
 	
 	
@@ -99,43 +99,14 @@ class AppController extends Controller {
 				
 			}
 		}
-		
-		$shibLogin = !empty($_SERVER['HTTP_EPPN']);
-		if($shibLogin) {
-			// eppn: shib-'ID' (Matej said), givenName, surname, mail
-			$shibVars = array(
-					'HTTP_EPPN' => 'shib_eppn',
-					'HTTP_GIVENNAME' => 'first_name',
-					'HTTP_SN' => 'last_name',
-					'HTTP_EMAIL' => 'email');
-			foreach($_SERVER as $k => $v) {
-				if(isset($shibVars[$k]) AND !empty($v) AND $v != '(null)') {
-					$this->shibUser[$shibVars[$k]] = $v;
-				}
-			}
-			// shibboleth might return strange empty-values...
-			if(empty($this->shibUser['shib_eppn']) OR $this->shibUser['shib_eppn'] == '(null)')
-				$this->shibUser = array();
-				$this->set('shibUser', $this->shibUser);
-		}
-		
-		if($this->request->params['action'] != 'login') {
-			if($this->shibUser AND !$this->Auth->user()) {
-				// check for a matching user
-				$this->loadModel('AppUser');
-				$user = $this->AppUser->find('first', array(
-						'contain' => array(),
-						'conditions' => array(
-							'AppUser.shib_eppn' => $this->shibUser['shib_eppn']
-						)
-				));
-				if(empty($user)) {
-					// account has not yet been linked to the DHCR - or not yet registered!!!
-					$this->Flash->set('You have an active external identity provider session (single sign-on), 
-							but you either just logged out from the registry or you do not yet have an account..
-							If you did not register yourself to the DH-Course Registry, please register now.');
-				}
-			}
+
+		if(!empty($_SERVER['HTTP_EPPN'])) {
+            $this->shibUser = new AppUser();
+            if($this->shibUser->isShibUser()) {
+                $this->set('shibUser', $this->shibUser->data);
+            }else{
+                $this->shibUser = null;
+            }
 		}
 	}
 	

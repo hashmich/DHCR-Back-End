@@ -5,6 +5,12 @@ tmp
 .svn
 logs
 
+~*
+/composer.*
+/build.*
+/.buildpath
+/.project
+
 \.idea/
 
 \.settings/
@@ -13,4 +19,4 @@ logs
 
 \.project
 
-app/webroot/css/styles\.css\.map
+/app/webroot/css/styles\.css\.map

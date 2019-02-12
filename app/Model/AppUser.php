@@ -22,6 +22,12 @@ class AppUser extends User {
 	public $name = 'AppUser';
 	
     public $useTable = 'users';
+
+    private $isShibUser = false;
+
+    public function isShibUser() {
+    	return $this->shibUser;
+	}
 	
 	// a set of validation rules, extending or overriding the given rules from the plugin
 	public $validationRules = array(
@@ -44,10 +50,36 @@ class AppUser extends User {
 			)
 		)
 	);
+
+
+
+	public static $mapping = array(
+		'HTTP_EPPN' => 'shib_eppn',
+		'HTTP_GIVENNAME' => 'first_name',
+		'HTTP_SN' => 'last_name',
+		'HTTP_EMAIL' => 'email'
+	);
+
+
 	
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
 		$this->validate = array_merge($this->validate, $this->validationRules);
+
+		// try retrieving the server variables previously set from the Shibboleth login system
+		if(!empty($_SERVER['HTTP_EPPN'])) {
+			foreach($_SERVER as $k => $v) {
+				if(isset(self::$mapping[$k]) AND !empty($v) AND $v != '(null)') {
+					$this->data[self::$mapping[$k]] = $v;
+				}
+			}
+			// shibboleth might return strange empty-values...
+			if(empty($this->data['shib_eppn']) OR $this->data['shib_eppn'] == '(null)') {
+				$this->data = array();
+			}else{
+				$this->isShibUser = true;
+			}
+		}
 	}
 	
 				
@@ -218,6 +250,44 @@ class AppUser extends User {
 		}
 		
 		return $admins;
+	}
+
+
+	public function shibLogin() {
+		if($this->data AND $this->isShibUser) {
+			// find the matching user and log in
+			if(!empty($this->data[$this->name]))
+				$this->data = $this->data[$this->name];
+			$registeredUser = $this->find('first', array(
+				'contain' => array(),
+				'conditions' => array(
+					'or' => array(
+						'AppUser.shib_eppn' => $this->data['shib_eppn'],
+						'AppUser.email' => $this->data['shib_eppn'],
+						'AppUser.shib_eppn' => $this->data['email'],
+						'AppUser.email' => $this->data['email']),
+					'AppUser.active' => true
+				)
+			));
+			if(!empty($registeredUser)) {
+				return $registeredUser;
+			}else{
+				// try searching for persons with the same name, autocreate account...
+				return false;
+			}
+		}
+	}
+
+
+	public function connectAccount() {
+		// save identity provider ID, if not already set
+		if(!empty($this->id)) {
+			$this->recursive = 0;
+			$this->saveField('shib_eppn', $this->data['shib_eppn'], false);
+			if(!$this->data['shib_eppn']) $this->isShibUser = false;
+			return $this->read()[$this->name];
+		}
+		return array();
 	}
 	
 	

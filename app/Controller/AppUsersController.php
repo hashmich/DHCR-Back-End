@@ -44,96 +44,41 @@ class AppUsersController extends UsersController {
 		
 		if($this->Auth->user('user_role_id') < 3) $this->Auth->allow(array('invite'));
 		
-		// save identity provider ID, if not already set
-		if(	$this->Auth->user()
-		AND	empty($this->Auth->user('shib_eppn'))
-		AND	$this->shibUser
-		AND	(!$this->Session->read('Users.block_eppn') 
-			|| $this->Session->read('Users.block_eppn') != $this->shibUser['shib_eppn'])
-		) {
-			$this->{$this->modelClass}->recursive = 0;
-			$this->{$this->modelClass}->id = $this->Auth->user('id');
-			$this->{$this->modelClass}->saveField('shib_eppn', $this->shibUser['shib_eppn'], true);
-			$user = $this->{$this->modelClass}->read()[$this->modelClass];
-			$this->Auth->login();
-			$this->set('auth_user', $user);
-		}
-		
 		if($this->Auth->user()) {
 			if($this->DefaultAuth->isAdmin()) {
 				$this->Auth->allow(array('delete'));
 			}
 			$this->Auth->allow(array('delete_identity'));
+
+			if($this->shibUser AND !$this->Auth->user('shib_eppn')) {
+				$user = $this->shibUser->connectAccount();
+				$this->Auth->login($user);
+				$this->set('auth_user', $user);
+			}
 		}
 		
-		$this->set('title_for_layout', 'User Management');
+		$this->set('title_for_layout', 'Account Management');
 	}
 	
 	
 	public function login() {
-		if(!$this->request->is('post') AND !$this->Auth->user()) {
-			
-			if($this->shibUser) {
-				// find the matching user and log in
-				$user = $this->{$this->modelClass}->find('first', array(
-					'contain' => array(),
-					'conditions' => array(
-						'or' => array(
-							$this->modelClass . '.shib_eppn' => $this->shibUser['shib_eppn'],
-							$this->modelClass . '.email' => $this->shibUser['shib_eppn']),
-						$this->modelClass . '.active' => true
-					)
-				));
-				if(!empty($user)) {
-					if(!empty($user[$this->modelClass]))
-						$user = $user[$this->modelClass];
-					if($this->Auth->login($user)) {
-						$this->Flash->set('You successfully logged in via external identity.');
-						$this->redirect($this->Auth->loginRedirect);
-					}
-
-				}else{
-					/*
-					// try searching for persons with the same name
-					$user = $this->{$this->modelClass}->find('all', array(
-						'contain' => array(),
-						'conditions' => array(
-							$this->modelClass . '.first_name' => $this->shibUser['first_name'],
-							$this->modelClass . '.last_name' => $this->shibUser['last_name'],
-							$this->modelClass . '.active' => true
-						)
-					));
-					//TODO: provide an overview of the results and ask for password, create a new account if no match or no password.
-
-					if(!empty($user)) {
-						$c = count($user);
-						$msg = 'You have been successfully verified by your identity provider (IDP).
-							Please provide the password of your Course Registry account once, 
-							to link your external identity to the local account.
-							If you forgot your password, you may reset your password.';
-						if(count($user) > 1) $msg = 'You have been successfully verified by your identity provider (IDP),
-							but we found more than one account with the same name. 
-							Please pick your account from the list, and provide the password to link 
-							account and external identity.';
-
-						$user = $user[0];
-						$this->set('shib_users', $user);
-						$this->Flash->set($msg);
-
-					}else{
-                        // account has not yet been linked to the DHCR - or not yet registered!!!
-						//TODO: try autocreating an account
-						*/
-                        $this->Flash->set('You have been successfully verified by your identity provider (IDP),
-							but we could not find a matching account in our system.
-							In case you already have an account, please login once using your existing account 
-							to link your external identity to the DH-Course Registry.
-							If you did not register yourself to the Course Registry before, please register now.');
-					//}
-
+		if(!$this->request->is('post') AND !$this->Auth->user() AND $this->shibUser) {
+			if($user = $this->shibUser->shibLogin()) {
+				if(!empty($user[$this->modelClass]))
+					$user = $user[$this->modelClass];
+				if($this->Auth->login($user)) {
+					$this->Flash->set('You successfully logged in via external identity.');
+					$this->redirect($this->Auth->loginRedirect);
 				}
+			}else{
+				$this->Flash->set('You have been successfully verified by your identity provider (IDP),
+					but we could not find a matching account in our system.
+					In case you already have an account, please login once using your existing account 
+					to link your external identity to the DH-Course Registry.
+					If you did not register yourself to the Course Registry before, please register now.');
 			}
 		}
+		#TODO: make sure a message keeps displaying the need to continue registration, if login failed!
 
         // handle any other login errors in parent login method
 		parent::login();

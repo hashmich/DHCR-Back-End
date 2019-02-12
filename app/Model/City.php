@@ -108,7 +108,5 @@ class City extends AppModel {
 			'counterQuery' => ''
 		)
 	);
-	
-	function test() {}
 
 }

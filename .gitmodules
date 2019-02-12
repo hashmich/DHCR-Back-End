@@ -11,3 +11,6 @@
 [submodule "app/Plugin/Cakeclient"]
 	path = app/Plugin/Cakeclient
 	url = https://github.com/hashmich/CakeClient.git
+[submodule "vendors"]
+	path = vendors
+	url = https://github.com/hashmich/phpUnit.git
