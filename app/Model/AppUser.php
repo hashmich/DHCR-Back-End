@@ -26,7 +26,7 @@ class AppUser extends User {
     private $isShibUser = false;
 
     public function isShibUser() {
-    	return $this->shibUser;
+    	return $this->isShibUser;
 	}
 	
 	// a set of validation rules, extending or overriding the given rules from the plugin
@@ -282,9 +282,11 @@ class AppUser extends User {
 	public function connectAccount() {
 		// save identity provider ID, if not already set
 		if(!empty($this->id)) {
+			if(!empty($this->data['shib_eppn']))
+				$this->save(array('shib_eppn' =>  $this->data['shib_eppn']), false);
+			if(empty($this->data['shib_eppn']))
+				$this->isShibUser = false;
 			$this->recursive = 0;
-			$this->saveField('shib_eppn', $this->data['shib_eppn'], false);
-			if(!$this->data['shib_eppn']) $this->isShibUser = false;
 			return $this->read()[$this->name];
 		}
 		return array();
