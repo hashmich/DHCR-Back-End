@@ -104,6 +104,15 @@ class AppController extends Controller {
             $this->shibUser = new AppUser();
             if($this->shibUser->isShibUser()) {
                 $this->set('shibUser', $this->shibUser->data);
+
+                if($this->Auth->user() AND !$this->Auth->user('shib_eppn')
+                AND	(!$this->Session->read('Users.block_eppn')
+                    || $this->Session->read('Users.block_eppn') != $this->shibUser->data['shib_eppn'])
+                ) {
+                    $user = $this->shibUser->connectAccount();
+                    $this->Auth->login($user);
+                    $this->set('auth_user', $user);
+                }
             }else{
                 $this->shibUser = null;
             }

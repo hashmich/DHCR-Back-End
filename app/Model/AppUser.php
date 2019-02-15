@@ -23,10 +23,10 @@ class AppUser extends User {
 	
     public $useTable = 'users';
 
-    private $isShibUser = false;
+    private $__isShibUser = false;
 
     public function isShibUser() {
-    	return $this->isShibUser;
+    	return $this->__isShibUser;
 	}
 	
 	// a set of validation rules, extending or overriding the given rules from the plugin
@@ -77,7 +77,7 @@ class AppUser extends User {
 			if(empty($this->data['shib_eppn']) OR $this->data['shib_eppn'] == '(null)') {
 				$this->data = array();
 			}else{
-				$this->isShibUser = true;
+				$this->__isShibUser = true;
 			}
 		}
 	}
@@ -253,12 +253,12 @@ class AppUser extends User {
 	}
 
 
-	public function shibLogin() {
-		if($this->data AND $this->isShibUser) {
+	public function shibLogin(&$user) {
+		if($this->data AND $this->__isShibUser) {
 			// find the matching user and log in
 			if(!empty($this->data[$this->name]))
 				$this->data = $this->data[$this->name];
-			$registeredUser = $this->find('first', array(
+			$user = $this->find('first', array(
 				'contain' => array(),
 				'conditions' => array(
 					'or' => array(
@@ -269,25 +269,44 @@ class AppUser extends User {
 					'AppUser.active' => true
 				)
 			));
-			if(!empty($registeredUser)) {
-				return $registeredUser;
+			if(!empty($user)) {
+				return 'unique_identification';
 			}else{
 				// try searching for persons with the same name, autocreate account...
-				return false;
+				$usersByName = $this->find('all', array(
+					'contain' => array(),
+					'conditions' => array(
+						'and' => array(
+							'AppUser.first_name' => $this->data['first_name'],
+							'AppUser.last_name' => $this->data['last_name']
+						),
+						'AppUser.active' => true
+					)
+				));
+				return 'ambiguous_identification';
 			}
 		}
+		return false;
 	}
 
 
-	public function connectAccount() {
+	public function connectAccount($user = array()) {
+		if(!empty($user)) {
+			if(!empty($user[$this->name])) $user = $user[$this->name];
+			foreach($user as $k => $v) {
+				// do not allow overriding existing data
+				if(empty($this->data[$k]) OR $k == 'id')
+					$this->data[$k] = $v;
+			}
+			if(!empty($this->data['id'])) $this->id = $this->data['id'];
+		}
 		// save identity provider ID, if not already set
-		if(!empty($this->id)) {
-			if(!empty($this->data['shib_eppn']))
-				$this->save(array('shib_eppn' =>  $this->data['shib_eppn']), false);
-			if(empty($this->data['shib_eppn']))
-				$this->isShibUser = false;
+		if(!empty($this->id) AND !empty($this->data['shib_eppn'])) {
+			$result = $this->save($this->data, false);
 			$this->recursive = 0;
-			return $this->read()[$this->name];
+			$result = $this->read();
+			if(!empty($result[$this->name])) $result = $result[$this->name];
+			return $result;
 		}
 		return array();
 	}

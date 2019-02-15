@@ -49,12 +49,6 @@ class AppUsersController extends UsersController {
 				$this->Auth->allow(array('delete'));
 			}
 			$this->Auth->allow(array('delete_identity'));
-
-			if($this->shibUser AND !$this->Auth->user('shib_eppn')) {
-				$user = $this->shibUser->connectAccount();
-				$this->Auth->login($user);
-				$this->set('auth_user', $user);
-			}
 		}
 		
 		$this->set('title_for_layout', 'Account Management');
@@ -63,13 +57,17 @@ class AppUsersController extends UsersController {
 	
 	public function login() {
 		if(!$this->request->is('post') AND !$this->Auth->user() AND $this->shibUser) {
-			if($user = $this->shibUser->shibLogin()) {
+			$user = array();
+			$result = $this->shibUser->shibLogin($user);
+			if($result === 'unique_identification') {
 				if(!empty($user[$this->modelClass]))
 					$user = $user[$this->modelClass];
 				if($this->Auth->login($user)) {
 					$this->Flash->set('You successfully logged in via external identity.');
 					$this->redirect($this->Auth->loginRedirect);
 				}
+			}elseif($result === 'ambiguous_identification') {
+			
 			}else{
 				$this->Flash->set('You have been successfully verified by your identity provider (IDP),
 					but we could not find a matching account in our system.
