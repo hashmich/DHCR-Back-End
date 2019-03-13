@@ -2,11 +2,11 @@ Dear <?php echo $admin['AppUser']['first_name']; ?>,
 
 a new course has been published!
 
-In your role as a moderator, we would like to ask you to review the course as soon as possible.
+In your role as a moderator, we would like to ask you to review this course as soon as possible.
 Please check, if the course is related to DH and if the chosen tags are appropriate.
 A guideline about which courses can be regarded as DH will be available soon.
 
-# EXPECTED ACTIONS:
+#EXPECTED ACTIONS:
 Hit "Approve" if you think this is a proper DH course.
 In case you think there is something wrong, you may either edit the course data or unpublish the record.
 However, you should contact the lecturer or the person that added the data.
@@ -20,7 +20,7 @@ The provided lecturer contact is:
 
 ====================================================
 
-# Quick Links:
+#Quick Links:
 Approve:    <?php echo Router::url('/courses/approve/'.$course['Course']['approval_token'], true); ?>
 
 Login required:
