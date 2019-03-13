@@ -168,8 +168,14 @@
     <script type="text/javascript">
         var _paq = _paq || [];
         // tracker methods like "setCustomDimension" should be called before "trackPageView"
+        <?php
+        if (!empty($auth_user)) {
+            echo sprintf("_paq.push(['setUserId', '%s']);", Security::hash($auth_user['id']), null, true);
+        }
+        ?>
         _paq.push(['trackPageView']);
         _paq.push(['enableLinkTracking']);
+        
         (function() {
             var u="//matomo.acdh.oeaw.ac.at/";
             _paq.push(['setTrackerUrl', u+'piwik.php']);
