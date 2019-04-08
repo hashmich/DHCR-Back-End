@@ -247,7 +247,7 @@ class AppUsersController extends UsersController {
 				$success = true;
 			}else{
 				$this->Flash->set('The user data did not pass validation. Please check the details.');
-				if(empty($this->Auth->user())) {
+				if(!$this->Auth->user()) {
 					$this->Flash->set('Further user details need to be amended. Please log in first.');
 				}
 				if(!$this->Auth->user()) {

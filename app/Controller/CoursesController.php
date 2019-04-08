@@ -733,8 +733,12 @@ class CoursesController extends AppController {
 		}
 
 
-        $tadirahObjects = $this->Course->TadirahObject->find('all', array('contain' => array()));
-        $tadirahTechniques = $this->Course->TadirahTechnique->find('all', array('contain' => array()));
+        $tadirahObjects = $this->Course->TadirahObject->find('all', array(
+        	'contain' => array(),
+			'order' => 'TadirahObject.name ASC'));
+        $tadirahTechniques = $this->Course->TadirahTechnique->find('all', array(
+        	'contain' => array(),
+			'order' => 'TadirahTechnique.name ASC'));
         $disciplines = $this->Course->Discipline->find('all', array(
             'contain' => array(),
             'order' => 'Discipline.name ASC'
