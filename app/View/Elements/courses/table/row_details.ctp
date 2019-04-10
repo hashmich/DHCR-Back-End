@@ -55,7 +55,7 @@ if($state !== 'Green' AND !empty($edit)) {
 					<dd>
 						<?php
 						$value = (!empty($record['Course']['start_date'])) ? $record['Course']['start_date'] : ' - ';
-						$value = explode(';', $value);
+						$value = explode(array(';',','), $value);
 						if($record['Course']['recurring']) {
 							foreach($value as &$date) {
 								$date = trim($date);
