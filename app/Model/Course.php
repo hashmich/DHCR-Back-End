@@ -194,7 +194,7 @@ class Course extends AppModel {
 			),
 			'multi_date' => array(
 				'rule' => 'multiDate',
-				'message' => 'Dates must follow the format YYYY-MM-DD, many dates separated by ";".'
+				'message' => 'Dates must follow the format YYYY-MM-DD, many dates separated by ";" or ",".'
 			)
 		),
 		'recurring' => array(
@@ -340,9 +340,9 @@ class Course extends AppModel {
 	
 	
 	public function multiDate($check) {
-		$check = explode(';', $check[key($check)]);
+		$check = explode(array(',',';'), $check[key($check)]);
 		foreach($check as $k => $date) {
-			if(!preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $date))
+			if(!preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', trim($date)))
 				return false;
 		}
 		return true;

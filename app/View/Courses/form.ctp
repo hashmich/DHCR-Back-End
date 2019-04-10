@@ -41,44 +41,45 @@ echo $this->element('Utils.validation_errors');
 
 
 echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
+
+if($this->action == 'edit') {
+    ?>
+    <fieldset>
+        <?php echo $this->Form->input('id', array('disabled' => true, 'type' => 'text')); ?>
+    
+        <p>Courses are not displayed any more, if the "last-update" field's date is too old. </p>
+        <p>To mark this record as up-to-date, you have to submit this form, even if the information did not change.</p>
+        
+        <?php
+        if(!empty($admin)) {
+            ?>
+            <p>
+                Leave this box unchecked to <strong>not</strong> update the "last-update" field when saving your revisions.
+            </p>
+            <p>
+                Owners of course records are emailed based on the date in the field "last-update"
+                to keep their entries alive.
+                Please consider this if you are making changes to entries not maintained by yourself.
+            </p>
+            <?php
+            echo $this->Form->input('update', array(
+                'type' => 'checkbox',
+                'label' => 'Update Timestamp',
+                'checked' => true,
+                'value' => 1
+            ));	// do or not update the timestamp
+        }
+
+        echo $this->Form->input('user_id', array(
+            'label' => 'Maintainer',
+            'empty' => ' -- nobody -- '
+        ));
+        ?>
+    </fieldset>
+    <?php
+}
 ?>
 
-<fieldset>
-	<?php
-	if($this->action == 'edit') {
-		echo $this->Form->input('id', array('disabled' => true, 'type' => 'text'));
-		?>
-		
-		<p>Courses are not displayed any more, if the "last-update" field's date is too old. </p>
-		<p>To mark this record as up-to-date, you have to submit this form, even if the information did not change.</p>
-		
-		<?php
-		if(!empty($admin)) {
-			?>
-			<p>
-				Leave this box unchecked to <strong>not</strong> update the "last-update" field when saving your revisions.
-			</p>
-			<p>
-				Owners of course records are emailed based on the date in the field "last-update" 
-				to keep their entries alive.
-				Please consider this if you are making changes to entries not maintained by yourself.
-			</p>
-			<?php
-			echo $this->Form->input('update', array(
-				'type' => 'checkbox',
-				'label' => 'Update Timestamp',
-				'checked' => true,
-				'value' => 1
-			));	// do or not update the timestamp 
-		}
-
-		echo $this->Form->input('user_id', array(
-			'label' => 'Maintainer',
-			'empty' => ' -- nobody -- '
-		));
-	}
-	?>
-</fieldset>
 <fieldset>
 	<?php
 	echo $this->Form->input('name', array(
@@ -91,7 +92,9 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 	));
 	echo $this->Form->input('language_id', array('empty' => ' -- none -- '));
 	echo $this->Form->input('access_requirements');
-	echo $this->Form->input('start_date', array('title' => 'One or many course start dates, format YYYY-MM-DD, separated by ";".'));
+	echo $this->Form->input('start_date', array(
+        'title' => 'One or many course start dates, format YYYY-MM-DD, separated by ";" or ",".',
+        'placeholder' => 'YYYY-MM-DD (multiple dates separated by ",")'));
 	echo $this->Form->input('recurring', array(
 		'title' => 'Check box if the course begins every year at the same date. Uncheck if the course takes place only once.',
 		'required' => false
