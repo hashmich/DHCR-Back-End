@@ -93,8 +93,8 @@ if($this->action == 'edit') {
 	echo $this->Form->input('language_id', array('empty' => ' -- none -- '));
 	echo $this->Form->input('access_requirements');
 	echo $this->Form->input('start_date', array(
-        'title' => 'One or many course start dates, format YYYY-MM-DD, separated by ";" or ",".',
-        'placeholder' => 'YYYY-MM-DD (multiple dates separated by ",")'));
+        'title' => 'One or many course start dates, format YYYY-MM-DD, separated by ";".',
+        'placeholder' => 'YYYY-MM-DD (multiple dates separated by ";")'));
 	echo $this->Form->input('recurring', array(
 		'title' => 'Check box if the course begins every year at the same date. Uncheck if the course takes place only once.',
 		'required' => false
