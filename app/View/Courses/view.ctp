@@ -41,7 +41,7 @@ $fieldlist = array(
 		'Course.start_date' => array(),
 		'Course.ects' => array('label' => 'ECTS'),
 		'Course.lecturer' => array(),
-		'Course.pid' => array('label' => 'PID'),
+		'Course.pid' => array('label' => 'Link to Detail Page'),
 		'Course.access_requirements' => array(),
 		'Course.description' => array(),
 		'Course.keywords' => array(),
@@ -108,6 +108,7 @@ foreach($fieldlist as $key => $options) {
 					'action' => 'view',
 					$course['Course']['id']);
 			$value = $this->Html->link(Router::url($url, true), $url);
+			break;
 		case 'Course.keywords':
 			$keywords = array();
 			if(!empty($course['Discipline'])) {
@@ -137,7 +138,7 @@ foreach($fieldlist as $key => $options) {
 }
 
 
-if(!empty($edit) AND $auth_user['is_admin']) {
+if(!empty($edit) AND !empty($auth_user) AND $auth_user['is_admin']) {
 	?>
 	<dt>Maintainer</dt>
 	<dd>
