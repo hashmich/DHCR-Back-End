@@ -69,8 +69,11 @@ foreach($fieldlist as $key => $options) {
 	
 	switch($key) {
 		case 'Course.info_url':
-		case 'Course.guide_url':
 			if(trim($value) != '-') $value = $this->Html->link($value, $value);
+			break;
+		case 'Course.guide_url':
+			if($course['Course']['info_url'] == $course['Course']['guide_url']) $value = '-';
+		    if(trim($value) != '-') $value = $this->Html->link($value, $value);
 			break;
 		case 'Course.status':
 			$value = 'record actively maintained';
