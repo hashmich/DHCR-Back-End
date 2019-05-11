@@ -42,7 +42,7 @@ $filter = $this->Session->read('filter');
 		'label' => 'Education'
 	));
 	
-	echo $this->element('taxonomy/taxonomy_filter', array('dropdownChecklist' => true));
+	echo $this->element('taxonomy/taxonomy_filter');
 	
 	echo $this->Form->end(array(
 		'label' => 'Show Results',

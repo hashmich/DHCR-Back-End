@@ -17,39 +17,44 @@
  */
 
 if(!function_exists('getOpts')) {
-	function getOpts($modelName, $habtmModel, $record, $request, $level = null) {
-		if(!empty($level)) $level = ' ' . $level;
+	function getOpts($modelName, $habtmModel, $optionEntry, $formData, $noHabtm = false) {
 		$crossModel = Inflector::pluralize($modelName).$habtmModel;
 		$label = array();
-		if(!empty($record[$habtmModel]['description'])) 
-			$label['title'] = $record[$habtmModel]['description'];
-		if(!empty($record[$habtmModel]['name']))
-			$label['text'] = $record[$habtmModel]['name'];
+		if(!empty($optionEntry[$habtmModel]['description']))
+			$label['title'] = $optionEntry[$habtmModel]['description'];
+		if(!empty($optionEntry[$habtmModel]['name']))
+			$label['text'] = $optionEntry[$habtmModel]['name'];
 		$opts = array(
 			'empty' => false,
 			'required' => false,
 			'onchange' => false,
 			'type' => 'checkbox',
-			'value' => $record[$habtmModel]['id'],
+			'value' => $optionEntry[$habtmModel]['id'],
 			'label' => $label,
 			'name' => "data[$habtmModel][$habtmModel][]",
-			'div' => array('class' => "checkbox$level"),
+			'div' => array('class' => 'checkbox'),
 			'hiddenField' => false,
 			//'datapath' => "$HabtmModel.$CrossTableModel.$habtm_model_id",
 			// the js code is aware of the crossTable by the datarelation and starts iteration on the existing records
 			'datapath' => $habtmModel.'.'.$crossModel.'.'.Inflector::underscore($habtmModel).'_id',
 			'datarelation' => $modelName.'.habtm.'.$habtmModel
 		);
-		if(!empty($request[$habtmModel][$habtmModel])) {
-			if(in_array($record[$habtmModel]['id'], $request[$habtmModel][$habtmModel])) {
+		
+		// short data path for usage in filter form
+		if($noHabtm) $opts['name'] = "data[$habtmModel][]";
+		
+		
+		// the request data array changes format after form submission!
+		if(!empty($formData[$habtmModel][$habtmModel])) {
+			// after submission with validation errors
+		    if(in_array($optionEntry[$habtmModel]['id'], $formData[$habtmModel][$habtmModel])) {
 				$opts['checked'] = true;
-				//$opts['data-cross-id'] = $crossModel . $record[$habtmModel][$crossModel]['id'];
 			}
-		}elseif(!empty($request[$habtmModel])) {
-			foreach($request[$habtmModel] as $k => $entry) {
-				if(!empty($entry['id']) AND $record[$habtmModel]['id'] == $entry['id']) {
+		}elseif(!empty($formData[$habtmModel])) {
+			// first call, array format as is from database
+		    foreach($formData[$habtmModel] as $selection) {
+				if(!empty($selection['id']) AND $optionEntry[$habtmModel]['id'] == $selection['id']) {
 					$opts['checked'] = true;
-					$opts['data-cross-id'] = $crossModel . $entry[$crossModel]['id'];
 					break;
 				}
 			}
@@ -58,7 +63,7 @@ if(!function_exists('getOpts')) {
 	}
 }
 
-$classes = (!empty($errors) AND !empty($errors[$habtmModel])) ? ' error' : '';
+$classes = (!empty($errors) AND !empty($habtmModel) AND !empty($errors[$habtmModel])) ? ' error' : '';
 $classes .= (!empty($dropdown)) ? ' dropdown_checklist' : '';
 ?>
 
@@ -97,26 +102,11 @@ $classes .= (!empty($dropdown)) ? ' dropdown_checklist' : '';
 				));
 			}
 			
+			// iterate the options of $habtmModel
 			$varname = Inflector::variable(Inflector::pluralize($habtmModel));
-			foreach($$varname as $pk => $pv) {
-				$level = null;
-				if(!empty($pv['children'])) $level = 'primary';
-				$opts = getOpts($modelName, $habtmModel, $pv, $this->request->data, $level);
-				echo $this->Form->input($habtmModel . '.' . $habtmModel . $pv[$habtmModel]['id'], $opts);
-				
-				if(!empty($pv['children'])) {
-					foreach($pv['children'] as $sk => $sv) {
-						$opts = getOpts($modelName, $habtmModel, $sv, $this->request->data, 'secondary');
-						echo $this->Form->input($habtmModel . '.' . $habtmModel . $sv[$habtmModel]['id'], $opts);
-						
-						if(!empty($sv['children'])) {
-							foreach($sv['children'] as $tk => $tv) {
-								$opts = getOpts($modelName, $habtmModel, $tv, $this->request->data, 'tertiary');
-								echo $this->Form->input($habtmModel . '.' . $habtmModel . $tv[$habtmModel]['id'], $opts);
-							}
-						}
-					}
-				}
+			foreach($$varname as $entry) {
+				$opts = getOpts($modelName, $habtmModel, $entry, $this->request->data, !empty($noHabtm));
+				echo $this->Form->input($habtmModel . '.' . $habtmModel . $entry[$habtmModel]['id'], $opts);
 			}
 			?>
 		</div>

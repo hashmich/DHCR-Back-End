@@ -16,8 +16,7 @@
  * limitations under the License.
  */
 
- 
-if(empty($dropdownChecklist)) $dropdownChecklist = false;
+
 ?>
 <noscript>
 	<p class="note">Enable Javascript to make use of the taxonomy filters. </p>
@@ -26,7 +25,8 @@ if(empty($dropdownChecklist)) $dropdownChecklist = false;
 echo $this->element('taxonomy/selector', array(
 	'habtmModel' => 'Discipline',
 	'label' => 'Disciplines',
-	'dropdown' => $dropdownChecklist,
+	'dropdown' => true,
+	'noHabtm' => true,
 	'buttons' => true,
 	'autosubmit' => true
 ));
@@ -34,14 +34,16 @@ echo $this->element('taxonomy/selector', array(
 echo $this->element('taxonomy/selector', array(
 	'habtmModel' => 'TadirahTechnique',
 	'label' => 'Techniques',
-	'dropdown' => $dropdownChecklist,
+	'dropdown' => true,
+	'noHabtm' => true,
 	'buttons' => true,
 	'autosubmit' => true
 ));
 echo $this->element('taxonomy/selector', array(
 	'habtmModel' => 'TadirahObject',
 	'label' => 'Objects',
-	'dropdown' => $dropdownChecklist,
+	'dropdown' => true,
+	'noHabtm' => true,
 	'buttons' => true,
 	'autosubmit' => true
 ));

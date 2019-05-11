@@ -206,7 +206,7 @@ class Course extends AppModel {
 		'ects' => array(
 			'decimal' => array(
 				'rule' => array('decimal'),
-				'message' => 'Only numbers and floats.',
+				'message' => 'Only integers and floats.',
 				'allowEmpty' => true,
 				'required' => false
 			),
@@ -274,6 +274,7 @@ class Course extends AppModel {
         // trigger moderator notification for new courses, that are published
         if( empty($this->data['Course']['approved']) AND !empty($this->data['Course']['active'])
         AND empty($this->data['Course']['mod_mailed'])
+		AND Configure::read('debug') == 0
         ) {
             $admins = $this->AppUser->getModerators($this->data['Course']['country_id'], $user_admin = true);
             if($admins) {
