@@ -19,7 +19,7 @@ if(!empty($data[$model])) {
             continue;
         // handle foreign keys
         if(strpos($fieldname, '_id') !== false) {
-            $modelname = Inflector::camelize(substr($fieldname, 0, strlen($fieldname) - 3));
+            $modelname = Inflector::classify(substr($fieldname, 0, strlen($fieldname) - 3));
             $value = $course[$modelname]['name'];
             $fieldname = $modelname;
         }
