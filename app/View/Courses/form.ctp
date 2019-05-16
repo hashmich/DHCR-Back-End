@@ -25,9 +25,13 @@ if($this->action == 'edit') {
 	<?php
 	echo $this->Html->link('Delete this Course', '/courses/delete/' . $this->request->data['Course']['id'], array(
 		'confirm' => "Are you sure? /n
-			Courses not updated for " . round(Configure::read('App.CourseArchivalPeriod') / (60*60*24*365), 1) . " years will be 
-			archived for later research and disappear from your dashboard automatically. \n
-			Please only remove this entry, if it was only created by mistake. \n\n
+			Courses, that passed their expiry without being updated,
+			will disappear from the public listing automatically.
+			They will show up in your dashbord only a little longer,
+			in case you missed to update the entry and want it to stay visible. \n\n
+			We want to keep historical data for later research.\n\n
+			Please only remove this entry, if it was only created
+			by mistake or the data is inapropriate for the DHCR. \n\n
 			You can uncheck the 'publish' option if you do not want this entry to display in the registry any longer and 
 			stop the update reminder email service."
 	));
