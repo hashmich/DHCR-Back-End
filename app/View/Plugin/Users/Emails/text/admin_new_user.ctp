@@ -20,7 +20,7 @@ if(!empty($data[$model])) {
         // handle foreign keys
         if(strpos($fieldname, '_id') !== false) {
             $modelname = Inflector::classify(substr($fieldname, 0, strlen($fieldname) - 3));
-            $value = $course[$modelname]['name'];
+            $value = $data[$modelname]['name'];
             $fieldname = $modelname;
         }
         switch($fieldname) {
