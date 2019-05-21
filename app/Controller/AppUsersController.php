@@ -369,16 +369,6 @@ class AppUsersController extends UsersController {
 	
 	// technically, this is a admin-triggered password reset - thus the email template reads somewhat different
 	public function invite($param = null) {
-		$mailOpts = array(
-			'template' => 'invite_user',
-			'subject' => 'Join the Digital Humanities Course Registry',
-			'bcc' => $this->Auth->user('email'),
-			'cc' => Configure::read('App.defaultCc'),
-			'sender' => Configure::read('App.defaultEmail'),
-			'replyTo' => $this->Auth->user('email')
-		);
-		if(Configure::read('debug') > 0) $mailOpts['transport'] = 'Debug';
-		
 		if(!empty($param)) {
 			if(ctype_digit($param)) {
 				// invite individual user - $param == $id
@@ -390,9 +380,7 @@ class AppUsersController extends UsersController {
 					)
 				));
 				if($user AND !empty($user[$this->modelClass]['email'])) {
-					$mailOpts['email'] = $user[$this->modelClass]['email'];
-					$mailOpts['data'] = $user;
-					$this->_sendUserManagementMail($mailOpts);
+					$this->__invite($user);
 					$this->Flash->set('User will receive a reminder email.');
 				}
 				
@@ -407,9 +395,7 @@ class AppUsersController extends UsersController {
 				if(!empty($users)) {
 					foreach($users as $user) {
 						if($user AND !empty($user[$this->modelClass]['email'])) {
-							$mailOpts['email'] = $user[$this->modelClass]['email'];
-							$mailOpts['data'] = $user;
-							$this->_sendUserManagementMail($mailOpts);
+							$this->__invite($user);
 						}
 					}
 					$this->Flash->set('Users will receive a reminder email.');
@@ -422,9 +408,7 @@ class AppUsersController extends UsersController {
 			if(!empty($this->request->data[$this->modelClass])) {
 				if($user = $this->{$this->modelClass}->inviteRegister($this->request->data)) {
 					if(!empty($user[$this->modelClass]['email'])) {
-						$mailOpts['email'] = $user[$this->modelClass]['email'];
-						$mailOpts['data'] = $user;
-						$this->_sendUserManagementMail($mailOpts);
+						$this->__invite($user);
 						$this->Flash->set('User successfully invited and emailed.');
 					}
 					$this->redirect('/users/dashboard');
@@ -432,6 +416,21 @@ class AppUsersController extends UsersController {
 			}
 			$this->_setOptions();
 		}
+	}
+	
+	private function __invite($user = array()) {
+		$mailOpts = array(
+			'template' => 'invite_user',
+			'subject' => 'Join the Digital Humanities Course Registry',
+			'bcc' => $this->Auth->user('email'),
+			'cc' => Configure::read('App.defaultCc'),
+			'sender' => Configure::read('App.defaultEmail'),
+			'replyTo' => $this->Auth->user('email')
+		);
+		if(Configure::read('debug') > 0) $mailOpts['transport'] = 'Debug';
+		$mailOpts['email'] = $user[$this->modelClass]['email'];
+		$mailOpts['data'] = $user;
+		$this->_sendUserManagementMail($mailOpts);
 	}
 	
 	
