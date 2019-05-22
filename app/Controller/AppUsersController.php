@@ -147,7 +147,8 @@ class AppUsersController extends UsersController {
 		$eppn = $this->Auth->user('shib_eppn');
 		$this->{$this->modelClass}->id = $this->Auth->user('id');
 		$this->{$this->modelClass}->saveField('shib_eppn', null, false);
-		$this->Auth->login($this->{$this->modelClass}->read()[$this->modelClass]);
+		$user = $this->{$this->modelClass}->read();
+		$this->Auth->login($user[$this->modelClass]);
 		$this->Session->write('Users.block_eppn', $eppn);
 		$this->redirect('/users/profile');
 	}
@@ -294,7 +295,7 @@ class AppUsersController extends UsersController {
 			)
 		));
 		// moderators
-		if($this->Auth->user('user_role_id') == 2 AND !empty($this->Auth->user('country_id'))) {
+		if($this->Auth->user('user_role_id') == 2 AND $this->Auth->user('country_id')) {
             $moderated = $this->AppUser->Course->find('all', array(
                 'conditions' => array(
                     'Course.country_id' => $this->Auth->user('country_id'),
@@ -312,7 +313,7 @@ class AppUsersController extends UsersController {
                 'Course.approved' => false,
                 'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
             );
-        	if($this->Auth->user('user_role_id') == 2 AND !empty($this->Auth->user('country_id')))
+        	if($this->Auth->user('user_role_id') == 2 AND $this->Auth->user('country_id'))
         		$conditions['Course.country_id'] = $this->Auth->user('country_id');
 			$new_courses = $this->AppUser->Course->find('all', array(
                 'conditions' => $conditions,
@@ -348,7 +349,9 @@ class AppUsersController extends UsersController {
 					)),
 					'conditions' => $conditionsInvited
 				));
-				foreach($invited as $k => $record) if(empty($record['Institution']['id'])) unset($invited[$k]);
+				// remove all other invited users for national moderators only
+				if(!$this->Auth->user('user_admin'))
+					foreach($invited as $k => $record) if(empty($record['Institution']['id'])) unset($invited[$k]);
 				
 				$this->set(compact('unapproved', 'invited'));
 				$this->render('admin_dashboard');
