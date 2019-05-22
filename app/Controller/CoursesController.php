@@ -270,12 +270,6 @@ class CoursesController extends AppController {
 		
 		if(!empty($this->request->data['Course'])) {
 			// check the ID has been autorized correctly
-			$id = $this->Session->read('edit.Course.id');
-			if(!$id) $this->redirect(array(
-				'controller' => 'users',
-				'action' => 'dashboard'
-			));
-			
 			if(!$admin) {
 				$this->request->data['Course']['user_id'] = $this->Auth->user('id');
 				unset($this->request->data['Course']['created']);
@@ -311,7 +305,6 @@ class CoursesController extends AppController {
 			}
 		}else{
 			$this->request->data = $course;
-			$this->Session->write('edit.Course.id', $id);
 		}
 		
 		$this->_setOptions($admin);

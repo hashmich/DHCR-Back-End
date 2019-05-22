@@ -63,7 +63,7 @@ class AppController extends Controller {
 
 		// reset filter if moving somewhere else
         if( $this->request->controller != 'courses' AND $this->request->action != 'index'
-        AND empty($this->Auth->user())) {
+        AND !$this->Auth->user()) {
             $this->_resetFilter();
         }
 
@@ -80,8 +80,6 @@ class AppController extends Controller {
 		}
 		
 		$this->set('modelName', $this->modelClass);
-		
-		if($this->request->params['action'] != 'edit') $this->Session->delete('edit');
 		
 		// for debugging purposes
 		if(!$this->Auth->user() AND strpos(APP, 'xampp') !== false AND Configure::read('debug') > 0) {
