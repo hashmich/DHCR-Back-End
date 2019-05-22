@@ -291,6 +291,7 @@ class AppUsersController extends UsersController {
 		$courses = $this->AppUser->Course->find('all', array(
 			'conditions' => array(
 				'Course.user_id' => $user_id,
+				'Course.deleted' => false,
 				'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
 			)
 		));
@@ -300,6 +301,8 @@ class AppUsersController extends UsersController {
                 'conditions' => array(
                     'Course.country_id' => $this->Auth->user('country_id'),
                     'Course.approved' => true,
+                    'Course.deleted' => false,
+                    'Course.active' => true,
                     'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
                 ),
                 'order' => array(
@@ -311,6 +314,8 @@ class AppUsersController extends UsersController {
         if($this->Auth->user('user_role_id') <= 2) {
 			$conditions = array(
                 'Course.approved' => false,
+                'Course.active' => true,
+                'Course.deleted' => false,
                 'Course.updated >' => date('Y-m-d H:i:s', time() - Configure::read('App.CourseArchivalPeriod'))
             );
         	if($this->Auth->user('user_role_id') == 2 AND $this->Auth->user('country_id'))

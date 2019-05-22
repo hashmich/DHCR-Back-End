@@ -359,18 +359,42 @@ class CoursesController extends AppController {
 			'action' => 'dashboard'
 		));
 		
+		
 		$conditions = array('Course.id' => $id);
-		if($this->Auth->user('is_admin') OR $this->Auth->user('user_role_id') < 3)
-			$admin = true;
-		else
+		if(!$this->Auth->user('is_admin') AND $this->Auth->user('user_role_id') > 2)
 			$conditions['Course.user_id'] = $this->Auth->user('id');
 		
-		$this->Course->deleteAll($conditions, $cascade = true);
+		$course = $this->Course->find('first', array(
+			'conditions' => $conditions,
+			'contain' => array()));
 		
-		$this->redirect(array(
+		if(empty($course)) $this->redirect(array(
 			'controller' => 'users',
 			'action' => 'dashboard'
 		));
+		
+		if(!empty($this->request->data)) {
+			$message = 'The course has been removed.';
+			if($this->request->data['Course']['deletion_reason_id'] >= 4) {
+				$message = 'The course has been moved to archive';
+				$this->Course->id = $id;
+				$this->Course->save(array(
+					'deleted' => true
+				), array('validate' => false));
+			}else{
+				$this->Course->delete($id, $cascade = true);
+			}
+			
+			$this->Flash->set($message);
+			
+			$this->redirect(array(
+				'controller' => 'users',
+				'action' => 'dashboard'
+			));
+		}
+		
+		$this->request->data = $course;
+		// render form
 	}
 	
 	
@@ -456,6 +480,7 @@ class CoursesController extends AppController {
 		if(empty($filter)) $filter = $this->_setupFilter();
 		// set some filter properties that are NOT editable via the filter form - so $this->filter remains empty if no filter is set
 		$filter['Course.active'] = 1;	// active will be used as an user-option to unpublish the record
+		$filter['Course.deleted'] = false;
 		$filter['Course.updated >'] = date('Y-m-d H:i:s', time() - Configure::read('App.CourseExpirationPeriod'));
 		return $filter;
 	}
