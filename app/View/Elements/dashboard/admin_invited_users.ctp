@@ -28,7 +28,7 @@ if(empty($invited)) {
 		'Institution.name' => array('label' => 'Institution'),
 		'AppUser.about' => array('label' => 'About'),
 		'AppUser.email' => array('label' => 'Email'),
-		'AppUser.telephone' => array('label' => 'Telephone')
+        'AppUser.created' => array('label' => 'Created')
 	);
 	
 	echo '<div class="scroll_wrapper">';

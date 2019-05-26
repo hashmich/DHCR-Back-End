@@ -349,14 +349,14 @@ class AppUsersController extends UsersController {
 				));
 				
 				$invited = $this->AppUser->find('all', array(
-					'contain' => array('Institution' => array(
-						'conditions' => array('Institution.country_id' => $this->Auth->user('country_id'))
-					)),
+					'contain' => array('Institution'),
 					'conditions' => $conditionsInvited
 				));
 				// remove all other invited users for national moderators only
 				if(!$this->Auth->user('user_admin'))
-					foreach($invited as $k => $record) if(empty($record['Institution']['id'])) unset($invited[$k]);
+					foreach($invited as $k => $record)
+						if($record['Institution']['id'] != $this->Auth->user('country_id'))
+							unset($invited[$k]);
 				
 				$this->set(compact('unapproved', 'invited'));
 				$this->render('admin_dashboard');
