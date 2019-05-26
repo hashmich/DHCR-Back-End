@@ -372,7 +372,8 @@ class CoursesController extends AppController {
 				$message = 'The course has been moved to archive';
 				$this->Course->id = $id;
 				$this->Course->save(array(
-					'deleted' => true
+					'deleted' => true,
+					'deletion_reason_id' => $this->request->data['Course']['deletion_reason_id']
 				), array('validate' => false));
 			}else{
 				$this->Course->delete($id, $cascade = true);
@@ -387,6 +388,8 @@ class CoursesController extends AppController {
 		}
 		
 		$this->request->data = $course;
+		$deletionReasons = $this->Course->DeletionReason->find('list');
+		$this->set(compact($deletionReasons));
 		// render form
 	}
 	
@@ -434,6 +437,7 @@ class CoursesController extends AppController {
 			'contain' => array('CourseParentType'),
 			'fields' => array('CourseType.id','CourseType.name','CourseParentType.name')
 		));
+		$courseDurationUnits = $this->Course->CourseDurationUnit->find('list');
 		
 		$this->_setTaxonomy();
 		
@@ -443,7 +447,8 @@ class CoursesController extends AppController {
 			'locations',
 			'languages',
 			'courseTypes',
-			'admin'
+			'admin',
+			'courseDurationUnits'
 		));
 	}
 	

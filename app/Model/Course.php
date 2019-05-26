@@ -79,6 +79,14 @@ class Course extends AppModel {
 			'AppUser' => array(
 					'className' => 'AppUser',
 					'foreignKey' => 'user_id'
+			),
+			'DeletionReason' => array(
+					'className' => 'DeletionReason',
+					'foreignKey' => 'deletion_reason_id'
+			),
+			'CourseDurationUnit' => array(
+					'className' => 'CourseDurationUnit',
+					'foreignKey' => 'course_duration_unit_id'
 			)
 	);
 	
@@ -197,6 +205,24 @@ class Course extends AppModel {
 				'message' => 'Dates must follow the format YYYY-MM-DD, many dates separated by ";".'
 			)
 		),
+		'duration' => array(
+			'integer' => array(
+				'rule' => 'integer',
+				'message' => 'Please provide an integer number for duration.'
+			),
+			'positive' => array(
+				'rule' => array('comparison', '>=', 0),
+				'message' => 'Duration must be a positive number.'
+			)
+		),
+		'course_duration_unit_id' => array(
+			'from_list' => array(
+				'rule' => array('checkList', 'CourseDurationUnit'),
+				'message' => 'Only the provided options are allowed.',
+				'allowEmpty' => false,
+				'required' => true
+			),
+		),
 		'recurring' => array(
 			'bool' => array(
 				'rule' => 'boolean',
@@ -212,7 +238,7 @@ class Course extends AppModel {
 			),
 			'positive' => array(
 				'rule' => array('comparison', '>=', 0),
-				'message' => 'ECTS value must be positive'
+				'message' => 'ECTS value must be positive.'
 			)
 		),
 		'contact_mail' => array(
@@ -381,8 +407,8 @@ class Course extends AppModel {
 	
 	
 	private function http_status($url){
-	    if(Configure::read('debug') > 0 AND !function_exists('curl_init'))
-	    	return 200;
+	    //if(Configure::read('debug') > 0 AND !function_exists('curl_init'))
+	    //	return 200;
 		$ch = curl_init();
 	    curl_setopt($ch, CURLOPT_URL, $url);
 	    curl_setopt($ch, CURLOPT_NOBODY, true);

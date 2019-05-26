@@ -88,6 +88,8 @@ if($this->action == 'edit') {
 	echo $this->Form->input('start_date', array(
         'title' => 'One or many course start dates, format YYYY-MM-DD, separated by ";".',
         'placeholder' => 'YYYY-MM-DD (multiple dates separated by ";")'));
+	echo $this->Form->input('duration');
+	echo $this->Form->input('course_duration_unit_id', array('label' => false));
 	echo $this->Form->input('recurring', array(
 		'title' => 'Check box if the course begins every year at the same date. Uncheck if the course takes place only once.',
 		'required' => false
