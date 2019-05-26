@@ -218,7 +218,7 @@ class AppUser extends User {
 	function getModerators($country_id = null, $user_admin = true) {
 		$admins = array();
 		// try fetching the moderator in charge of the user's country,
-		if(!empty($data['country_id'])) {
+		if(!empty($country_id)) {
 			$admins = $this->find('all', array(
 					'contain' => array(),
 					'conditions' => array(
