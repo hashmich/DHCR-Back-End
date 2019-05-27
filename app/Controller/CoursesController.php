@@ -224,6 +224,8 @@ class CoursesController extends AppController {
             $course['Course']['approval_token'] = null;
             $this->Course->save($course, array('validate' => false));
             $this->Flash->set('The record has been marked as approved!');
+		}else{
+			$this->Flash->set('The record was already approved.');
 		}
 		if($this->Auth->user()) $this->redirect('/users/dashboard');
 		else $this->redirect('/');
