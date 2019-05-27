@@ -565,6 +565,7 @@ class Course extends AppModel {
 	    $conditions = array(
             $key => $value,
             'Course.active' => true,
+            'Course.deleted' => false,
             'Course.updated >' => date("Y-m-d H:i:s", time() - Configure::read('App.CourseExpirationPeriod'))
         );
         if(strpos($key, '.') === false) {

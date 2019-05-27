@@ -152,8 +152,17 @@ class CoursesController extends AppController {
 	public function view($id = null) {
 		if(empty($id)) $this->redirect('index');
 		$course = $this->Course->find('first', array(
-			'conditions' => array('Course.id' => $id)
+			'conditions' => array(
+				'Course.id' => $id,
+				'Course.deleted' => false)
 		));
+		if(empty($course)) {
+			$this->Flash->set('The course could not be found.');
+			$this->redirect(array(
+				'controller' => 'users',
+				'action' => 'dashboard'
+			));
+		}
 		if(	$this->Auth->user('id') == $course['Course']['user_id']
 		||	$this->Auth->user('is_admin'))
 			$this->set('edit', true);
@@ -257,16 +266,21 @@ class CoursesController extends AppController {
 		));
 		
 		$admin = false;
-		$conditions = array('Course.id' => $id);
+		$conditions = array(
+			'Course.id' => $id,
+			'Course.deleted' => false);
 		if($this->Auth->user('is_admin') OR $this->Auth->user('user_role_id') < 3) $admin = true;
 		else $conditions['Course.user_id'] = $this->Auth->user('id');
 		
 		// check autorisation beforehand
 		$course = $this->Course->find('first', array('conditions' => $conditions));
-		if(empty($course)) $this->redirect(array(
-			'controller' => 'users',
-			'action' => 'dashboard'
-		));
+		if(empty($course)) {
+			$this->Flash->set('The course could not be found.');
+			$this->redirect(array(
+				'controller' => 'users',
+				'action' => 'dashboard'
+			));
+		}
 		
 		if(!empty($this->request->data['Course'])) {
 			// check the ID has been autorized correctly
@@ -366,8 +380,9 @@ class CoursesController extends AppController {
 			'action' => 'dashboard'
 		));
 		
-		if(!empty($this->request->data)) {
-			$message = 'The course has been removed.';
+		if(	!empty($this->request->data)
+		AND	!empty($this->request->data['Course']['deletion_reason_id'])) {
+			
 			if($this->request->data['Course']['deletion_reason_id'] >= 4) {
 				$message = 'The course has been moved to archive';
 				$this->Course->id = $id;
@@ -376,6 +391,7 @@ class CoursesController extends AppController {
 					'deletion_reason_id' => $this->request->data['Course']['deletion_reason_id']
 				), array('validate' => false));
 			}else{
+				$message = 'The course has been deleted.';
 				$this->Course->delete($id, $cascade = true);
 			}
 			
@@ -385,11 +401,15 @@ class CoursesController extends AppController {
 				'controller' => 'users',
 				'action' => 'dashboard'
 			));
+			
+		}elseif(!empty($this->request->data)) {
+			$message = 'You must provide a reason for deleting this course.';
+			$this->Flash->set($message);
 		}
 		
 		$this->request->data = $course;
 		$deletionReasons = $this->Course->DeletionReason->find('list');
-		$this->set(compact($deletionReasons));
+		$this->set(compact('deletionReasons'));
 		// render form
 	}
 	

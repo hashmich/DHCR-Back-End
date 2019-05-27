@@ -21,14 +21,15 @@ echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 <fieldset>
 	<?php
 	echo $this->Form->input('id', array('disabled' => true, 'type' => 'text'));
-	echo $this->Form->input('name', array('disabled' => true, 'type' => 'text'));
+	echo $this->Form->input('name', array(
+		'disabled' => true, 'type' => 'text',
+		'required' =>  false));
 	echo $this->Form->input('deletion_reason_id', array(
 		'empty' => ' -- none -- '
 	));
+	
+	echo $this->Form->end('delete');
 	?>
+
 </fieldset>
 
-
-<?php
-echo $this->Form->end('delete');
-?>
