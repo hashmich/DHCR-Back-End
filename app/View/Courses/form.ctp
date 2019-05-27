@@ -88,8 +88,30 @@ if($this->action == 'edit') {
 	echo $this->Form->input('start_date', array(
         'title' => 'One or many course start dates, format YYYY-MM-DD, separated by ";".',
         'placeholder' => 'YYYY-MM-DD (multiple dates separated by ";")'));
-	echo $this->Form->input('duration');
-	echo $this->Form->input('course_duration_unit_id', array('label' => false));
+	
+    ?><div class="input duration required"><?php
+        echo $this->Form->input('duration', array(
+                'div' => false,
+                'min' => 1,
+                'error' => false));
+        echo $this->Form->input('course_duration_unit_id', array(
+                'label' => false,
+                'div' => false,
+                'error' => false));
+        if( !empty($this->validationErrors['Course']['duration'])
+        OR  !empty($this->validationErrors['Course']['course_duration_unit_id'])) {
+            echo '<div class="error-message">';
+                if(!empty($this->validationErrors['Course']['duration'])) {
+					echo implode('<br>', $this->validationErrors['Course']['duration']);
+					if(!empty($this->validationErrors['Course']['course_duration_unit_id']))
+					    echo '<br>';
+                }
+                if(!empty($this->validationErrors['Course']['course_duration_unit_id']))
+                    echo implode('<br>', $this->validationErrors['Course']['course_duration_unit_id']);
+            echo '</div>';
+        }
+    ?></div><?php
+	
 	echo $this->Form->input('recurring', array(
 		'title' => 'Check box if the course begins every year at the same date. Uncheck if the course takes place only once.',
 		'required' => false
@@ -140,7 +162,9 @@ if($this->action == 'edit') {
 </fieldset>
 <fieldset>
 	<?php
-	echo $this->Form->input('ects', array('title' => 'Decimal numbers only. Optionally use the decimal point.'));
+	echo $this->Form->input('ects', array(
+	        'title' => 'Decimal numbers only. Optionally use the decimal point.',
+            'min' => 0));
 	echo $this->Form->input('contact_name');
 	echo $this->Form->input('contact_mail');
 	?>

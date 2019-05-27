@@ -2104,6 +2104,12 @@ div.auth {
           top: 0;
           left: 0;
           z-index: 500; }
+      .columns #content form div.input.duration {
+        position: relative; }
+        .columns #content form div.input.duration input, .columns #content form div.input.duration select {
+          width: 100px;
+          margin-right: 10px;
+          float: left; }
     .columns #content .input.taxonomy.select.dropdown_checklist:after {
       visibility: hidden;
       display: block;

@@ -207,8 +207,8 @@ class Course extends AppModel {
 		),
 		'duration' => array(
 			'integer' => array(
-				'rule' => 'integer',
-				'message' => 'Please provide an integer number for duration.'
+				'rule' => 'naturalNumber',
+				'message' => 'Please provide a natural number for duration.'
 			),
 			'positive' => array(
 				'rule' => array('comparison', '>=', 0),
@@ -407,8 +407,8 @@ class Course extends AppModel {
 	
 	
 	private function http_status($url){
-	    //if(Configure::read('debug') > 0 AND !function_exists('curl_init'))
-	    //	return 200;
+	    if(Configure::read('debug') > 0 AND !function_exists('curl_init'))
+	    	return 200;
 		$ch = curl_init();
 	    curl_setopt($ch, CURLOPT_URL, $url);
 	    curl_setopt($ch, CURLOPT_NOBODY, true);

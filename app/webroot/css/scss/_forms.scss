@@ -389,6 +389,15 @@ form {
 			z-index: 500;
 		}
 	}
+
+	div.input.duration {
+		position: relative;
+		input, select {
+			width: 100px;
+			margin-right: 10px;
+			float: left;
+		}
+	}
 }
 
 
