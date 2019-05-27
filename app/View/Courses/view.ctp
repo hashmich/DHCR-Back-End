@@ -8,7 +8,7 @@
 		<?php
 		if(!empty($edit)) {
 			echo '<li>';
-			echo $this->Html->link('review', array(
+			echo $this->Html->link('edit', array(
 					'controller' => 'courses',
 					'action' => 'edit',
 				$course['Course']['id']

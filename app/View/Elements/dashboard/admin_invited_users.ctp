@@ -39,7 +39,14 @@ if(empty($invited)) {
 				echo '<th>Actions</th>';
 				
 				foreach($fieldlist as $key => $fieldDef) {
-					if(!isset($fieldDef['label']) OR empty($fieldDef['label'])) {
+					$expl = explode('.', $key);
+					$fieldModelName = $modelName;
+					$fieldname = $expl[0];
+					if(isset($expl[1])) {
+						$fieldModelName = $expl[0];
+						$fieldname = $expl[1];
+					}
+				    if(!isset($fieldDef['label']) OR empty($fieldDef['label'])) {
 						$fieldDef['label'] = Inflector::camelize($fieldname);
 					}
 					echo '<th>' . $fieldDef['label'] . '</th>';
