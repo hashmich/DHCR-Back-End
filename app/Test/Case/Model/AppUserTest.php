@@ -19,7 +19,7 @@ class AppUserTest extends CakeTestCase {
     }
 
     private function __setShibVars() {
-        foreach(AppUser::$mapping as $k => $v) $_SERVER[$k] = $v;
+        foreach(AppUser::$shib_mapping as $k => $v) $_SERVER[$k] = $v;
     }
 
 
@@ -42,7 +42,8 @@ class AppUserTest extends CakeTestCase {
 
 
     public function testShibLogin() {
-        $result = $this->AppUser->shibLogin();
+		$user = array();
+    	$result = $this->AppUser->shibLogin($user);
         $this->assertFalse($result);
 
         $this->tearDown();
@@ -54,12 +55,26 @@ class AppUserTest extends CakeTestCase {
         // set the data...
         $this->AppUser->read();
         $this->assertTrue($this->AppUser->isShibUser());
-
-        $result = $this->AppUser->shibLogin();
+        
+        $result = $this->AppUser->shibLogin($user);
+		$this->assertEquals(1, count($user));
         $this->assertNotEmpty($result);
-        $this->assertEquals(1, count($result));
-
-        #TODO: create more assertions to make sure the email mechanism works correctly
+        $this->assertNotEmpty($user);
+		
+        // assert that we don't get identification on double entries!
+		$this->AppUser->data['id'] = 3;
+		$this->AppUser->data['shib_eppn'] = 'other';
+		$this->AppUser->data['email'] = 'other';
+		$this->AppUser->save($this->AppUser->data, false);
+		$this->AppUser->read();
+	
+		$this->AppUser->data['AppUser']['shib_eppn'] = 'foo';
+		$this->AppUser->data['AppUser']['email'] = 'bar';
+		
+		// test to retrieve ambiguous users for further processing
+		$result = $this->AppUser->shibLogin($user);
+		$this->assertFalse($result);
+		$this->assertEquals(2, count($user));
     }
 
 
@@ -69,6 +84,25 @@ class AppUserTest extends CakeTestCase {
         $AppUser = new AppUser();
         $this->assertTrue($AppUser->isShibUser());
     }
+    
+    
+    public function testGetModerators() {
+    	// get admins only
+    	$result = $this->AppUser->getModerators($country_id = null, $user_admin = false);
+    	$this->assertNotEmpty($result);
+    	foreach($result as $user) {
+    		$this->assertTrue($user['AppUser']['is_admin'] || ($user['AppUser']['user_role_id'] == 1));
+		}
+    	// get user admins only
+		$result = $this->AppUser->getModerators($country_id = null, $user_admin = true);
+		$this->assertNotEmpty($result);
+		foreach($result as $user) {
+			$this->assertTrue($user['AppUser']['user_admin']);
+		}
+		// get national moderators
+		$result = $this->AppUser->getModerators($country_id = 1, $user_admin = false);
+		$this->assertNotEmpty($result);
+	}
 
 }
 ?>

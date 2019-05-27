@@ -53,7 +53,7 @@ class AppUser extends User {
 
 
 
-	public static $mapping = array(
+	public static $shib_mapping = array(
 		'HTTP_EPPN' => 'shib_eppn',
 		'HTTP_GIVENNAME' => 'first_name',
 		'HTTP_SN' => 'last_name',
@@ -69,8 +69,8 @@ class AppUser extends User {
 		// try retrieving the server variables previously set from the Shibboleth login system
 		if(!empty($_SERVER['HTTP_EPPN'])) {
 			foreach($_SERVER as $k => $v) {
-				if(isset(self::$mapping[$k]) AND !empty($v) AND $v != '(null)') {
-					$this->data[self::$mapping[$k]] = $v;
+				if(isset(self::$shib_mapping[$k]) AND !empty($v) AND $v != '(null)') {
+					$this->data[self::$shib_mapping[$k]] = $v;
 				}
 			}
 			// shibboleth might return strange empty-values...
@@ -251,14 +251,20 @@ class AppUser extends User {
 		
 		return $admins;
 	}
-
-
-	public function shibLogin(&$user) {
+	
+	/**
+	 * @param $user
+	 * @return array|bool|int|null
+	 *
+	 * The function will return false if no unique identification was possible.
+	 * A parameter passed by reference will hold
+	 */
+	public function shibLogin(&$user = array()) {
 		if($this->data AND $this->__isShibUser) {
 			// find the matching user and log in
 			if(!empty($this->data[$this->name]))
 				$this->data = $this->data[$this->name];
-			$user = $this->find('first', array(
+			$user = $this->find('all', array(
 				'contain' => array(),
 				'conditions' => array(
 					'or' => array(
@@ -269,11 +275,13 @@ class AppUser extends User {
 					'AppUser.active' => true
 				)
 			));
-			if(!empty($user)) {
-				return 'unique_identification';
+			
+			if(!empty($user) AND count($user) == 1) {
+				// unique identification
+				return $user;
 			}else{
 				// try searching for persons with the same name, autocreate account...
-				$usersByName = $this->find('all', array(
+				$user = $this->find('all', array(
 					'contain' => array(),
 					'conditions' => array(
 						'and' => array(
@@ -283,7 +291,6 @@ class AppUser extends User {
 						'AppUser.active' => true
 					)
 				));
-				return 'ambiguous_identification';
 			}
 		}
 		return false;
