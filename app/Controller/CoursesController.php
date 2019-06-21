@@ -291,12 +291,13 @@ class CoursesController extends AppController {
 				unset($this->request->data['Course']['created']);
 				unset($this->request->data['Course']['updated']);
 			}else{
+				// admin only: do not change the updated timestamp if requested (update is not a typo)
 				if(empty($this->request->data['Course']['update'])) {
 					$this->request->data['Course']['updated'] = $course['Course']['updated'];
 				}
 			}
 			$this->request->data['Course']['id'] = $id;
-
+			
 			if(!empty($this->request->data['Course']['skip_info_validation'])) {
 				$this->request->data['Course']['skip_info_url'] = date('Y-m-d H:i:s');
 				$this->Course->validator()->remove('info_url', 'status_ok');
@@ -305,6 +306,11 @@ class CoursesController extends AppController {
 				$this->request->data['Course']['skip_guide_url'] = date('Y-m-d H:i:s');
 				$this->Course->validator()->remove('guide_url', 'status_ok');
 			}
+			// do not revalidate URL, if skip is already set
+			if($course['Course']['skip_info_url'] > date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
+				$this->Course->validator()->remove('info_url', 'status_ok');
+			if($course['Course']['skip_guide_url'] > date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
+				$this->Course->validator()->remove('guide_url', 'status_ok');
 			
 			if($this->Course->validateAll($this->request->data)) {
 				$this->request->data = $this->Course->data;		// callback beforeValidate manipulates data
