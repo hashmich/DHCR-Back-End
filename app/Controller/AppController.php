@@ -123,7 +123,7 @@ class AppController extends Controller {
 	public function beforeRedirect($url, $status = null, $exit = true) {
 		if(	!empty($this->request->params['layout'])
 		AND	$this->request->params['layout'] == 'iframe'
-		AND	strpos($url, 'iframe') === false
+		AND	is_string($url) AND strpos($url, 'iframe') === false
 		) {
 			$url = (strpos($url, '/') === 0) ? '/iframe' . $url : '/iframe/' . $url;
 			return array(
