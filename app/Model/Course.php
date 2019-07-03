@@ -302,8 +302,16 @@ class Course extends AppModel {
 
 	public function afterSave($created, $options = array()) {
         // trigger moderator notification for new courses, that are published
-        if( empty($this->data['Course']['approved']) AND !empty($this->data['Course']['active'])
-        AND empty($this->data['Course']['mod_mailed'])
+		$alert_mods = true;
+		if(!empty($this->data['Course']['id'])) {
+			$this->recursive = -1;
+			$course = $this->findById($this->data['Course']['id']);
+			if($course AND ($course['Course']['approved']) OR $course['Course']['mod_mailed'])
+				$alert_mods = false;
+		}
+		
+        if( $alert_mods
+		AND !empty($this->data['Course']['active'])
 		AND Configure::read('debug') == 0
         ) {
             $admins = $this->AppUser->getModerators($this->data['Course']['country_id'], $user_admin = true);
