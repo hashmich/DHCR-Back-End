@@ -83,13 +83,18 @@ if($this->action == 'edit') {
 			'empty' => ' -- none -- ',
 			'label' => 'Education Type'
 	));
+	echo $this->Form->input('online_course');
 	echo $this->Form->input('language_id', array('empty' => ' -- none -- '));
 	echo $this->Form->input('access_requirements');
 	echo $this->Form->input('start_date', array(
         'title' => 'One or many course start dates, format YYYY-MM-DD, separated by ";".',
         'placeholder' => 'YYYY-MM-DD (multiple dates separated by ";")'));
 	
-    ?><div class="input duration required"><?php
+	
+	
+    ?>
+    <div class="input duration required">
+        <?php
         echo $this->Form->input('duration', array(
                 'div' => false,
                 'min' => 1,
@@ -110,8 +115,10 @@ if($this->action == 'edit') {
                     echo implode('<br>', $this->validationErrors['Course']['course_duration_unit_id']);
             echo '</div>';
         }
-    ?></div><?php
-	
+        ?>
+    </div>
+    
+    <?php
 	echo $this->Form->input('recurring', array(
 		'title' => 'Check box if the course begins every year at the same date. Uncheck if the course takes place only once.',
 		'required' => false
