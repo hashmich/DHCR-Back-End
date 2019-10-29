@@ -59,24 +59,27 @@ class AppUsersController extends UsersController {
 		if(!$this->request->is('post') AND !$this->Auth->user() AND $this->shibUser) {
 			$user = array();
 			$result = $this->shibUser->shibLogin($user);
-			if($result === 'unique_identification') {
-				if(!empty($user[$this->modelClass]))
-					$user = $user[$this->modelClass];
+			if($result) {
+				if(!empty($user[0][$this->modelClass]))
+					$user = $user[0][$this->modelClass];
 				if($this->Auth->login($user)) {
 					$this->Flash->set('You successfully logged in via external identity.');
 					$this->redirect($this->Auth->loginRedirect);
 				}
-			}elseif($result === 'ambiguous_identification') {
-			
-			}else{
-				$this->Flash->set('You have been successfully verified by your identity provider (IDP),
+			}elseif(!$result AND !empty($user)) {
+				// ambiguous identification
+				$this->Flash->set('You have been successfully verified by your identity provider,
 					but we could not find a matching account in our system.
-					In case you already have an account, please login once using your existing account 
-					to link your external identity to the DH-Course Registry.
+					Please login once using your existing DHCR account to match internal and external identities.');
+			}else{
+				$this->Flash->set('You have been successfully verified by your identity provider,
+					but we could not find a matching account in our system.
+					Please login once using your existing DHCR account to match internal and external identities.
 					If you did not register yourself to the Course Registry before, please register now.');
 			}
 		}
 		#TODO: make sure a message keeps displaying the need to continue registration, if login failed!
+		#TODO: make sure the not appropriate actions disappear from the following view
 
         // handle any other login errors in parent login method
 		parent::login();
