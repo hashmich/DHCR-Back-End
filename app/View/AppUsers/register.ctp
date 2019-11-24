@@ -33,10 +33,6 @@ function recaptchaCallback(token) {
 
 <div class="users_form">
 	<h2>User Registration</h2>
-	<p>
-        If you are lecturer and want to add your course to the registry, please register here.
-        Registration is also for contributors, who you want to add data about courses of their institution.
-    </p>
 	
     <?php
     if(!empty($this->Session->read('Users.verification'))) {
@@ -62,9 +58,20 @@ function recaptchaCallback(token) {
 	echo $this->element('Utils.validation_errors');
 	
 	echo $this->Form->create($modelName, array('novalidate' => true));
+	?>
 	
-	echo '<fieldset>';
-	
+    
+    <fieldset>
+        <p>
+            If you are lecturer or member of an academic institution in the field of digital humanities,
+            please register here.
+            After approval of a moderator, you can add your courses to the registry.
+        </p>
+    </fieldset>
+    
+    
+	<fieldset>
+    <?php
 	if(empty($shibUser)){
 		?>
 		<h3>Log in with your institutional account</h3>
@@ -160,7 +167,30 @@ so that our moderators get an idea of your involvement into Digital Humanities.'
 	));
 	
 	echo '</fieldset>';
+	?>
+ 
+	<fieldset>
+        <p>
+            By registering an account for the Digital Humanities Course Registry,
+            you agree to the processing of your personal data for the purposes of this service.
+            Your personal data is stored and processed by the ACDH but not made public or shared with third parties.
+            In case you act as national moderator or administrator of the Digital Humanities Course Registry,
+            your name, country and e-mail address will be shared publicly
+            in order to enable all visitors to contact you.
+            Your contact data will remain published until you resign from any assigned role.
+            The deletion of your account and the associated personal data can be
+            requested at any time via our
+            <?= $this->Html->link('contact page', Configure::read('dhcr.baseUrl').'pages/info#contact') ?>.
+        </p>
+        <?php echo $this->Form->input('consent', [
+            'type' => 'checkbox',
+            'label' => 'I agree',
+            'required' => true,
+            'value' => 1
+        ]); ?>
+	</fieldset>
 	
+    <?php
 	echo $this->Form->end(array(
 		'label' => 'Submit',
 		'class' => 'g-recaptcha',

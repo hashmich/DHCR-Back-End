@@ -180,6 +180,7 @@ class Course extends AppModel {
 				'message' => 'The http server response code of the provided URL is not okay.'
 			)
 		),
+		/*
 		'guide_url' => array(
 			'url' => array(
 				'rule' => array('urlFormat'),
@@ -192,10 +193,11 @@ class Course extends AppModel {
 				'message' => 'The http server response code of the provided URL is not okay.'
 			)
 		),
+		*/
 		'start_date' => array(
 			'notEmpty' => array(
 				'rule' => array('notBlank'),
-				'message' => 'Enter one or many start dates of the course.',
+				'message' => 'Enter one or many start dates for the course.',
 				'allowEmpty' => false,
 				'required' => true,
 				'last' => true
@@ -208,7 +210,8 @@ class Course extends AppModel {
 		'duration' => array(
 			'integer' => array(
 				'rule' => 'naturalNumber',
-				'message' => 'Please provide a natural number for duration.'
+				'message' => 'Please provide an integer number greate zero for duration.',
+				'allowEmpty' => false,
 			),
 			'positive' => array(
 				'rule' => array('comparison', '>=', 0),
@@ -222,12 +225,6 @@ class Course extends AppModel {
 				'allowEmpty' => false,
 				'required' => true
 			),
-		),
-		'recurring' => array(
-			'bool' => array(
-				'rule' => 'boolean',
-				'message' => 'Only the provided options are allowed.'
-			)
 		),
 		'ects' => array(
 			'decimal' => array(

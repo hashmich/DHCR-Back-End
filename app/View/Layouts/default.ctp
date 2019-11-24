@@ -1,28 +1,28 @@
-<!-- 
+<!--
  * Copyright 2014 Hendrik Schmeer on behalf of DARIAH-EU, VCC2 and DARIAH-DE,
  * Credits to Erasmus University Rotterdam, University of Cologne, PIREH / University Paris 1
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
 -->
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
 	<?php echo $this->Html->charset(); ?>
-	<title>DHCR Back-End</title>
+	<title>DHCR Back End</title>
 	<?php
 	echo $this->Html->meta(array('name' => 'robots', 'content' => 'noindex'));
 	echo $this->Html->meta(array('name' => 'robots', 'content' => 'nofollow'));
@@ -31,11 +31,6 @@
 	
 	if(Configure::read('debug') > 0) echo $this->Html->css('cake_debugging.css');
 	
-	// TODO: streamline the styles with bootstrap?
-	/*echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', array(
-		'integrity' => 'sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7',
-		'crossorigin' => 'anonymous'));*/
-	
 	// custom CSS
 	echo $this->Html->css('styles.css');
 	echo $this->fetch('css');
@@ -43,11 +38,15 @@
 	
 </head>
 
+<?php
+if(!empty($auth_user)) {
+	echo '<body class="authenticated">';
+}else{
+    echo '<body>';
+}
+?>
 
-<body>
 	<div id="container">
-
-        
         <div id="header">
             
             <a class="blue back button" href="<?= Configure::read('dhcr.baseUrl') ?>">Go to Start</a>
@@ -83,10 +82,6 @@
 				echo $this->element('login_info');
                 ?>
 
-				<ul>
-				    echo $this->fetch('menu');
-                    ?>
-				</ul>
 			</div>
 			
 			<div id="content">

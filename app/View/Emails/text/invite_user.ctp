@@ -19,9 +19,7 @@
 <?php
 echo $data[$model]['message'] . "\n";
 echo "\n\n";
-echo "*To access your account, please set a password:*\n";
-echo "*Click the link below within 24 hours,*\n";
-echo "thereafter you can still request a password-reset by following the 'I forgot my password' link below the login box.\n";
+echo "*Click the link below to set a password and access your account:*\n";
 echo "\n";
 echo Router::url(array(
 	'admin' => false,

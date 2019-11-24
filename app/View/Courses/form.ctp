@@ -78,52 +78,69 @@ if($this->action == 'edit') {
 	echo $this->Form->input('name', array(
 		'label' => 'Course Name'
 	));
-	echo $this->Form->input('description', array('type' => 'textarea'));
 	echo $this->Form->input('course_type_id', array(
-			'empty' => ' -- none -- ',
-			'label' => 'Education Type'
+		'empty' => ' -- none -- ',
+		'label' => 'Education Type'
 	));
-	echo $this->Form->input('online_course');
 	echo $this->Form->input('language_id', array('empty' => ' -- none -- '));
+	echo $this->Form->input('online_course', ['label' => 'Is Online Course']);
+	echo $this->Form->input('description', array('type' => 'textarea'));
 	echo $this->Form->input('access_requirements');
-	echo $this->Form->input('start_date', array(
-        'title' => 'One or many course start dates, format YYYY-MM-DD, separated by ";".',
-        'placeholder' => 'YYYY-MM-DD (multiple dates separated by ";")'));
-	
-	
-	
     ?>
-    <div class="input duration required">
+</fieldset>
+<fieldset>
+    <div class="input start_date required">
         <?php
-        echo $this->Form->input('duration', array(
-                'div' => false,
-                'min' => 1,
-                'error' => false));
-        echo $this->Form->input('course_duration_unit_id', array(
-                'label' => false,
-                'div' => false,
-                'error' => false));
-        if( !empty($this->validationErrors['Course']['duration'])
-        OR  !empty($this->validationErrors['Course']['course_duration_unit_id'])) {
-            echo '<div class="error-message">';
-                if(!empty($this->validationErrors['Course']['duration'])) {
-					echo implode('<br>', $this->validationErrors['Course']['duration']);
-					if(!empty($this->validationErrors['Course']['course_duration_unit_id']))
-					    echo '<br>';
-                }
-                if(!empty($this->validationErrors['Course']['course_duration_unit_id']))
-                    echo implode('<br>', $this->validationErrors['Course']['course_duration_unit_id']);
-            echo '</div>';
-        }
+        echo $this->Form->input('start_date', array(
+            'title' => 'One or many course start dates, format YYYY-MM-DD, separated by ";".',
+            'placeholder' => 'YYYY-MM-DD (multiple dates separated by ";")',
+            'div' => false,
+            'error' => false
+        ));
+        echo $this->Form->input('recurring', array(
+            'title' => 'Tick box if the course begins every year at the same date(s)',
+            'required' => false,
+            'div' => false,
+            'error' => false
+        ));
+		if( !empty($this->validationErrors['Course']['start_date'])
+			OR  !empty($this->validationErrors['Course']['recurring'])) {
+			echo '<div class="error-message">';
+			if(!empty($this->validationErrors['Course']['start_date'])) {
+				echo implode('<br>', $this->validationErrors['Course']['start_date']);
+				if(!empty($this->validationErrors['Course']['recurring']))
+					echo '<br>';
+			}
+			if(!empty($this->validationErrors['Course']['recurring']))
+				echo implode('<br>', $this->validationErrors['Course']['recurring']);
+			echo '</div>';
+		}
         ?>
     </div>
-    
-    <?php
-	echo $this->Form->input('recurring', array(
-		'title' => 'Check box if the course begins every year at the same date. Uncheck if the course takes place only once.',
-		'required' => false
-	));
-	?>
+    <div class="input duration required">
+		<?php
+		echo $this->Form->input('duration', array(
+			'div' => false,
+			'min' => 1,
+			'error' => false));
+		echo $this->Form->input('course_duration_unit_id', array(
+			'label' => false,
+			'div' => false,
+			'error' => false));
+		if( !empty($this->validationErrors['Course']['duration'])
+			OR  !empty($this->validationErrors['Course']['course_duration_unit_id'])) {
+			echo '<div class="error-message">';
+			if(!empty($this->validationErrors['Course']['duration'])) {
+				echo implode('<br>', $this->validationErrors['Course']['duration']);
+				if(!empty($this->validationErrors['Course']['course_duration_unit_id']))
+					echo '<br>';
+			}
+			if(!empty($this->validationErrors['Course']['course_duration_unit_id']))
+				echo implode('<br>', $this->validationErrors['Course']['course_duration_unit_id']);
+			echo '</div>';
+		}
+		?>
+    </div>
 </fieldset>
 <fieldset>
 	<?php

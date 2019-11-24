@@ -19,21 +19,17 @@
 <?php $name = (!empty($data['maintainer'])) ? $data['maintainer'] : 'User'; ?>
 Dear <?php echo $name; ?>.
 
-We noticed, that one or more of your entries in 
-the Digital Humanities Course Registry have not been updated for a longer time. 
+One or more of your entries in the Digital Humanities Course Registry have not been updated for a longer time.
 
 To prevent the registry from showing outdated information, 
-please review the listed records. 
-Please note, that you must submit the edit form, even if the information does not change.  
+please review the listed records. Otherwise, your course information will soon disappear from the DHCR.
+Please note, that you must submit the edit form, even if the information did not change.
 This will update the 'last-modification-date' of your record. 
 
-If you have many courses whose information definitely did not change, you may alternatively 
+If you have many courses, with information that definitely did not change, you may alternatively
 make use of the 'revalidate' button on each course row on your dashboard. 
 Using this feature saves you from unneccessarily loading the course edit form, if 
-your data remains the same.  
-
-Information older than <?php echo round(Configure::read('App.CourseExpirationPeriod') / (60*60*24*365), 1); ?> years will be automatically removed 
-from the registry. 
+your data remains the same.
 
 Please review the linked courses:
 <?php

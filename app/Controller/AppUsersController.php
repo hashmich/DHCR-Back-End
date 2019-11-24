@@ -139,6 +139,14 @@ class AppUsersController extends UsersController {
 						'message' => 'For verification of your involvement, please provide any further information.'
 					)
 				)
+			),
+			array(
+				'consent' => array(
+					'rule' => array('equalTo', 1),
+					'required' => true,
+					'allowEmpty' => false,
+					'message' => 'You must agree to the terms.'
+				)
 			)
 		);
 		parent::register();

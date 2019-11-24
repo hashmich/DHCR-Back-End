@@ -22,22 +22,11 @@
 	<ul>
 		<li>
 			<?php
-			echo $this->Html->link('Invite a new course maintainer', array(
+			echo $this->Html->link('Invite a lecturer or contributor', array(
 				'controller' => 'users',
 				'action' => 'invite',
 				'plugin' => null
 			));
-			?>
-		</li>
-		<li>
-			<?php
-			echo $this->Html->link('Re-Invite All!', array(
-					'controller' => 'users',
-					'action' => 'invite',
-					'plugin' => null,
-					'all'
-				), array('confirm' => 'Confirm to send out an invitation reminder email to *ALL* users listed above.')
-			);
 			?>
 		</li>
 		<li>
@@ -54,34 +43,92 @@
 <?php
 echo $this->element('dashboard/shibboleth_link');
 
-echo $this->element('dashboard/admin_account_requests');
 
-echo $this->element('dashboard/admin_invited_users');
+$this->Html->script(['accordeon','hash'], array('inline' => false));
+$this->Html->scriptStart(array('inline' => false));
+?>
+$(document).ready( function() {
+let accordeon = new Accordeon('accordeon');
+});
+<?php $this->Html->scriptEnd(); ?>
 
-if(!empty($new_courses)) {
+<div id="accordeon">
+    <?php
+	if(!empty($unapproved)) {
+		?>
+        <div class="accordeon-item" id="account-requests">
+            <h2>New Account Requests</h2>
+            <div class="item-content">
+                <?php echo $this->element('dashboard/admin_account_requests'); ?>
+            </div>
+        </div>
+		<?php
+	}
+	if(!empty($invited)) {
+		?>
+        <div class="accordeon-item" id="invited">
+            <h2>Pending Invitations</h2>
+            <div class="item-content">
+                <div class="actions">
+                    <ul>
+                        <li>
+                            <?php
+                            echo $this->Html->link('Remind All!', array(
+                                'controller' => 'users',
+                                'action' => 'invite',
+                                'plugin' => null,
+                                'all'
+                            ), array('confirm' => 'Confirm to send out an invitation reminder email to *ALL* users listed here.'));
+                            ?>
+                        </li>
+                    </ul>
+                </div>
+                <?php echo $this->element('dashboard/admin_invited_users'); ?>
+            </div>
+        </div>
+		<?php
+	}
+	if(!empty($new_courses)) {
+        ?>
+        <div class="accordeon-item" id="new-courses">
+            <h2>New Courses</h2>
+            <div class="item-content">
+                <p>These courses have been published, but should be reviewed for meeting the DH Course Registry standards.</p>
+                <?php
+                $this->set('edit', true);	// displays the "Actions" column in all subsequent elements
+                echo $this->element('courses/index', array('courses' => $new_courses));
+                ?>
+            </div>
+        </div>
+        <?php
+    }
+	if(!empty($moderated)) {
+		?>
+        <div class="accordeon-item" id="moderated">
+            <h2>Moderated Courses</h2>
+            <div class="item-content">
+                <p>As a national moderator, you find an overview of courses in your country here.</p>
+				<?php
+                $this->set('edit', true);	// displays the "Actions" column in all subsequent elements
+				echo $this->element('courses/index', array('courses' => $moderated));
+				?>
+            </div>
+        </div>
+		<?php
+	}
+	if(!empty($courses)) {
+		?>
+        <div class="accordeon-item" id="your-courses">
+            <h2>Your Courses</h2>
+            <div class="item-content">
+                <?php
+				$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
+				echo $this->element('courses/index');
+				?>
+            </div>
+        </div>
+		<?php
+	}
     ?>
-    <h3>New Courses</h3>
-    <p>These courses have been published, but should be reviewed for meeting the DH Course Registry standards.</p>
-    <?php
-    $this->set('edit', true);	// displays the "Actions" column in all subsequent elements
-    echo $this->element('courses/index', array('courses' => $new_courses));
-}
-if(!empty($moderated)) {
-	?>
-	<h3>Moderated Courses</h3>
-    <?php
-	$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
-    echo $this->element('courses/index', array('courses' => $moderated));
-
-}
-?>
-
-<h3>Your Courses</h3>
-<?php
-if(empty($courses)) {
-	echo '<p>There are no courses in the registry owned by you.</p>';
-}else{
-	$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
-	echo $this->element('courses/index');
-}
-?>
+    
+</div>

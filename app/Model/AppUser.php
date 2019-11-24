@@ -175,6 +175,23 @@ class AppUser extends User {
 		return $result;
 	}
 	
+	/**
+	 * @param null $token
+	 * @return array|bool|int|null
+	 * overrides user plugin method
+	 */
+	public function checkPasswordToken($token = null) {
+		if(empty($token)) return false;
+		$user = $this->find('first', array(
+			'contain' => array(),
+			'conditions' => array(
+				$this->alias . '.password_token' => $token
+			)
+		));
+		if(empty($user)) return false;
+		return $user;
+	}
+	
 	
 	public function approve($data = array()) {
 		if(isset($data[$this->alias])) $data = $data[$this->alias];

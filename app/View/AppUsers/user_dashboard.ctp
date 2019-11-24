@@ -39,7 +39,7 @@ echo $this->element('dashboard/shibboleth_link');
 
 
 if(empty($courses)) {
-	echo '<p>There are no courses in the registry owned by you.</p>';
+	echo '<p>You have no courses in the registry, please add one :)</p>';
 }else{
 	$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
 	echo $this->element('courses/index');

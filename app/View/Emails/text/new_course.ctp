@@ -9,7 +9,7 @@ A guideline about which courses can be regarded as DH will be available soon.
 #EXPECTED ACTIONS:
 Hit "Approve" if you think this is a proper DH course.
 In case you think there is something wrong, you may either edit the course data or unpublish the record.
-However, you should contact the lecturer or the person that added the data.
+However, you should contact the lecturer or the person, that added this record.
 
 The course has been added by:
 <?php echo $course['AppUser']['name'].', '.$course['AppUser']['email']; ?>
@@ -21,6 +21,8 @@ The provided lecturer contact is:
 ====================================================
 
 #Quick Links:
+View on DHCR:   <?php echo Configure::read('dhcr.baseUrl').'courses/view/'.$course['Course']['id']; ?>
+
 Approve:    <?php echo Router::url('/courses/approve/'.$course['Course']['approval_token'], true); ?>
 
 Login required:
@@ -36,7 +38,7 @@ Unpublish:  <?php echo Router::url('/courses/unpublish/'.$course['Course']['id']
 foreach($course['Course'] as $field => $value) {
     if(in_array($field, array('updated','user_id','active','approved',
         'approval_token','mod_mailed','last_reminder','course_parent_type_id',
-        'skip_info_url','skip_guide_url','contact_mail','contact_name','lon','lat')))
+        'skip_info_url','skip_guide_url','guide_url','contact_mail','contact_name','lon','lat')))
         continue;
     // handle foreign keys
     if(strpos($field, '_id') !== false) {

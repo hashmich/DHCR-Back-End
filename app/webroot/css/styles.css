@@ -1171,7 +1171,11 @@ div.auth {
   src: url(../fonts/bebas_neue/BebasNeue-Bold.otf);
   font-weight: bold; }
 body {
-  padding-top: 15px !important; }
+  margin-top: -35px; }
+
+body.authenticated {
+  padding-top: 15px;
+  margin-top: 0; }
 
 #header {
   font-size: 12px;
