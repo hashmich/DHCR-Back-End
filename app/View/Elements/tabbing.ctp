@@ -1,13 +1,7 @@
 
 <?php
 $items = array(
-    array('Home', '/'),
-    array('Students', '/pages/students'),
-    array('Lecturers', '/pages/lecturers'),
-    array('Downloads', '/pages/downloads'),
-    //array('About', '/pages/about'),
-    array('Contact', '/contact/us'),
-    array('Statistics', '/statistic')
+    array('DHCR Homepage', Configure::read('dhcr.baseUrl'))
 );
 if(empty($auth_user)) $items[] = array('Login', '/users/login');
 
@@ -21,9 +15,9 @@ if(!empty($this->params->base)) {
 <div id="tabbing">
     <?php
     foreach($items as $item) {
-        echo '<a href="'.Router::url($item[1]).'" class="tab';
-        if($here == $item[1]) echo ' active';
-        echo '">'.$item[0].'</a>';
+		$classname = 'tab';
+		if($here == $item[1]) $classname .= ' active';
+        echo $this->Html->link($item[0], $item[1], ['class' => $classname]);
     }
     ?>
 </div>

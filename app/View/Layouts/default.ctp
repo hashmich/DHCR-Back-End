@@ -22,26 +22,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
 	<?php echo $this->Html->charset(); ?>
-	<title>
-		<?php
-		$page = $this->fetch('title');
-		$title = 'DH Registry';
-		if($page == 'Courses') $title = 'DH Course Registry';
-		elseif($page == 'Projects') $title = 'DH Project Registry';
-		echo $title;
-		?>
-	</title>
+	<title>DHCR Back-End</title>
 	<?php
-	if(Configure::read('debug') > 0) {
-		echo $this->Html->meta(array('name' => 'robots', 'content' => 'noindex'));
-		echo $this->Html->meta(array('name' => 'robots', 'content' => 'nofollow'));
-	}else{
-		echo $this->Html->meta(array('name' => 'robots', 'content' => 'index'));
-		echo $this->Html->meta(array('name' => 'robots', 'content' => 'follow'));
-	}
-	echo $this->Html->meta('keywords', 'digital humanities, research, programs, courses');
-	echo $this->Html->meta('description', 'European platform for digital humanity related research, courses and programs.');
-	echo $this->fetch('meta');
+	echo $this->Html->meta(array('name' => 'robots', 'content' => 'noindex'));
+	echo $this->Html->meta(array('name' => 'robots', 'content' => 'nofollow'));
 	
 	echo $this->Html->meta('icon');
 	
@@ -55,18 +39,6 @@
 	// custom CSS
 	echo $this->Html->css('styles.css');
 	echo $this->fetch('css');
-
-	if(!empty($layout) AND $layout == 'iframe') {
-	    ?>
-        <script type="text/javascript">
-            window.onload = function () {
-                var iframe = window.parent.document.getElementById('dhcr-iframe');
-                var container = document.getElementById('container');
-                iframe.style.height = container.offsetHeight + 'px';
-            }
-        </script>
-        <?php
-    }
 	?>
 	
 </head>
@@ -75,40 +47,35 @@
 <body>
 	<div id="container">
 
-        <?php
-        if(empty($layout)) {
-            ?>
-            <div id="header">
-                <div id="logo">
-                    <?php
-                    $logo = array(
-                        'alt' => 'CLARIN-DARIAIH joint Logo',
-                        'width' => 115,
-                        'height' => 90);
+        
+        <div id="header">
+            
+            <a class="blue back button" href="<?= Configure::read('dhcr.baseUrl') ?>">Go to Start</a>
+            
+            <div id="logo">
+                <?php
+                $logo = array(
+                    'alt' => 'CLARIN-DARIAIH joint Logo',
+                    'width' => 115,
+                    'height' => 90);
 
-                    $file = '/img/logos/DARIAH-CLARIN-joint-logo.jpg';
-                    echo $this->Html->link($this->Html->image($file, $logo), '/', array(
-                        'target' => '_blank',
-                        'escape' => false));
-                    ?>
-                    <div class="title">
-                        <h1>
-                            <a href="<?php echo Router::url('/'); ?>">
-                                <span id="h1">Digital Humanities</span><br>
-                                <span id="h2">Course</span><span id="h3">Registry</span>
-                            </a>
-                        </h1>
+                $file = '/img/logos/DARIAH-CLARIN-joint-logo.jpg';
+                echo $this->Html->link($this->Html->image($file, $logo), '/', array(
+                    'target' => '_blank',
+                    'escape' => false));
+                ?>
+                <div class="title">
+                    <h1>
+                        <a href="<?php echo Router::url('/'); ?>">
+                            <span id="h1">Digital Humanities</span><br>
+                            <span id="h2">Course</span><span id="h3">Registry</span>
+                        </a>
+                    </h1>
 
-                    </div>
                 </div>
-
-                <?php echo $this->element('tabbing'); ?>
             </div>
-        <?php
-        }elseif(!empty($layout) AND $layout == 'iframe') {
-            echo '<div id="header" style="display: none;"><h1>The Digital Humanities Course Registry</h1></div>';
-        }
-        ?>
+            
+        </div>
 		
 		<div class="columns">
 			<div id="left">
@@ -117,14 +84,7 @@
                 ?>
 
 				<ul>
-				    <?php
-                    if(!empty($layout) AND $layout == 'iframe') {
-                        echo '<li class="info-text">';
-                        echo $this->Html->link('The Digital Humanities Course Registry','/',
-                            array('target' => '_blank'));
-                        echo '</li>';
-                    }
-                    echo $this->fetch('menu');
+				    echo $this->fetch('menu');
                     ?>
 				</ul>
 			</div>

@@ -8,13 +8,11 @@
                 $name = (empty($auth_user['name']))
                     ? $auth_user[Configure::read('Users.loginName')]
                     : $auth_user['name'];
-                echo 'Hello ' . $name;
+                echo 'Hello ' . $name . ',';
                 ?>
             </p>
+            <p>welcome to the DHCR back end.</p>
             <?php
-            if(!empty($auth_user['is_admin'])) {
-                echo '<p>You are Admin</p>';
-            }
             if(	!empty($auth_user[Configure::read('Users.roleModel')])
             AND !empty($auth_user[Configure::read('Users.roleModel')]['name'])) {
                 echo '<p>Role: ' . $auth_user[Configure::read('Users.roleModel')]['name'];
