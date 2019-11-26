@@ -40,24 +40,15 @@
 	</ul>
 </div>
 
-<?php
-echo $this->element('dashboard/shibboleth_link');
+<?php echo $this->element('dashboard/shibboleth_link'); ?>
 
-
-$this->Html->script(['accordeon','hash'], array('inline' => false));
-$this->Html->scriptStart(array('inline' => false));
-?>
-$(document).ready( function() {
-let accordeon = new Accordeon('accordeon');
-});
-<?php $this->Html->scriptEnd(); ?>
 
 <div id="accordeon">
     <?php
 	if(!empty($unapproved)) {
 		?>
         <div class="accordeon-item" id="account-requests">
-            <h2>New Account Requests</h2>
+            <h3><span>New Account Requests</span></h3>
             <div class="item-content">
                 <?php echo $this->element('dashboard/admin_account_requests'); ?>
             </div>
@@ -67,7 +58,7 @@ let accordeon = new Accordeon('accordeon');
 	if(!empty($invited)) {
 		?>
         <div class="accordeon-item" id="invited">
-            <h2>Pending Invitations</h2>
+            <h3><span>Pending Invitations</span></h3>
             <div class="item-content">
                 <div class="actions">
                     <ul>
@@ -91,7 +82,7 @@ let accordeon = new Accordeon('accordeon');
 	if(!empty($new_courses)) {
         ?>
         <div class="accordeon-item" id="new-courses">
-            <h2>New Courses</h2>
+            <h3><span>New Courses</span></h3>
             <div class="item-content">
                 <p>These courses have been published, but should be reviewed for meeting the DH Course Registry standards.</p>
                 <?php
@@ -105,7 +96,7 @@ let accordeon = new Accordeon('accordeon');
 	if(!empty($moderated)) {
 		?>
         <div class="accordeon-item" id="moderated">
-            <h2>Moderated Courses</h2>
+            <h3><span>Moderated Courses</span></h3>
             <div class="item-content">
                 <p>As a national moderator, you find an overview of courses in your country here.</p>
 				<?php
@@ -119,7 +110,7 @@ let accordeon = new Accordeon('accordeon');
 	if(!empty($courses)) {
 		?>
         <div class="accordeon-item" id="your-courses">
-            <h2>Your Courses</h2>
+            <h3><span>Your Courses</span></h3>
             <div class="item-content">
                 <?php
 				$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
@@ -132,3 +123,13 @@ let accordeon = new Accordeon('accordeon');
     ?>
     
 </div>
+
+
+<?php
+$this->Html->script('accordeon', array('inline' => false));
+$this->Html->scriptStart(array('inline' => false));
+?>
+$(document).ready( function() {
+    let accordeon = new Accordeon('accordeon');
+});
+<?php $this->Html->scriptEnd(); ?>
