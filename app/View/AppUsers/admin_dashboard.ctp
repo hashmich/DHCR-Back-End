@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 ?>
-<h2>Admin Dashboard</h2>
+<h2>Moderation Dashboard</h2>
 
 <div class="actions">
 	<ul>
@@ -87,7 +87,7 @@
                 <p>These courses have been published, but should be reviewed for meeting the DH Course Registry standards.</p>
                 <?php
                 $this->set('edit', true);	// displays the "Actions" column in all subsequent elements
-                echo $this->element('courses/index', array('courses' => $new_courses));
+                echo $this->element('courses/index', array('courses' => $new_courses, 'varname' => 'newCourses'));
                 ?>
             </div>
         </div>
@@ -101,7 +101,7 @@
                 <p>As a national moderator, you find an overview of courses in your country here.</p>
 				<?php
                 $this->set('edit', true);	// displays the "Actions" column in all subsequent elements
-				echo $this->element('courses/index', array('courses' => $moderated));
+				echo $this->element('courses/index', array('courses' => $moderated, 'varname' => 'moderatedCourses'));
 				?>
             </div>
         </div>
@@ -112,24 +112,48 @@
         <div class="accordeon-item" id="your-courses">
             <h3><span>Your Courses</span></h3>
             <div class="item-content">
+                <p class="share-and-feature">
+                    Please mind contributing to the DHCR project by sharing your courses on social media
+                    or placing the DHCR-featured badge on institutional websites.
+                </p>
                 <?php
 				$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
-				echo $this->element('courses/index');
+				echo $this->element('courses/index', ['varname' => 'yourCourses']);
 				?>
             </div>
         </div>
 		<?php
 	}
     ?>
-    
 </div>
 
 
+<?= $this->element('svg_icons') ?>
+
+
 <?php
-$this->Html->script('accordeon', array('inline' => false));
+$this->Html->script(['sharing','modal','accordeon'], ['inline' => false]);
 $this->Html->scriptStart(array('inline' => false));
+
+echo 'var BASE_URL = "' . Configure::read('dhcr.baseUrl') . '";';
+
+$jsonOptions = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_PARTIAL_OUTPUT_ON_ERROR;
+if(!empty($courses))
+    echo 'var yourCourses = ' . json_encode($courses, $jsonOptions). ';';
+if(!empty($moderated))
+	echo 'var moderatedCourses = ' . json_encode($moderated, $jsonOptions). ';';
+if(!empty($new_courses))
+	echo 'var newCourses = ' . json_encode($new_courses, $jsonOptions). ';';
 ?>
+
 $(document).ready( function() {
     let accordeon = new Accordeon('accordeon');
+    $('.sharing.button').on('click', function(e) {
+        e.preventDefault();
+        let varname = $(e.target).attr('data-varname');
+        let id = $(e.target).attr('data-id');
+        let data = window[varname];
+        new Sharing(data, id);
+    });
 });
 <?php $this->Html->scriptEnd(); ?>

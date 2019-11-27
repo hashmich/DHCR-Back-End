@@ -1132,6 +1132,169 @@ div.notice {
   #accordeon .accordeon-item.open:last-child .item-content {
     border-bottom: 2px solid #d8d8d8; }
 
+#modal-wrapper {
+  position: fixed;
+  z-index: 1000000;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  #modal-wrapper #modal-content {
+    width: 90%;
+    max-width: 500px;
+    height: auto;
+    max-height: 95vh;
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative; }
+    @media only screen and (max-width: 400px) {
+      #modal-wrapper #modal-content {
+        padding: 20px; } }
+    #modal-wrapper #modal-content .close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      color: transparent;
+      line-height: 0;
+      cursor: pointer; }
+      #modal-wrapper #modal-content .close::after {
+        pointer-events: none;
+        content: '';
+        position: relative;
+        display: inline-block;
+        box-sizing: border-box;
+        width: 1.8em;
+        height: 1.8em;
+        border-radius: 100%;
+        border: 2px solid #1E6BA3;
+        background: -webkit-linear-gradient(-45deg, transparent 0%, transparent 44%, white 44%, white 56%, transparent 56%, transparent 100%), -webkit-linear-gradient(45deg, #1E6BA3 0%, #1E6BA3 44%, white 44%, white 56%, #1E6BA3 56%, #1E6BA3 100%);
+        background: linear-gradient(-45deg, transparent 0%, transparent 44%, white 44%, white 56%, transparent 56%, transparent 100%), linear-gradient(45deg, #1E6BA3 0%, #1E6BA3 44%, white 44%, white 56%, #1E6BA3 56%, #1E6BA3 100%);
+        transition: all 0.3s ease;
+        top: 2px;
+        margin-left: 8px; }
+      #modal-wrapper #modal-content .close:hover {
+        text-decoration: none; }
+        #modal-wrapper #modal-content .close:hover::after {
+          transform: rotate(90deg); }
+    #modal-wrapper #modal-content h1 {
+      font-size: 25px;
+      margin-top: 0; }
+      @media only screen and (max-width: 400px) {
+        #modal-wrapper #modal-content h1 {
+          font-size: 20px; } }
+
+.sharing svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 7px; }
+.sharing .row {
+  display: flex;
+  margin-top: 1em;
+  justify-content: space-between; }
+  .sharing .row:first-child {
+    margin: 0; }
+  .sharing .row.copy_to_clipboard {
+    justify-content: flex-start; }
+    .sharing .row.copy_to_clipboard input {
+      flex: 0 1 40%;
+      min-width: 110px;
+      height: 30px;
+      border: 2px solid #1E6BA3;
+      border-radius: 4px 0 0 4px;
+      background-color: #fff;
+      -ms-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      padding: 4px;
+      border-right: none; }
+    .sharing .row.copy_to_clipboard button {
+      flex: 0 0 auto;
+      padding: 2px 20px 0 10px;
+      border-radius: 0 15px 15px 0;
+      border-left: none;
+      border-color: #1E6BA3;
+      height: 30px;
+      font-size: 20px;
+      background-color: #1E6BA3;
+      color: white;
+      outline: none;
+      font-family: bebas, Sans-Serif;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase; }
+      .sharing .row.copy_to_clipboard button:hover {
+        transform: none;
+        background-color: #d8d8d8; }
+    .sharing .row.copy_to_clipboard .tooltip {
+      position: relative;
+      display: inline-block; }
+    .sharing .row.copy_to_clipboard .tooltip .tooltiptext {
+      visibility: hidden;
+      font-size: 18px;
+      width: 140px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 150%;
+      left: 50%;
+      margin-left: -75px;
+      opacity: 0;
+      transition: opacity 0.3s; }
+    .sharing .row.copy_to_clipboard .tooltip .tooltiptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent; }
+  .sharing .row .sharing-option {
+    flex: 1 1 40%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 2em;
+    color: #6d7278;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: 2px;
+    text-transform: capitalize;
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: 4px;
+    border: 2px solid #d8d8d8;
+    cursor: pointer;
+    height: 30px;
+    box-sizing: border-box;
+    transition: all 0.3s;
+    padding: 8px 0; }
+    .sharing .row .sharing-option:hover, .sharing .row .sharing-option.animate, .sharing .row .sharing-option.focus {
+      font-size: 105%;
+      text-decoration: underline; }
+    .sharing .row .sharing-option:last-child {
+      margin-right: 0; }
+
 /* Users plugin */
 /* defined as a mixin to possibly include it somewhere else, where !important is not strong enough */
 .info-text {

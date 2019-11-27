@@ -35,20 +35,29 @@ OR	(!empty($edit) AND $record['Course']['updated'] < date('Y-m-d H:i:s', time() 
 	<?php
 	if(!empty($edit)) {
 		echo '<td class="actions">';
-            if($auth_user['user_role_id'] < 3 AND !$record['Course']['approved']) {
-                echo $this->Html->link('approve', '/courses/approve/'.$record['Course']['approval_token']);
-            }
-            echo $this->Html->link('edit', array(
-				'controller' => 'courses',
-				'action' => 'edit',
-				$record['Course']['id']
-			));
-            if($auth_user['user_role_id'] < 3 OR $record['Course']['approved'])
-                echo $this->Html->link('revalidate', array(
-                        'controller' => 'courses',
-                        'action' => 'revalidate',
-                        $record['Course']['id']
-                ));
+		
+		echo $this->Html->link('share',
+            Configure::read('dhcr.baseUrl').'courses/view/'.$record['Course']['id'], [
+                'target' => '_blank',
+                'class' => 'sharing button',
+                'data-varname' => $varname,
+                'data-id' => $record['Course']['id']
+            ]);
+		
+		if($auth_user['user_role_id'] < 3 AND !$record['Course']['approved'])
+            echo $this->Html->link('approve', '/courses/approve/'.$record['Course']['approval_token']);
+		
+        echo $this->Html->link('edit', array(
+            'controller' => 'courses',
+            'action' => 'edit',
+            $record['Course']['id']
+        ));
+        if($auth_user['user_role_id'] < 3 OR $record['Course']['approved'])
+            echo $this->Html->link('revalidate', array(
+                    'controller' => 'courses',
+                    'action' => 'revalidate',
+                    $record['Course']['id']
+            ));
 		echo '</td>';
 	}
 	?>

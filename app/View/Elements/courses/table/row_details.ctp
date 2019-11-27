@@ -66,8 +66,34 @@ if($state !== 'Green' AND !empty($edit)) {
 						echo $value;
 						?>
 					</dd>
+                    <dt>Duration</dt>
+                    <dd>
+                        <?php
+						if(!empty($record['Course']['duration']) AND !empty($record['CourseDurationUnit']['name']))
+                            echo $record['Course']['duration'] . ' ' . $record['CourseDurationUnit']['name'];
+						else echo ' - ';
+                        ?>
+                    </dd>
+                    <dt>Recurring</dt>
+                    <dd>
+                        <?php
+						if(!empty($record['Course']['recurring']))
+							echo 'yes';
+						else echo 'no';
+                        ?>
+                    </dd>
+                    <dt>Online</dt>
+                    <dd>
+						<?php
+						if(!empty($record['Course']['online_course']))
+							echo 'yes';
+						else echo 'no';
+						?>
+                    </dd>
 					<dt>ECTS</dt>
-					<dd><?php echo (!empty($record['Course']['ects'])) ? $record['Course']['ects'] : ' - '; ?></dd>
+					<dd>
+                        <?php echo (!empty($record['Course']['ects'])) ? $record['Course']['ects'] : ' - '; ?>
+                    </dd>
 					
 					<dt>Lecturer</dt>
 					<dd>
@@ -84,13 +110,9 @@ if($state !== 'Green' AND !empty($edit)) {
 					
 					<dt>Link to Detail Page</dt>
 					<dd>
-						<?php
-						$url = array(
-							'controller' => 'courses',
-							'action' => 'view',
-							$record['Course']['id']);
-						echo $this->Html->link(Router::url($url, $full = true), $url);
-						?>
+						<?= $this->Html->link(
+						    Configure::read('dhcr.baseUrl').'courses/view/'.$record['Course']['id'],
+                            ['target' => '_blank']) ?>
 					</dd>
 					
 					<?php

@@ -21,11 +21,11 @@ $fieldlist = array(
 	'Institution.name' => array('label' => 'Institution'),
 	'Course.department' => array('label' => 'Department'),
 	'Course.info_url' => array('label' => 'Information'),
-	'Course.guide_url' => array('label' => 'Curriculum')
 );
 $colspan = count($fieldlist);
 if(!empty($edit)) $colspan++;
 $colspan++;	// add one for the state column
+if(!empty($varname)) $this->set('varname', $varname);
 ?>
 	
 <div class="scroll_wrapper">
@@ -63,7 +63,6 @@ $colspan++;	// add one for the state column
 	}
 	?>
 </div>
-
 
 
 <?php $this->Html->scriptStart(array('inline' => false)); ?>
