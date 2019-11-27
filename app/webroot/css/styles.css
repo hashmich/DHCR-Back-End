@@ -1078,6 +1078,25 @@ div.notice {
 .iframe-container-4x3 {
   padding-top: 75%; }
 
+.share-and-feature {
+  margin-bottom: 1.5em; }
+  .share-and-feature a {
+    display: inline-block;
+    float: left;
+    margin: 0;
+    margin-right: 1.5em; }
+  .share-and-feature p {
+    margin: 0;
+    float: left;
+    max-width: 350px; }
+  .share-and-feature:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0; }
+
 #accordeon {
   margin-top: 4em; }
   #accordeon .accordeon-item > h3 {

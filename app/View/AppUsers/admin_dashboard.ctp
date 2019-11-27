@@ -112,10 +112,17 @@
         <div class="accordeon-item" id="your-courses">
             <h3><span>Your Courses</span></h3>
             <div class="item-content">
-                <p class="share-and-feature">
-                    Please mind contributing to the DHCR project by sharing your courses on social media
-                    or placing the DHCR-featured badge on institutional websites.
-                </p>
+                <div class="share-and-feature">
+					<?= $this->Html->image('dhcr-feature-badge-300.png', [
+						'url' => '/img/dhcr-feature-badge-300.png',
+						'target' => '_blank',
+						'width' => 150,
+						'height' => 67]) ?>
+                    <p>
+                        Please mind contributing to the DHCR project by sharing your courses on social media
+                        or placing the DHCR-featured badge on institutional websites.
+                    </p>
+                </div>
                 <?php
 				$this->set('edit', true);	// displays the "Actions" column in all subsequent elements
 				echo $this->element('courses/index', ['varname' => 'yourCourses']);

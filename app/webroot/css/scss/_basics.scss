@@ -221,3 +221,19 @@ div.notice {
   padding-top: 75%;
 }
 
+.share-and-feature {
+	a {
+		display: inline-block;
+		float: left;
+		margin: 0;
+		margin-right: 1.5em;
+	}
+	p {
+		margin: 0;
+		float: left;
+		max-width: 350px;
+	}
+	margin-bottom: 1.5em;
+	@include clearfix;
+}
+
