@@ -86,6 +86,12 @@ class AppUsersController extends UsersController {
 	}
 	
 	
+	public function logout() {
+		// override required to apply Auth->logoutRedirect
+		parent::logout();
+	}
+	
+	
 	// when calling render from this controller, wee need to check for existing plugin views,
 	// which only partially are overridden on app level
 	public function render($view = null, $layout = null) {
@@ -142,13 +148,14 @@ class AppUsersController extends UsersController {
 			),
 			array(
 				'consent' => array(
-					'rule' => array('equalTo', 1),
+					'rule' => array('equalTo', '1'),
 					'required' => true,
 					'allowEmpty' => false,
 					'message' => 'You must agree to the terms.'
 				)
 			)
 		);
+		
 		parent::register();
 		$this->_setOptions();
 	}

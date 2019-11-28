@@ -30,7 +30,7 @@ App::uses('Controller', 'Controller');
 class AppController extends Controller {
 
 	public $components = array(
-		'Users.DefaultAuth',
+		'Users.DefaultAuth' => ['components' => ['Auth' => ['logoutRedirect' => '/users/login']]],
 		'DebugKit.Toolbar',
 		'Paginator',
 		'Session',
@@ -66,13 +66,7 @@ class AppController extends Controller {
         AND !$this->Auth->user()) {
             $this->_resetFilter();
         }
-
 		
-		if(	!empty($this->request->params['layout'])
-		AND	$this->request->params['layout'] == 'iframe'
-		) {
-			$this->set('layout', 'iframe');
-		}
 		
 		if(isset($this->Security))	{
 			$this->Security->requireSecure = array();
