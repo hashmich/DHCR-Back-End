@@ -35,6 +35,8 @@ echo $this->element('Utils.validation_errors');
 
 echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
 
+//echo '<div id="accordeon">';
+
 if($this->action == 'edit') {
     ?>
     <fieldset>
@@ -84,8 +86,66 @@ if($this->action == 'edit') {
 	));
 	echo $this->Form->input('language_id', array('empty' => ' -- none -- '));
 	echo $this->Form->input('online_course', ['label' => 'Is Online Course']);
+    ?>
+</fieldset>
+<fieldset>
+    <p>
+        Credit points rewarded within the European Credit Transfer and Accumulation System (ECTS).
+        Leave blank if not applicable.
+    </p>
+    <?php
+	echo $this->Form->input('ects', array(
+		'title' => 'Decimal numbers only. Optionally use the decimal point.',
+		'label' => 'ECTS points',
+		'min' => 0));
+	?>
+</fieldset>
+<fieldset>
+	<p>
+        The source URL should be the official publication location of your course information,
+        where more detailed information like curricula or module handbooks are available.
+    </p>
+    <?php
+	if(!empty($errors) OR ($modelName AND !empty($this->validationErrors[$modelName]))) {
+	?>
+    <div class="notice">
+        <p>
+            URL Validation has been set up to assist you providing valid content. <br />
+            But sometimes you may have trouble to get URLs past validation, due to weird
+            http status codes (codes > 300) or restrictive server settings.
+        </p>
+        <p>
+            Please check these boxes, if you thoroughly checked the URLs,
+            but repeatedly keep getting validation errors.
+        </p>
+		<?php
+		echo $this->Form->input('skip_info_validation', array(
+			'label' => 'Skip Info URL Validation',
+			'type' => 'checkbox',
+			'checked' => false,
+			'value' => 1
+		));
+		echo '</div>';
+		}
+		
+		echo $this->Form->input('info_url', array(
+			'label' => 'Source URL',
+			'title' => 'Course information URL.',
+			'type' => 'text'
+		));
+		?>
+</fieldset>
+<fieldset>
+	<?php
+	echo $this->Form->input('contact_name', ['label' => 'Lecturer Name']);
+	echo $this->Form->input('contact_mail', ['label' => 'Lecturer E-Mail']);
+	?>
+</fieldset>
+<fieldset>
+    <p>Please provide these descriptions in English language.</p>
+    <?php
 	echo $this->Form->input('description', array('type' => 'textarea'));
-	echo $this->Form->input('access_requirements');
+	echo $this->Form->input('access_requirements', array('type' => 'textarea'));
     ?>
 </fieldset>
 <fieldset>
@@ -141,57 +201,6 @@ if($this->action == 'edit') {
 		}
 		?>
     </div>
-</fieldset>
-<fieldset>
-	<?php
-	if(!empty($errors) OR ($modelName AND !empty($this->validationErrors[$modelName]))) {
-		?>
-		<div class="notice">
-			<p>
-				URL Validation has been set up to assist you providing valid content. <br />
-				But sometimes you may have trouble to get URLs past validation, due to weird 
-				http status codes (codes > 300) or restrictive server settings.
-			</p>
-			<p>
-				Please check these boxes, if you thoroughly checked the URLs, 
-				but repeatedly keep getting validation errors.
-			</p>
-			<?php
-			echo $this->Form->input('skip_info_validation', array(
-				'label' => 'Skip Info URL Validation',
-				'type' => 'checkbox',
-				'checked' => false,
-				'value' => 1
-			));
-			echo $this->Form->input('skip_guide_validation', array(
-				'label' => 'Skip Guide URL Validation',
-				'type' => 'checkbox',
-				'checked' => false,
-				'value' => 1
-			));
-		echo '</div>';
-	}
-	
-	echo $this->Form->input('info_url', array(
-		'label' => 'Information URL',
-		'title' => 'Course information URL.',
-		'type' => 'text'
-	));
-	echo $this->Form->input('guide_url', array(
-		'label' => 'Curriculum URL',
-		'type' => 'text',
-		'title' => 'URL of a course guide (eg a .pdf), that describes the course modules and structure.'
-	));
-	?>
-</fieldset>
-<fieldset>
-	<?php
-	echo $this->Form->input('ects', array(
-	        'title' => 'Decimal numbers only. Optionally use the decimal point.',
-            'min' => 0));
-	echo $this->Form->input('contact_name');
-	echo $this->Form->input('contact_mail');
-	?>
 </fieldset>
 <fieldset>
 	<?php
@@ -273,6 +282,21 @@ if($this->action == 'edit') {
 <?php
 echo $this->Form->end('submit');
 ?>
+
+
+
+<?php
+$this->Html->script(['modal','accordeon'], ['inline' => false]);
+$this->Html->scriptStart(array('inline' => false));
+
+echo 'var BASE_URL = "' . Configure::read('dhcr.baseUrl') . '";';
+?>
+
+$(document).ready( function() {
+    let accordeon = new Accordeon('accordeon');
+    
+});
+<?php $this->Html->scriptEnd(); ?>
 
 
 
