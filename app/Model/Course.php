@@ -180,20 +180,6 @@ class Course extends AppModel {
 				'message' => 'The http server response code of the provided URL is not okay.'
 			)
 		),
-		/*
-		'guide_url' => array(
-			'url' => array(
-				'rule' => array('urlFormat'),
-				'message' => 'URLs must begin with "http://" or "https://".',
-				'allowEmpty' => true,
-				'required' => false
-			),
-			'status_ok' => array(
-				'rule' => array('urlCheckStatus'),
-				'message' => 'The http server response code of the provided URL is not okay.'
-			)
-		),
-		*/
 		'start_date' => array(
 			'notEmpty' => array(
 				'rule' => array('notBlank'),
@@ -497,8 +483,6 @@ class Course extends AppModel {
 				$fieldlist = array();
 				if($record['Course']['skip_info_url'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
 					$fieldlist[] = 'info_url';
-				if($record['Course']['skip_guide_url'] < date('Y-m-d H:i:s', time() - Configure::read('App.CourseWarnPeriod')))
-					$fieldlist[] = 'guide_url';
 				$this->set($record);
 				if(!empty($fieldlist) AND !$this->validates(array('fieldList' => $fieldlist))) {
 					$errors = $this->validationErrors;
