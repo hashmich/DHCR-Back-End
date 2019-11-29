@@ -32,8 +32,9 @@ if($this->action == 'edit') {
 
 echo $this->element('Utils.validation_errors');
 
-
 echo $this->Form->create('Course', array('novalidate' => 'novalidate'));
+
+echo '<p>Independent from the language the course is held in, please provide meta data in English.</p>';
 
 if($this->action == 'edit') {
     ?>
@@ -75,6 +76,7 @@ if($this->action == 'edit') {
 ?>
 
     <fieldset>
+        <p>Please provide the course name in English language, if possible.</p>
         <?php
         echo $this->Form->input('name', array(
             'label' => 'Course Name'
