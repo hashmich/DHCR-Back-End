@@ -17,6 +17,7 @@
  */
 
 App::uses('Controller', 'Controller');
+App::uses('AppUser', 'Model');
 
 /**
  * Application Controller
@@ -43,6 +44,10 @@ class AppController extends Controller {
 	public $paginate = array(
 		'limit' => 10,
 		'maxLimit' => 200
+	);
+	
+	public $uses = array(
+		'AppUser'
 	);
 	
 	public $shibUser = null;
@@ -91,7 +96,7 @@ class AppController extends Controller {
 				
 			}
 		}
-
+		
 		if(!empty($_SERVER['HTTP_EPPN'])) {
             $this->shibUser = new AppUser();
             if($this->shibUser->isShibUser()) {
