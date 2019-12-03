@@ -85,7 +85,8 @@ function recaptchaCallback(token) {
 		</p>
 		<p>
 			<?php $url = urlencode(Router::url('/users/register', $full = true)); ?>
-			<a href="https://clarin.oeaw.ac.at/Shibboleth.sso/Login?target=<?php echo $url; ?>">
+			<a href="<?php echo Configure::read('shib.idpSelect') . $url; ?>"
+               onclick="alert('Single Sign-On is having problems at the moment. We are working on a solution...')">
 				Select your institution
 			</a>
 			(you will be redirected to an external website).

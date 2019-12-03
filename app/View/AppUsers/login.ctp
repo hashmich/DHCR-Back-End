@@ -33,7 +33,8 @@
 			$url = urlencode(Router::url('/users/login', $full = true));
 			?>
 			<li>
-				<a href="https://clarin.oeaw.ac.at/Shibboleth.sso/Login?target=<?php echo $url; ?>"
+                <a href="<?php echo Configure::read('shib.idpSelect') . $url; ?>"
+                   onclick="alert('Single Sign-On is having problems at the moment. We are working on a solution...')"
 				title="You will be redirected to an external service">
 					Login via Single Sign-On
 				</a>	
