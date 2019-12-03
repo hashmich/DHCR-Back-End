@@ -1207,6 +1207,73 @@ div.notice {
       @media only screen and (max-width: 400px) {
         #modal-wrapper #modal-content h1 {
           font-size: 20px; } }
+    #modal-wrapper #modal-content .radio-selector {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      margin: 0;
+      margin-bottom: 1rem;
+      border: 2px solid #1E6BA3;
+      border-radius: 14px;
+      overflow: hidden;
+      padding: 0;
+      box-sizing: border-box;
+      width: 100%; }
+      #modal-wrapper #modal-content .radio-selector li {
+        font-size: 12px;
+        line-height: 1em;
+        padding: 5px 10px 6px;
+        font-weight: bold;
+        color: #1E6BA3;
+        margin: 0;
+        flex: 1 1 20%; }
+      #modal-wrapper #modal-content .radio-selector li.label {
+        padding-left: 15px;
+        flex: 0 0 130px; }
+      #modal-wrapper #modal-content .radio-selector li.option {
+        cursor: pointer;
+        text-align: center; }
+        #modal-wrapper #modal-content .radio-selector li.option:last-child {
+          padding-right: 12px; }
+        #modal-wrapper #modal-content .radio-selector li.option.selected {
+          background-color: #1E6BA3;
+          color: white;
+          cursor: default; }
+        #modal-wrapper #modal-content .radio-selector li.option:hover {
+          background-color: #1E6BA3;
+          color: white; }
+    #modal-wrapper #modal-content .separator {
+      color: #1E6BA3; }
+    #modal-wrapper #modal-content #StartDateResult {
+      border: 2px solid #1E6BA3;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: bold;
+      line-height: 1em;
+      padding: 5px 10px 6px; }
+    #modal-wrapper #modal-content #dateContainer {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      grid-auto-rows: auto;
+      grid-gap: 1em; }
+      #modal-wrapper #modal-content #dateContainer label {
+        font-weight: bold; }
+      #modal-wrapper #modal-content #dateContainer input {
+        border: 1px solid #1E6BA3;
+        border-radius: 4px;
+        padding: 4px 8px;
+        line-height: 1.5em;
+        color: #333333; }
+    #modal-wrapper #modal-content .delete-date, #modal-wrapper #modal-content .add-date {
+      color: #1E6BA3;
+      font-weight: bold;
+      cursor: pointer; }
+      #modal-wrapper #modal-content .delete-date:hover, #modal-wrapper #modal-content .add-date:hover {
+        text-decoration: underline; }
+    #modal-wrapper #modal-content .add-date {
+      margin: 1em 0; }
 
 .sharing svg {
   width: 20px;

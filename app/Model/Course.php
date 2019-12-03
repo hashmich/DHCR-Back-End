@@ -364,7 +364,7 @@ class Course extends AppModel {
 	public function multiDate($check) {
 		$check = explode(';', $check[key($check)]);
 		foreach($check as $k => $date) {
-			if(!preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', trim($date)))
+			if(!preg_match('/^2[0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', trim($date)))
 				return false;
 		}
 		return true;

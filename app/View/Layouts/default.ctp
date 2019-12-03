@@ -59,13 +59,12 @@ if(!empty($auth_user)) {
                     'height' => 90);
 
                 $file = '/img/logos/DARIAH-CLARIN-joint-logo.jpg';
-                echo $this->Html->link($this->Html->image($file, $logo), '/', array(
-                    'target' => '_blank',
+                echo $this->Html->link($this->Html->image($file, $logo), '/users/dashboard', array(
                     'escape' => false));
                 ?>
                 <div class="title">
                     <h1>
-                        <a href="<?php echo Router::url('/'); ?>">
+                        <a href="<?php echo Router::url('/users/dashboard'); ?>">
                             <span id="h1">Digital Humanities</span><br>
                             <span id="h2">Course</span><span id="h3">Registry</span>
                         </a>

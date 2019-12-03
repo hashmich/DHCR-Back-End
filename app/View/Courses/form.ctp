@@ -169,7 +169,7 @@ if($this->action == 'edit') {
                 'div' => false,
                 'error' => false
             ));
-            echo $this->Form->input('recurring');
+            echo $this->Form->input('recurring', ['readonly' => true]);
             
             if( !empty($this->validationErrors['Course']['start_date'])
                 OR  !empty($this->validationErrors['Course']['recurring'])) {
@@ -296,18 +296,18 @@ echo $this->Form->end('submit');
 
 
 <?php
-//$this->Html->script(['modal','start_date'], ['inline' => false]);
-//$this->Html->script('https://code.jquery.com/ui/1.12.1/jquery-ui.js', ['inline' => false]); // for datepicker
+$this->Html->script(['start_date', 'modal'], ['inline' => false]);
+$this->Html->script('https://code.jquery.com/ui/1.12.1/jquery-ui.js', ['inline' => false]); // for datepicker
+$this->Html->css('https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', ['inline' => false]);
 $this->Html->scriptStart(array('inline' => false));
 
 echo 'var BASE_URL = "' . Configure::read('dhcr.baseUrl') . '";';
 ?>
-
 $(document).ready( function() {
-    $('#CourseStartDate').on('click', function(e) {
-        let input = $(e.target);
-        //new StartDate(input);
+    $('#CourseStartDate, #CourseRecurring').on('click', function(e) {
+        var sd = new StartDate($(e.target));
     });
+
 });
 <?php $this->Html->scriptEnd(); ?>
 
