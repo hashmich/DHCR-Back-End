@@ -1255,9 +1255,10 @@ div.notice {
       padding: 5px 10px 6px; }
     #modal-wrapper #modal-content #dateContainer {
       display: grid;
-      grid-template-columns: auto auto auto;
+      grid-template-columns: minmax(auto, 120px) 120px minmax(auto, 120px);
       grid-auto-rows: auto;
-      grid-gap: 1em; }
+      grid-gap: 1em;
+      align-items: center; }
       #modal-wrapper #modal-content #dateContainer label {
         font-weight: bold; }
       #modal-wrapper #modal-content #dateContainer input {
@@ -1265,7 +1266,8 @@ div.notice {
         border-radius: 4px;
         padding: 4px 8px;
         line-height: 1.5em;
-        color: #333333; }
+        color: #333333;
+        width: 100px; }
     #modal-wrapper #modal-content .delete-date, #modal-wrapper #modal-content .add-date {
       color: #1E6BA3;
       font-weight: bold;

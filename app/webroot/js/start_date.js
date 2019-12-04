@@ -80,7 +80,7 @@ class StartDate {
         }
         let separator = ' <span class="separator">•••</span> ';
         if($('#StartDateResult').length) $('#StartDateResult').html(readable.join(separator));
-        else return '<p id="StartDateResult">' + readable.join(separator) + '</p>';
+        else return '<p id="StartDateResult">Result: ' + readable.join(separator) + '</p>';
     }
 
     onClose() {

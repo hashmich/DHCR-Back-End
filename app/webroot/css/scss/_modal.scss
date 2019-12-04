@@ -136,9 +136,10 @@
 
         #dateContainer {
             display: grid;
-            grid-template-columns: auto auto auto;
+            grid-template-columns: minmax(auto, 120px) 120px minmax(auto, 120px);
             grid-auto-rows: auto;
             grid-gap: 1em;
+            align-items: center;
 
             label {
                 font-weight: bold;
@@ -149,6 +150,7 @@
                 padding: 4px 8px;
                 line-height: 1.5em;
                 color: $text-color;
+                width: 100px;
                 //font-family: metropolis, sans-serif;
             }
         }
