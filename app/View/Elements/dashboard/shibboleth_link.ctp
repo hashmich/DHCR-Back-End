@@ -10,8 +10,7 @@ if(empty($auth_user['shib_eppn'])){
 		</p>
 		<p>
 			Please log in
-			<a href="<?php echo Configure::read('shib.idpSelect') . $url; ?>"
-               onclick="alert('Single Sign-On is having problems at the moment. We are working on a solution...')">here</a>
+			<a href="<?php echo Configure::read('shib.idpSelect') . $url; ?>">here</a>
 			(you will be redirected to an external website).
 		</p>
 	</div>
