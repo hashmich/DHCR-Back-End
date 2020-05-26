@@ -1,8 +1,6 @@
 <?php
-// Edit lines 36, 228 & 233 (debug-level, security salt, security cipherSeed)
-
 /**
- * This is core configuration file.
+ * Core configuration file. Loaded before bootstrap.php
  *
  * Use it to configure core behavior of Cake.
  *
@@ -20,6 +18,24 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
+
+// load configuration from .env file, if specific variable is not already present on host system
+if(stripos(env('DHCR_Frontend'), 'true') !== 0 && file_exists(CONFIG . '.env')) {
+	require_once VENDORS.'josegonzalez/dotenv/src/josegonzalez/Dotenv/Loader.php';
+	require_once VENDORS.'m1/env/src/Parser.php';
+	require_once VENDORS.'m1/env/src/Parser/AbstractParser.php';
+	require_once VENDORS.'m1/env/src/Parser/VariableParser.php';
+	require_once VENDORS.'m1/env/src/Parser/ValueParser.php';
+	require_once VENDORS.'m1/env/src/Parser/KeyParser.php';
+	require_once VENDORS.'m1/env/src/Helper/StringHelper.php';
+	require_once VENDORS.'m1/env/src/Exception/ParseException.php';
+	$dotenv = new josegonzalez\Dotenv\Loader([CONFIG . '.env']);
+	$dotenv->parse()
+		->putenv()
+		->toEnv()
+		->toServer();
+}
+
 /**
  * CakePHP Debug Level:
  *
@@ -33,7 +49,7 @@
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
-	Configure::write('debug', 2);
+	Configure::write('debug', (stripos(env('DEBUG'), 'true') === 0) ? 2 : 0);
 
 /**
  * Configure the Error handler used to handle errors for your application. By default
@@ -157,7 +173,7 @@
  * Turn off all caching application-wide.
  *
  */
-	Configure::write('Cache.disable', true);
+	Configure::write('Cache.disable', false);
 
 /**
  * Enable cache checking.
@@ -224,13 +240,14 @@
 
 /**
  * A random string used in security hashing methods.
+ * Please enter 40 random alphanumeric charcters
  */
-	Configure::write('Security.salt', 'put_your_secret_alphanumeric_salt_string_here');
+	Configure::write('Security.salt', env('SECURITY_SALT'));
 
 /**
  * A random numeric string (digits only) used to encrypt/decrypt strings.
  */
-	Configure::write('Security.cipherSeed', '0815');
+	Configure::write('Security.cipherSeed', env('SECURITY_CYPHER_SEED'));
 
 /**
  * Apply timestamps with the last modified time to static assets (js, css, images).
@@ -270,7 +287,7 @@
  * Uncomment this line and correct your server timezone to fix
  * any date & time related errors.
  */
-	date_default_timezone_set('Europe/Berlin');
+	//date_default_timezone_set('UTC');
 
 /**
  * `Config.timezone` is available in which you can set users' timezone string.
@@ -278,7 +295,7 @@
  * then the value of `Config.timezone` will be used. This feature allows you to set users' timezone just
  * once instead of passing it each time in function calls.
  */
-	Configure::write('Config.timezone', 'Europe/Berlin');
+	//Configure::write('Config.timezone', 'Europe/Paris');
 
 /**
  *

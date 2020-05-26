@@ -37,70 +37,33 @@
  * The origin email. See CakeEmail::from() about the valid values
  *
  */
+
 class EmailConfig {
 
 	public function __construct() {
-		$host = env('HTTP_HOST');
-		$host = ($host != 'localhost' AND !empty($host)) ? $host : 'example.com';
 		if(!Configure::read('App.defaultEmail'))
 			Configure::write('App.defaultEmail', 'noreply@example.com');
+		
 		$this->default['from'] = Configure::read('App.defaultEmail');
 	}
 	
 	
 	
+	
+	
+
 	public $default = array(
-		'transport' => 'Mail',
-		'from' => 'noreply@example.com',
+		'transport' => 'Smtp',
+		// the following line has to be set from constructor!
+		//'from' => Configure::read('App.defaultEmail'),
+		'host' => 'smtp.oeaw.ac.at',
+		'port' => 25,
+		'timeout' => 30,
+		'client' => null,
+		'log' => false,		// enabling this will print the full messages into the log
 		'charset' => 'utf-8',
 		'headerCharset' => 'utf-8',
+		'returnPath' => 'dh-course-registry@dhcr.clarin-dariah.eu'
 	);
-	
-	// not being used for the DH Registry
-	/*
-	public $smtp = array(
-		'transport' => 'Smtp',
-		'from' => array('site@localhost' => 'My Site'),
-		'host' => 'localhost',
-		'port' => 25,
-		'timeout' => 30,
-		'username' => 'user',
-		'password' => 'secret',
-		'client' => null,
-		'log' => false,
-		//'charset' => 'utf-8',
-		//'headerCharset' => 'utf-8',
-	);
-
-	public $fast = array(
-		'from' => 'you@localhost',
-		'sender' => null,
-		'to' => null,
-		'cc' => null,
-		'bcc' => null,
-		'replyTo' => null,
-		'readReceipt' => null,
-		'returnPath' => null,
-		'messageId' => true,
-		'subject' => null,
-		'message' => null,
-		'headers' => null,
-		'viewRender' => null,
-		'template' => false,
-		'layout' => false,
-		'viewVars' => null,
-		'attachments' => null,
-		'emailFormat' => null,
-		'transport' => 'Smtp',
-		'host' => 'localhost',
-		'port' => 25,
-		'timeout' => 30,
-		'username' => 'user',
-		'password' => 'secret',
-		'client' => null,
-		'log' => true,
-		//'charset' => 'utf-8',
-		//'headerCharset' => 'utf-8',
-	);
-	*/
+ 
 }

@@ -64,29 +64,45 @@
  */
 class DATABASE_CONFIG {
 
-	public $default = array(
-		'datasource' => 'Database/Mysql',
-		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'user',
-		'password' => 'password',
-		'database' => 'database_name',
-		'prefix' => '',
-		//'encoding' => 'utf8',
-	);
-
-
-	/* do not remove the test database connection!
-	 * otherwise tests might write to the productive database
-	 */  
-	public $test = array(
-		'datasource' => 'Database/Mysql',
-		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'user',
-		'password' => 'password',
-		'database' => 'test_database_name',
-		'prefix' => '',
-		//'encoding' => 'utf8',
-	);
+	public $default = array();
+	
+	public $test = array();
+	
+	public function __construct() {
+		$url = strstr(env('DATABASE_URL'), '?', true);
+		$url = str_replace('mysql://', '', $url);
+		$url = explode('@', $url);
+		$login = explode(':', $url[0]);
+		$database = explode('/', $url[1]);
+		$this->default = array(
+			'datasource'  => 'Database/Mysql',
+			'persistent'  => false,
+			'host'        => $database[0],
+			'login'       => $login[0],
+			'password'    => $login[1],
+			'database'    => $database[1],
+			'prefix' => '',
+			'encoding' => 'utf8'
+		);
+		
+		$test = strstr(env('DATABASE_TEST_URL'), '?', true);
+		$test = str_replace('mysql://', '', $test);
+		$test = explode('@', $test);
+		$testLogin = explode(':', $test[0]);
+		$testDatabase = explode('/', $test[1]);
+		$this->test = array(
+			'datasource'  => 'Database/Mysql',
+			'persistent'  => false,
+			'host'        => $testDatabase[0],
+			'login'       => $testLogin[0],
+			'password'    => $testLogin[1],
+			'database'    => $testDatabase[1],
+			'prefix' => '',
+			'encoding' => 'utf8'
+		);
+	}
 }
+
+
+
+
