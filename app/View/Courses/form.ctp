@@ -64,11 +64,6 @@ if($this->action == 'edit') {
                 'value' => 1
             ));	// do or not update the timestamp
         }
-
-        echo $this->Form->input('user_id', array(
-            'label' => 'Maintainer',
-            'empty' => ' -- nobody -- '
-        ));
         ?>
     </fieldset>
     <?php

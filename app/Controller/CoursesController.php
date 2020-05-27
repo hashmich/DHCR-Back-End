@@ -287,7 +287,6 @@ class CoursesController extends AppController {
 		if(!empty($this->request->data['Course'])) {
 			// check the ID has been autorized correctly
 			if(!$admin) {
-				$this->request->data['Course']['user_id'] = $this->Auth->user('id');
 				unset($this->request->data['Course']['created']);
 				unset($this->request->data['Course']['updated']);
 			}else{
@@ -297,6 +296,7 @@ class CoursesController extends AppController {
 				}
 			}
 			$this->request->data['Course']['id'] = $id;
+			$this->request->data['Course']['user_id'] = $course['Course']['user_id'];
 			
 			if(!empty($this->request->data['Course']['skip_info_validation'])) {
 				$this->request->data['Course']['skip_info_url'] = date('Y-m-d H:i:s');
@@ -311,6 +311,7 @@ class CoursesController extends AppController {
 				$this->request->data['Course']['id'] = $id;		// we need to set this again...
 				if($this->Course->saveAll($this->request->data, array('validate' => false, 'deep' => true))) {
 					$this->Session->delete('edit.Course.id');
+					$this->Flash->set('Record updated');
 					$this->redirect(array(
 						'controller' => 'users',
 						'action' => 'dashboard'
@@ -332,7 +333,6 @@ class CoursesController extends AppController {
 		$admin = ($this->Auth->user('is_admin') OR $this->Auth->user('user_role_id') < 3);
 		if(!empty($this->request->data['Course'])) {
 			if(!$admin) {
-				$this->request->data['Course']['user_id'] = $this->Auth->user('id');
 				unset($this->request->data['Course']['created']);
 				unset($this->request->data['Course']['updated']);
 			}
@@ -340,9 +340,11 @@ class CoursesController extends AppController {
 				$this->request->data['Course']['skip_info_url'] = date('Y-m-d H:i:s');
 				$this->Course->validator()->remove('info_url', 'status_ok');
 			}
+			$this->request->data['Course']['user_id'] = $this->Auth->user('id');
 			if($this->Course->validateAll($this->request->data)) {
 				$this->request->data = $this->Course->data;		// callback beforeValidate manipulates data
 				if($this->Course->saveAll($this->request->data, array('validate' => false))) {
+					$this->Flash->set('Course saved');
 					$this->redirect(array(
 						'controller' => 'users',
 						'action' => 'dashboard'
