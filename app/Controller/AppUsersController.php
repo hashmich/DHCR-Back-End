@@ -171,11 +171,9 @@ class AppUsersController extends UsersController {
 		$this->redirect('/users/profile');
 	}
 	
-	
 	protected function _newUserAdminNotification($user = array()) {
 		if(empty($user)) return false;
 		$result = true;
-		$admins = array();
 		$mailOpts = array(
 			'template' => 'Users.admin_new_user',
 			'subject' => 'New Account Request',
@@ -183,30 +181,21 @@ class AppUsersController extends UsersController {
 			'cc' => Configure::read('App.defaultCc')
 		);
 		
-		// try fetching the moderator in charge of the user's country, 
-		$country_id = (!empty($user[$this->modelClass]['country_id'])) 
-			? $user[$this->modelClass]['country_id'] : null;
-		// if country is not set, try retrieving it from the institution of the user
-		if(empty($country_id) AND !empty($user[$this->modelClass]['institution_id'])) {
-			$institution = $this->{$this->modelClass}->Institution->find('first', array(
+		$admins = $this->AppUser->find('all', array(
+			'contain' => array(),
+			'conditions' => array(
+				'AppUser.user_admin' => 1,
+				'AppUser.active' => 1)));
+		if(empty($admins)) {
+			$admins = $this->find('all', array(
 				'contain' => array(),
 				'conditions' => array(
-					'Institution.id' => $user[$this->modelClass]['institution_id']
+					'AppUser.is_admin' => 1,
+					'AppUser.active' => 1
 				)
 			));
-			if($institution AND !empty($institution['Institution']['country_id']))
-				$country_id = $institution['Institution']['country_id'];
-		}
-		if(empty($country_id) AND !empty($user[$this->modelClass]['email'])) {
-			$country_id = $this->AppUser->Country->getCountryFromEmail($user[$this->modelClass]['email']);
-		}
-		if(empty($country_id) AND !empty($user[$this->modelClass]['university'])) {
-			$country_id = $this->AppUser->Country->getCountryFromText($user[$this->modelClass]['university']);
 		}
 		
-		// find the moderators in charge
-        $admins = $this->AppUser->getModerators($country_id, $user_admin = true);
-
 		if($admins) {
 			foreach($admins as $admin) {
 				$mailOpts['email'] = $admin[$this->modelClass]['email']; 
