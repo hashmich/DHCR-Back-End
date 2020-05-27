@@ -24,7 +24,8 @@ $fieldlist = array(
     'Institution.name' => array('label' => 'Institution'),
     'AppUser.university' => array('label' => 'New Institution?'),
     'AppUser.about' => array('label' => 'About'),
-    'AppUser.email' => array('label' => 'Email')
+    'AppUser.email' => array('label' => 'Email'),
+	'AppUser.created' => array('label' => 'Created')
 );
 
 
