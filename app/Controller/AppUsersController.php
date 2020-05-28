@@ -156,6 +156,11 @@ class AppUsersController extends UsersController {
 			)
 		);
 		
+		//check the email subscription
+		if($this->request->data['AppUser']['mail_list']) {
+			$this->AppUser->handleUserDHMailList($this->request->data['AppUser']['email'], true);
+		}
+		
 		parent::register();
 		$this->_setOptions();
 	}
@@ -284,6 +289,23 @@ class AppUsersController extends UsersController {
 	
 	public function profile($id = null) {
 		$this->_setOptions();
+		//get the actual user info because we need the email
+		$user = $this->Auth->user();
+		if(isset($user['email']) && isset($user['mail_list'])) {
+			//check if the mail subscription is changed?
+			if(isset($this->request->data['AppUser']['mail_list']) && ($user['mail_list'] != $this->request->data['AppUser']['mail_list'])) {
+				//subscription
+				if($this->request->data['AppUser']['mail_list']) {
+					//error_log('subscribe');
+					$this->AppUser->handleUserDHMailList($user['email'], true);
+				}
+				//unsubs.
+				if( $this->request->data['AppUser']['mail_list'] == 0) {
+					//error_log('UNsubscribe');
+					$this->AppUser->handleUserDHMailList($user['email'], false);
+				}
+			}
+		}
 		parent::profile($id);
 	}
 	

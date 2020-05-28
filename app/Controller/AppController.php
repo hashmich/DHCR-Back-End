@@ -80,12 +80,6 @@ class AppController extends Controller {
 		
 		$this->set('modelName', $this->modelClass);
 		
-		// for debugging purposes
-		if(!$this->Auth->user() AND strpos(APP, 'xampp') !== false AND Configure::read('debug') > 0) {
-			//$this->Auth->allow();
-			//debug('allowed by debug settings');
-		}
-		
 		if($this->Auth->user('user_role_id') AND $this->Auth->user('user_role_id') < 3) {
 			// dynamically load the AclMenu Component
 			if(!isset($this->AclMenu)) {
