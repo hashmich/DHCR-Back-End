@@ -46,8 +46,13 @@ Configure::write('App.mapApiKey', env('MAP_API_KEY'));
 
 * We're not using Cake's 'App.FullBaseUrl', which would directly affect the Router::url('/', $full = true) output
 */
-#TODO: align email templates with new .env base URLs
-Configure::write('App.consoleBaseUrl', 'https://dhcr.clarin-dariah.eu');
+#TODO: align email templates with env('DHCR_BASE_URL')
+Configure::write('App.consoleBaseUrl', 'https://dhcr.clarin-dariah.eu/ops');
+
+
+Configure::write('List.subscribeURL', env('LIST_SUBSCRIBE_URL'));
+Configure::write('List.unsubscribeURL', env('LIST_UNSUBRSCRIBE_URL'));
+Configure::write('List.adminPwd', env('LIST_ADMIN_PWD'));
 
 
 /**

@@ -286,9 +286,10 @@ class AppUser extends User {
 				'conditions' => array(
 					'or' => array(
 						'AppUser.shib_eppn' => $this->data['shib_eppn'],
-						'AppUser.email' => $this->data['shib_eppn'],
-						'AppUser.shib_eppn' => $this->data['email'],
-						'AppUser.email' => $this->data['email']),
+						'AppUser.email' => $this->data['shib_eppn']
+					),
+					//'AppUser.shib_eppn' => $this->data['email'],
+					//'AppUser.email' => $this->data['email']
 					'AppUser.active' => true
 				)
 			));
@@ -333,6 +334,34 @@ class AppUser extends User {
 			return $result;
 		}
 		return array();
+	}
+	
+	
+	/**
+	 *
+	 * @param string $email
+	 * @param bool $subscribehandle the user un/subscription
+	 */
+	public function handleUserDHMailList($email, $subscribe = true) {
+		$mailcfg = Configure::read('List');
+		if($mailcfg['subscribeURL'] && $mailcfg['adminPwd'] && $mailcfg['unsubscribeURL']){
+			if($subscribe) {
+				$mailurl = $mailcfg['subscribeURL'];
+			}else{
+				$mailurl = $mailcfg['unsubscribeURL'];
+			}
+			$ch = curl_init($mailurl.$email);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_HEADER, 1);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
+			curl_setopt($ch,CURLOPT_POSTFIELDS, "&adminpw=".$mailcfg['adminPwd']);
+			$response = curl_exec($ch);
+			curl_close($ch);
+		}else{
+			error_log('problem with the list config variables');
+		}
 	}
 	
 	
