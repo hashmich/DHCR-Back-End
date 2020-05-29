@@ -49,10 +49,7 @@
 		$modSettingOptions = array();
 	}
 	
-    echo $this->Form->input('mail_list', [
-    'type' => 'checkbox',
-    'label' => 'Mailing List Subscription'
-    ]);
+    
 	echo '</fieldset>';
 	
 	
