@@ -190,7 +190,21 @@ so that our moderators get an idea of your involvement into Digital Humanities.'
         ]); ?>
 	</fieldset>
 
-    
+    <fieldset>
+        <p>
+            Would you like to subscibe to the DH Course Registry mailing list
+            and stay informed about updates regarding the DH Course Registry
+            and shared information regarding DH Training and Teaching?
+        </p>
+        <?php
+        echo $this->Form->input('mail_list', [
+            'type' => 'checkbox',
+            'label' => 'Yes, subscribe me please!',
+            'required' => false,
+            'value' => 1
+        ]);
+        ?>
+    </fieldset>
 	
     <?php
 	echo $this->Form->end(array(
