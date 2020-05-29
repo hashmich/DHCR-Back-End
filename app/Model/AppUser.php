@@ -100,6 +100,15 @@ class AppUser extends User {
 	}
 	
 	
+	public function afterSave(boolean $created, $options = array()) {
+		//check the email subscription
+		if(isset($this->request->data[$this->modelClass]['mail_list'])) {
+			$subsrcibe = (boolean)$this->request->data[$this->modelClass]['mail_list'];
+			$this->handleUserDHMailList($this->request->data['AppUser']['email'], $subsrcibe);
+		}
+	}
+	
+	
 	public $virtualFields = array(
 		'name' => 'TRIM(CONCAT(AppUser.academic_title, " ", AppUser.first_name, " ", AppUser.last_name))'
 	);

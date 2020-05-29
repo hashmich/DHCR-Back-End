@@ -156,11 +156,6 @@ class AppUsersController extends UsersController {
 			)
 		);
 		
-		//check the email subscription
-		if($this->request->data['AppUser']['mail_list']) {
-			$this->AppUser->handleUserDHMailList($this->request->data['AppUser']['email'], true);
-		}
-		
 		parent::register();
 		$this->_setOptions();
 	}
