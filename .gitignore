@@ -1,10 +1,10 @@
 .env
 /app/webroot/info.php
-/tmp/*
-/logs/*
+/app/tmp/**
+/app/logs/**
 .sass-cache
 .svn
-logs
+
 
 ~*
 /composer.*
