@@ -1,6 +1,7 @@
 .env
 /app/webroot/info.php
-tmp
+/tmp/*
+/logs/*
 .sass-cache
 .svn
 logs
