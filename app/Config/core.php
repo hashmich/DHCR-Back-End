@@ -20,7 +20,7 @@
 
 
 // load configuration from .env file, if specific variable is not already present on host system
-if(stripos(env('DHCR_Frontend'), 'true') !== 0 && file_exists(CONFIG . '.env')) {
+if(stripos(env('DHCR_ENV'), 'true') !== 0 && file_exists(CONFIG . '.env')) {
 	require_once VENDORS.'josegonzalez/dotenv/src/josegonzalez/Dotenv/Loader.php';
 	require_once VENDORS.'m1/env/src/Parser.php';
 	require_once VENDORS.'m1/env/src/Parser/AbstractParser.php';
