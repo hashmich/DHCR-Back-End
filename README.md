@@ -1,16 +1,19 @@
 # DHCR - Administrative Back-End
 The applications currently consists of three sub-apps. 
-This is the DHCR Back-End and meant to be used by contributors, moderators and admins. 
+This is the DHCR Back-End and meant to be used by contributors, moderators and admins. It currently holds legacy code from the former DHCR prototype, based on the 2.x branch of CakePhp, which should soon be integrated and migrated to the newer main app (Front-End) on CakePhp 3.x. The back-end can be used as stand-alone application, but is pulled in as a submodule from the front-end. 
+
+## PHP Version
+CakePhp 2.x is designed to work well with Php versions >=5.6.
+The most recent Php version it doesn't have too much problems with is 7.0, while >=7.1 requires you to disable deprecations `E_ALL & E_DEPRECATED & E_USER_DEPRECATED`.
+The test framework used with the CakePhp 2.x branch will break for Php versions >7.0.
+Check the CakePhp handbook for mor limitations: 
+[https://book.cakephp.org/2/en/installation.html]
 
 ## Setup
-The front-end project is build using composer. 
-See instructions on how to install composer and 
-CakePhp specific instructions here: 
-https://book.cakephp.org/3.0/en/installation.html
-
-After downloading/cloning the repository, run
+The CakePhp source code is pulled in using composer. 
+After downloading/cloning the repository, cd to `app/` and run
 ```bash
-php composer.phar update
+composer update 
 ```
 
 If not present, create directories logs and tmp:
@@ -22,8 +25,12 @@ If not present, create directories logs and tmp:
 	|__logs
     	|
     	|__tmp
+	|
+	|__Vendor
     	|
-    	|__...
+    	|__composer.json
+	|
+	|__...
 ```
 
 Run following command to make them writable:
