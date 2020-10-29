@@ -1,0 +1,15 @@
+{
+    "name": "cakephp/app",
+    "description": "CakePHP skeleton app",
+    "homepage": "https://cakephp.org",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "7.0",
+        "cakephp/cakephp": "^2.10",
+        "josegonzalez/dotenv": "3.*",
+    },
+    "config": {
+        "vendor-dir": "Vendor/"
+    }
+}

@@ -17,11 +17,13 @@ If not present, create directories logs and tmp:
 ```
 <installation_directory>
     |
-    |__logs
-    |
-    |__tmp
-    |
-    |__...
+    |__app
+	|
+	|__logs
+    	|
+    	|__tmp
+    	|
+    	|__...
 ```
 
 Run following command to make them writable:
@@ -44,16 +46,20 @@ To connect to databases, provide required access keys, set debug level or interc
 ```
 <installation_directory>
 	|
-	|__Config
+	|__app
 		|
-		|__.env.default
+		|__Config
+			|
+			|__.env.default
 ```
 
 Make sure the file's contents are interpreted on container startup globally or use the renamed local file for development:
 ```
 <installation_directory>
 	|
-	|__Config
+	|__app
 		|
-		|__.env
+		|__Config
+			|
+			|__.env
 ```

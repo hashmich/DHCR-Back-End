@@ -83,6 +83,10 @@ if (php_sapi_name() === 'cli-server') {
 	$_SERVER['PHP_SELF'] = '/' . basename(__FILE__);
 }
 
+define(
+    'CAKE_CORE_INCLUDE_PATH',
+    ROOT . DS . APP_DIR . DS . 'Vendor' . DS . 'cakephp' . DS . 'cakephp' . DS . 'lib');
+
 if (!defined('CAKE_CORE_INCLUDE_PATH')) {
 	if (function_exists('ini_set')) {
 		ini_set('include_path', ROOT . DS . 'lib' . PATH_SEPARATOR . ini_get('include_path'));
