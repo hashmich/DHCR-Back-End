@@ -19,42 +19,42 @@
 App::uses('UsersController', 'Users.Controller');
 
 /**	Extending the plugin's UsersController.
-*	This is not neccessary to override plugin views on app-level, but if you want to extend the plugin views. 
-*	
+*	This is not neccessary to override plugin views on app-level, but if you want to extend the plugin views.
+*
 *	The Users plugin is a reinforced/refactored version of the CakeDC Users plugin.
 *	documentation: https://github.com/CakeDC/users/blob/master/Docs/Documentation/Extending-the-Plugin.md
 */
 
 class AppUsersController extends UsersController {
-    
+
 	public $name = 'AppUsers';
-	
+
 	// if using the plugin's model:
 	//public $modelClass = 'Users.User';
 	//public $uses = array('Users.User');
-	
+
 	public $modelClass = 'AppUser';
-	
+
 	public $uses = array('AppUser');
-	
-	
-	
+
+
+
 	public function beforeFilter() {
 		parent::beforeFilter();
-		
+
 		if($this->Auth->user('user_role_id') < 3) $this->Auth->allow(array('invite'));
-		
+
 		if($this->Auth->user()) {
 			if($this->DefaultAuth->isAdmin()) {
 				$this->Auth->allow(array('delete'));
 			}
 			$this->Auth->allow(array('delete_identity'));
 		}
-		
+
 		$this->set('title_for_layout', 'Account Management');
 	}
-	
-	
+
+
 	public function login() {
 		if(!$this->request->is('post') AND !$this->Auth->user() AND $this->shibUser) {
 			$user = array();
@@ -84,14 +84,14 @@ class AppUsersController extends UsersController {
         // handle any other login errors in parent login method
 		parent::login();
 	}
-	
-	
+
+
 	public function logout() {
 		// override required to apply Auth->logoutRedirect
 		parent::logout();
 	}
-	
-	
+
+
 	// when calling render from this controller, wee need to check for existing plugin views,
 	// which only partially are overridden on app level
 	public function render($view = null, $layout = null) {
@@ -107,9 +107,9 @@ class AppUsersController extends UsersController {
 		}
 		return parent::render($view, $layout);
 	}
-	
-	
-	
+
+
+
 	protected function _setOptions() {
 		$institutions = $this->AppUser->Institution->find('list', array(
 			'contain' => array('Country'),
@@ -124,8 +124,8 @@ class AppUsersController extends UsersController {
 		));
 		$this->set(compact('institutions','countries','userRoles','cities'));
 	}
-	
-	
+
+
 	public function register() {
 		if(!empty($this->request->data)) {
 			if(!$this->_checkCaptcha()) {
@@ -136,31 +136,37 @@ class AppUsersController extends UsersController {
 		if(!empty($this->request->data[$this->modelClass]['university'])) {
 			$this->request->data[$this->modelClass]['institution_id'] = null;
 		}
-		$this->{$this->modelClass}->validate = array_merge(
-			$this->{$this->modelClass}->validate,
-			array(
-				'about' => array(
-					'required' => array(
-						'rule' => 'notBlank',
-						'message' => 'For verification of your involvement, please provide any further information.'
-					)
-				)
-			),
-			array(
-				'consent' => array(
-					'rule' => array('equalTo', '1'),
-					'required' => true,
-					'allowEmpty' => false,
-					'message' => 'You must agree to the terms.'
-				)
-			)
-		);
-		
+
+        if($this->shibUser) {
+            $this->{$this->modelClass}->validator()->remove('password');
+        }else{
+            $this->{$this->modelClass}->validate = array_merge(
+                $this->{$this->modelClass}->validate,
+                array(
+                    'about' => array(
+                        'required' => array(
+                            'rule' => 'notBlank',
+                            'message' => 'For verification of your involvement, please provide any further information.'
+                        )
+                    )
+                ),
+                array(
+                    'consent' => array(
+                        'rule' => array('equalTo', '1'),
+                        'required' => true,
+                        'allowEmpty' => false,
+                        'message' => 'You must agree to the terms.'
+                    )
+                )
+            );
+        }
+
+
 		parent::register();
 		$this->_setOptions();
 	}
-	
-	
+
+
 	public function delete_identity() {
 		$eppn = $this->Auth->user('shib_eppn');
 		$this->{$this->modelClass}->id = $this->Auth->user('id');
@@ -170,7 +176,7 @@ class AppUsersController extends UsersController {
 		$this->Session->write('Users.block_eppn', $eppn);
 		$this->redirect('/users/profile');
 	}
-	
+
 	protected function _newUserAdminNotification($user = array()) {
 		if(empty($user)) return false;
 		$result = true;
@@ -180,7 +186,7 @@ class AppUsersController extends UsersController {
 			'data' => $user,
 			'cc' => Configure::read('App.defaultCc')
 		);
-		
+
 		$admins = $this->AppUser->find('all', array(
 			'contain' => array(),
 			'conditions' => array(
@@ -195,20 +201,20 @@ class AppUsersController extends UsersController {
 				)
 			));
 		}
-		
+
 		if($admins) {
 			foreach($admins as $admin) {
-				$mailOpts['email'] = $admin[$this->modelClass]['email']; 
+				$mailOpts['email'] = $admin[$this->modelClass]['email'];
 				if(!$this->_sendUserManagementMail($mailOpts)) {
 					$result = false;
 				}
 			}
 		}
-		
+
 		return $result;
 	}
-	
-	
+
+
 	public function approve($id = null) {
 		$success = $proceed = false;
 		if( ($this->Auth->user() AND $this->Auth->user('user_role_id') < 3)
@@ -237,13 +243,13 @@ class AppUsersController extends UsersController {
 				$proceed = true;
 			}
 		}
-		
+
 		if($proceed) {
 			if(!empty($this->request->data[$this->modelClass])) {
 				// the admin submitted additional data
 				$user[$this->modelClass] = array_merge($user[$this->modelClass], $this->request->data[$this->modelClass]);
 			}
-			
+
 			if($this->{$this->modelClass}->approve($user)) {
 				$this->_sendUserManagementMail(array(
 					'template' => 'Users.account_approved',
@@ -263,7 +269,7 @@ class AppUsersController extends UsersController {
 					$this->redirect('/users/login');
 				}
 			}
-			
+
 			if($success) {
 				if($this->Auth->user()) $this->redirect(array(
 					'plugin' => null,
@@ -272,7 +278,7 @@ class AppUsersController extends UsersController {
 				));
 				$this->redirect('/');
 			}
-			
+
 			$this->request->data = $user;
 			$this->_setOptions();
 		}else{
@@ -280,8 +286,8 @@ class AppUsersController extends UsersController {
 		}
 		// render the form...
 	}
-	
-	
+
+
 	public function profile($id = null) {
 		$this->_setOptions();
 		//get the actual user info because we need the email
@@ -303,8 +309,8 @@ class AppUsersController extends UsersController {
 		}
 		parent::profile($id);
 	}
-	
-	
+
+
 	public function dashboard($user_id = null) {
 		$assist = true;
 		if(empty($user_id) OR !$this->DefaultAuth->isAdmin()) {
@@ -352,7 +358,7 @@ class AppUsersController extends UsersController {
             ));
 		}
 		$this->set(compact('courses', 'moderated', 'new_courses'));
-		
+
 		if($this->DefaultAuth->isAdmin() OR $this->Auth->user('user_role_id') == 2) {
 			$conditionsUnapproved = array($this->modelClass . '.approved' => 0);
 			$conditionsInvited = array(
@@ -371,7 +377,7 @@ class AppUsersController extends UsersController {
 					'contain' => array('Institution'),
 					'conditions' => $conditionsUnapproved
 				));
-				
+
 				$invited = $this->AppUser->find('all', array(
 					'contain' => array('Institution'),
 					'conditions' => $conditionsInvited
@@ -381,24 +387,24 @@ class AppUsersController extends UsersController {
 					foreach($invited as $k => $record)
 						if($record['Institution']['id'] != $this->Auth->user('country_id'))
 							unset($invited[$k]);
-				
+
 				$this->set(compact('unapproved', 'invited'));
 				$this->render('admin_dashboard');
-				
+
 			}else{
 				$this->set('notice', 'You are viewing the dashboard of User '.$user_id);
 				$this->render('user_dashboard');
 			}
-			
+
 		}else{
 			// user dashboard
 			$this->render('user_dashboard');
 		}
-		
-		
+
+
 	}
-	
-	
+
+
 	// technically, this is a admin-triggered password reset - thus the email template reads somewhat different
 	public function invite($param = null) {
 		if(!empty($param)) {
@@ -415,7 +421,7 @@ class AppUsersController extends UsersController {
 					$this->__invite($user);
 					$this->Flash->set('User will receive a reminder email.');
 				}
-				
+
 			}elseif($param === 'all') {
 				$users = $this->{$this->modelClass}->find('all', array(
 					'contain' => array(),
@@ -449,7 +455,7 @@ class AppUsersController extends UsersController {
 			$this->_setOptions();
 		}
 	}
-	
+
 	private function __invite($user = array()) {
 		$mailOpts = array(
 			'template' => 'invite_user',
@@ -464,11 +470,11 @@ class AppUsersController extends UsersController {
 		$mailOpts['data'] = $user;
 		$this->_sendUserManagementMail($mailOpts);
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 }
 ?>
