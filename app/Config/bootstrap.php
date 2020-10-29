@@ -37,10 +37,10 @@ Configure::write('App.CourseArchivalPeriod', (60*60*24*365*2));
 Configure::write('App.mapApiKey', env('MAP_API_KEY'));
 
 
-/** 
+/**
 * This constant is used by the crontasks and email functions,
-* which are required to render links in the email bodies. 
-* As the cron is not being requested via the web, 
+* which are required to render links in the email bodies.
+* As the cron is not being requested via the web,
 * Cake's Router will resolve the base URL to 'localhost'.
 * Sometimes, it instead gets the server name instead of the domain name (user email system).
 
@@ -53,6 +53,10 @@ Configure::write('App.consoleBaseUrl', 'https://dhcr.clarin-dariah.eu/ops');
 Configure::write('List.subscribeURL', env('LIST_SUBSCRIBE_URL'));
 Configure::write('List.unsubscribeURL', env('LIST_UNSUBRSCRIBE_URL'));
 Configure::write('List.adminPwd', env('LIST_ADMIN_PWD'));
+
+
+
+Configure::write('shib.idpSelect', env('SHIB_IDP_SELECT_URL'));
 
 
 /**
@@ -125,13 +129,13 @@ Cache::config('default', array('engine' => 'File'));
  * CakePlugin::load('DebugKit'); //Loads a single plugin named DebugKit
  *
  */
- 
+
  // load plugin routes in a specific order in the routes.php file
  CakePlugin::loadAll(array(
 	array('routes' => true, 'bootstrap' => true, 'ignoreMissing' => true)
  ));
- 
- 
+
+
 
 /**
  * You can attach event listeners to the request lifecycle as Dispatcher Filter. By default CakePHP bundles two filters:
