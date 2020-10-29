@@ -19,16 +19,32 @@
  */
 
 
+// Load Composer autoload.
+#require APP . 'Vendor/autoload.php';
+// Remove and re-prepend CakePHP's autoloader as Composer thinks it is the
+// most important.
+// See: http://goo.gl/kKVJO7
+#spl_autoload_unregister(array('App', 'load'));
+#spl_autoload_register(array('App', 'load'), true, true);
+/* This is eating up 134217728 bytes of allowed memory.
+	However, it could save us from requiring all those dependencies 
+	for the dotenv loader
+	Indicated here: 
+	https://book.cakephp.org/2/en/installation/advanced-installation.html 
+*/
+
 // load configuration from .env file, if specific variable is not already present on host system
+//echo dirname(dirname(__FILE__)) . DS . 'Vendor'; exit;
+$VENDOR = APP.'Vendor'.DS;
 if(stripos(env('DHCR_ENV'), 'true') !== 0 && file_exists(CONFIG . '.env')) {
-	require_once VENDORS.'josegonzalez/dotenv/src/josegonzalez/Dotenv/Loader.php';
-	require_once VENDORS.'m1/env/src/Parser.php';
-	require_once VENDORS.'m1/env/src/Parser/AbstractParser.php';
-	require_once VENDORS.'m1/env/src/Parser/VariableParser.php';
-	require_once VENDORS.'m1/env/src/Parser/ValueParser.php';
-	require_once VENDORS.'m1/env/src/Parser/KeyParser.php';
-	require_once VENDORS.'m1/env/src/Helper/StringHelper.php';
-	require_once VENDORS.'m1/env/src/Exception/ParseException.php';
+	require_once $VENDOR.'josegonzalez/dotenv/src/josegonzalez/Dotenv/Loader.php';
+	require_once $VENDOR.'m1/env/src/Parser.php';
+	require_once $VENDOR.'m1/env/src/Parser/AbstractParser.php';
+	require_once $VENDOR.'m1/env/src/Parser/VariableParser.php';
+	require_once $VENDOR.'m1/env/src/Parser/ValueParser.php';
+	require_once $VENDOR.'m1/env/src/Parser/KeyParser.php';
+	require_once $VENDOR.'m1/env/src/Helper/StringHelper.php';
+	require_once $VENDOR.'m1/env/src/Exception/ParseException.php';
 	$dotenv = new josegonzalez\Dotenv\Loader([CONFIG . '.env']);
 	$dotenv->parse()
 		->putenv()

@@ -5,9 +5,9 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": "7.0",
+        "php": ">=7.0",
         "cakephp/cakephp": "^2.10",
-        "josegonzalez/dotenv": "3.*",
+        "josegonzalez/dotenv": "3.*"
     },
     "config": {
         "vendor-dir": "Vendor/"

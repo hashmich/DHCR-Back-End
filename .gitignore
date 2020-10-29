@@ -2,6 +2,7 @@
 /app/webroot/info.php
 /app/tmp/**
 /app/logs/**
+/app/Vendor/**
 .sass-cache
 .svn
 
