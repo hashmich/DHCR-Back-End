@@ -359,17 +359,19 @@ class AppUser extends User {
 			}else{
 				$mailurl = $mailcfg['unsubscribeURL'];
 			}
-			/*
 			$ch = curl_init($mailurl.$email);
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_HEADER, 1);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
 			curl_setopt($ch,CURLOPT_POSTFIELDS, "&adminpw=".$mailcfg['adminPwd']);
 			$response = curl_exec($ch);
+			if (curl_errno($ch)) {
+				error_log(print_r(curl_error($ch),true));
+			}
 			curl_close($ch);
-			*/
 		}else{
 			error_log('problem with the list config variables');
 		}
