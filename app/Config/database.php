@@ -65,38 +65,41 @@
 class DATABASE_CONFIG {
 
 	public $default = array();
-	
+
 	public $test = array();
-	
+
 	public function __construct() {
-		$url = strstr(env('DATABASE_URL'), '?', true);
+		/*
+	    $url = strstr(env('DATABASE_URL'), '?', true);
 		$url = str_replace('mysql://', '', $url);
 		$url = explode('@', $url);
 		$login = explode(':', $url[0]);
 		$database = explode('/', $url[1]);
+		*/
 		$this->default = array(
 			'datasource'  => 'Database/Mysql',
 			'persistent'  => false,
-			'host'        => $database[0],
-			'login'       => $login[0],
-			'password'    => $login[1],
-			'database'    => $database[1],
+			'host'        => env('DB_HOST', null),
+			'login'       => env('DB_USER', null),
+			'password'    => env('DB_PASS', null),
+			'database'    => env('DB_NAME', null),
 			'prefix' => '',
 			'encoding' => 'utf8'
 		);
-		
+		/*
 		$test = strstr(env('DATABASE_TEST_URL'), '?', true);
 		$test = str_replace('mysql://', '', $test);
 		$test = explode('@', $test);
 		$testLogin = explode(':', $test[0]);
 		$testDatabase = explode('/', $test[1]);
+		*/
 		$this->test = array(
 			'datasource'  => 'Database/Mysql',
 			'persistent'  => false,
-			'host'        => $testDatabase[0],
-			'login'       => $testLogin[0],
-			'password'    => $testLogin[1],
-			'database'    => $testDatabase[1],
+            'host'        => env('TEST_DB_HOST', null),
+            'login'       => env('TESt_DB_USER', null),
+            'password'    => env('TEST_DB_PASS', null),
+            'database'    => env('TEST_DB_NAME', null),
 			'prefix' => '',
 			'encoding' => 'utf8'
 		);
