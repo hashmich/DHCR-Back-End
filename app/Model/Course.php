@@ -35,95 +35,102 @@ class Course extends AppModel {
  * @var string
  */
 	public $displayField = 'name';
-	
-	
+
+
 	public $order = 'Course.updated DESC';
-	
-	
+
+
 	private $maxHttpCode = 300;
-	
-	
-	
-	
+
+
+
+
 	/**
 	 * belongsTo associations
 	 *
 	 * @var array
 	 */
 	public $belongsTo = array(
-			'Country' => array(
-					'className' => 'Country',
-					'foreignKey' => 'country_id'
-			),
-			'City' => array(
-					'className' => 'City',
-					'foreignKey' => 'city_id'
-			),
-			'Institution' => array(
-					'className' => 'Institution',
-					'foreignKey' => 'institution_id',
-					'counterCache' => true
-			),
-			'CourseParentType' => array(
-					'className' => 'CourseParentType',
-					'foreignKey' => 'course_parent_type_id'
-			),
-			'CourseType' => array(
-					'className' => 'CourseType',
-					'foreignKey' => 'course_type_id'
-			),
-			'Language' => array(
-					'className' => 'Language',
-					'foreignKey' => 'language_id'
-			),
-			'AppUser' => array(
-					'className' => 'AppUser',
-					'foreignKey' => 'user_id'
-			),
-			'DeletionReason' => array(
-					'className' => 'DeletionReason',
-					'foreignKey' => 'deletion_reason_id'
-			),
-			'CourseDurationUnit' => array(
-					'className' => 'CourseDurationUnit',
-					'foreignKey' => 'course_duration_unit_id'
-			)
+        'Country' => array(
+                'className' => 'Country',
+                'foreignKey' => 'country_id'
+        ),
+        'City' => array(
+                'className' => 'City',
+                'foreignKey' => 'city_id'
+        ),
+        'Institution' => array(
+                'className' => 'Institution',
+                'foreignKey' => 'institution_id',
+                'counterCache' => true
+        ),
+        'CourseParentType' => array(
+                'className' => 'CourseParentType',
+                'foreignKey' => 'course_parent_type_id'
+        ),
+        'CourseType' => array(
+                'className' => 'CourseType',
+                'foreignKey' => 'course_type_id'
+        ),
+        'Language' => array(
+                'className' => 'Language',
+                'foreignKey' => 'language_id'
+        ),
+        'AppUser' => array(
+                'className' => 'AppUser',
+                'foreignKey' => 'user_id'
+        ),
+        'DeletionReason' => array(
+                'className' => 'DeletionReason',
+                'foreignKey' => 'deletion_reason_id'
+        ),
+        'CourseDurationUnit' => array(
+                'className' => 'CourseDurationUnit',
+                'foreignKey' => 'course_duration_unit_id'
+        )
 	);
-	
-	
-	 
-	
+
+
+
+
 	/**
 	 * hasAndBelongsToMany associations
 	 *
 	 * @var array
 	 */
 	public $hasAndBelongsToMany = array(
-			'TadirahTechnique' => array(
-					'className' => 'TadirahTechnique',
-					'joinTable' => 'courses_tadirah_techniques',
-					'foreignKey' => 'course_id',
-					'associationForeignKey' => 'tadirah_technique_id',
-					'unique' => 'keepExisting'
-			),
-			'TadirahObject' => array(
-					'className' => 'TadirahObject',
-					'joinTable' => 'courses_tadirah_objects',
-					'foreignKey' => 'course_id',
-					'associationForeignKey' => 'tadirah_object_id',
-					'unique' => 'keepExisting'
-			),
-			'Discipline' => array(
-					'className' => 'Discipline',
-					'joinTable' => 'courses_disciplines',
-					'foreignKey' => 'course_id',
-					'associationForeignKey' => 'discipline_id',
-					'unique' => 'keepExisting'
-			)
+        'TadirahTechnique' => array(
+                'className' => 'TadirahTechnique',
+                'joinTable' => 'courses_tadirah_techniques',
+                'foreignKey' => 'course_id',
+                'associationForeignKey' => 'tadirah_technique_id',
+                'unique' => 'keepExisting'
+        ),
+        'TadirahObject' => array(
+                'className' => 'TadirahObject',
+                'joinTable' => 'courses_tadirah_objects',
+                'foreignKey' => 'course_id',
+                'associationForeignKey' => 'tadirah_object_id',
+                'unique' => 'keepExisting'
+        ),
+        'Discipline' => array(
+                'className' => 'Discipline',
+                'joinTable' => 'courses_disciplines',
+                'foreignKey' => 'course_id',
+                'associationForeignKey' => 'discipline_id',
+                'unique' => 'keepExisting'
+        )
 	);
-	
-	
-	
+
+	public $hasMany = array(
+	    'Notification' => array(
+	        'className' => 'Notification',
+            'foreignKey' => 'course_id'
+        )
+    );
+
+
+
 
 	/**
 	 * Validation rules
@@ -267,16 +274,16 @@ class Course extends AppModel {
 			),
 		)
 	);
-	
-	
+
+
 	public function beforeSave($options = array()) {
 		if(!empty($this->data['Course']['lon']) AND !empty($this->data['Course']['lat'])) {
 			$lon = $this->data['Course']['lon'];
 			$lat = $this->data['Course']['lat'];
-		
+
 			$lon = substr($lon, 0, strpos($lon, '.') + 7);
 			$lat = substr($lat, 0, strpos($lat, '.') + 7);
-		
+
 			$this->data['Course']['lon'] = floatval($lon);
 			$this->data['Course']['lat'] = floatval($lat);
 		}
@@ -285,22 +292,23 @@ class Course extends AppModel {
 
 	public function afterSave($created, $options = array()) {
         // trigger moderator notification for new courses, that are published
-		$alert_mods = true;
-		if(!empty($this->data['Course']['id'])) {
-			$this->recursive = -1;
-			$course = $this->findById($this->data['Course']['id']);
-			if($course AND ($course['Course']['approved']) OR $course['Course']['mod_mailed'])
-				$alert_mods = false;
-		}
-		
-        if( $alert_mods
-		AND !empty($this->data['Course']['active'])
-		AND Configure::read('debug') == 0
-        ) {
+		$alert_mods = false;
+        // get the current course
+        $course = $this->read();
+        if($course AND empty($course['Course']['deleted']) AND !empty($course['Course']['active'])) {
+            $alert_mods = true;
+            if($course['Course']['approved'] OR $course['Course']['mod_mailed'])
+                $alert_mods = false;
+        }
+
+        $subscribers = false;
+		if($subscribers AND Configure::read('debug') == 0) {
+
+        }
+
+        if($alert_mods AND Configure::read('debug') == 0) {
             $admins = $this->AppUser->getModerators($this->data['Course']['country_id'], $user_admin = true);
             if($admins) {
-                // get the current course
-                $course = $this->read();
                 $token = $this->generateToken('approval_token');
                 $course['Course']['approval_token'] = $token;
 
@@ -338,7 +346,7 @@ class Course extends AppModel {
                     unset($Email);
                 }
 
-                $this->saveField('mod_mailed', true, array(
+                $this->saveField('notifications_sent', true, array(
                         'validate' => false,
                         'callbacks' => false));
                 $this->saveField('approval_token', $token, array(
@@ -359,8 +367,8 @@ class Course extends AppModel {
 		) return true;
 		return false;
 	}
-	
-	
+
+
 	public function multiDate($check) {
 		$check = explode(';', $check[key($check)]);
 		foreach($check as $k => $date) {
@@ -369,8 +377,8 @@ class Course extends AppModel {
 		}
 		return true;
 	}
-	
-	
+
+
 	public function urlFormat($check) {
 		$url = (is_array($check)) ? $check[key($check)] : $check;
 		if(is_string($url)) {
@@ -379,8 +387,8 @@ class Course extends AppModel {
 		}
 		return false;
 	}
-	
-	
+
+
 	public function urlCheckStatus($check) {
 		$url = (is_array($check)) ? $check[key($check)] : $check;
 		$status = $this->http_status($url);
@@ -392,11 +400,11 @@ class Course extends AppModel {
 			->getField(key($check))->getRule('status_ok')
 			->message = 'The server response code of the provided URL is not okay. HTTP status code: '.$status;
 		}
-		
+
 		return false;
 	}
-	
-	
+
+
 	private function http_status($url){
 	    $ch = curl_init();
 	    curl_setopt($ch, CURLOPT_URL, $url);
@@ -407,18 +415,18 @@ class Course extends AppModel {
 	    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 	    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:54.0) Gecko/20100101 Firefox/54.0');
 	    curl_exec($ch);
-	    
+
 	    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	    curl_close($ch);
 	    return $status;
 	}
-	
-	
-	
 
 
-	
-	
+
+
+
+
+
 	public function beforeValidate($options = array()) {
 		unset($this->data['Course']['course_parent_type_id']);
 		unset($this->data['Course']['city_id']);
@@ -446,11 +454,11 @@ class Course extends AppModel {
 			}
 			$this->data['Course']['start_date'] = implode(';', $dates);
 		}
-		
+
 		return true;
 	}
-	
-	
+
+
 	public function validateAll($data) {
 		$this->Discipline->set($data);
 		$errors1 = $this->Discipline->invalidFields();
@@ -464,8 +472,8 @@ class Course extends AppModel {
 		$this->validationErrors = array_merge($this->validationErrors, $errors);
 		return false;
 	}
-	
-	
+
+
 	public function checkUrls() {
 		$courses = $this->find('all', array(
 			'contain' => array('AppUser'),
@@ -505,11 +513,11 @@ class Course extends AppModel {
 					}
 				}
 			}
-			
+
 		}
 		return $collection;
 	}
-	
+
 	// collect email addresses of owners of courses that haven't updated their course for at least one year
 	public function getReminderCollection() {
 		$courses = $this->find('all', array(
@@ -533,7 +541,7 @@ class Course extends AppModel {
 					//$email = 'no_owner';
 					$mods = $this->AppUser->getModerators($record['Course']['country_id'], $user_admin = false);
 					if($mods) {
-						
+
 						foreach($mods as $mod) {
 							$email = $mod['AppUser']['email'];
 							$collection[$email][$record['Course']['id']] = $errors;
@@ -546,8 +554,8 @@ class Course extends AppModel {
 		}
 		return $collection;
 	}
-	
-	
+
+
 	public function getCount($key = null, $value = null) {
 	    $conditions = array(
             $key => $value,
@@ -577,6 +585,6 @@ class Course extends AppModel {
     }
 
 
-	
-	
+
+
 }
