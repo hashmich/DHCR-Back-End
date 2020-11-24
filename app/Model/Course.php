@@ -303,7 +303,9 @@ class Course extends AppModel {
 
         $subscribers = false;
 		if($subscribers AND Configure::read('debug') == 0) {
-
+            // if we would like to send out mails from the old legacy app, we would start here
+            // instead, we'd like to go for a method triggered by cronjob in the new front end app
+            // (cronjob because no backend is available yet - migration pending)
         }
 
         if($alert_mods AND Configure::read('debug') == 0) {
@@ -346,7 +348,7 @@ class Course extends AppModel {
                     unset($Email);
                 }
 
-                $this->saveField('notifications_sent', true, array(
+                $this->saveField('mod_mailed', true, array(
                         'validate' => false,
                         'callbacks' => false));
                 $this->saveField('approval_token', $token, array(
