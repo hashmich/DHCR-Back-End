@@ -19,6 +19,8 @@ Configure::write('App.defaultEmail', array(env('APP_MAIL_DEFAULT_FROM') => 'DH C
 Configure::write('App.defaultCc', env('APP_MAIL_DEFAULT_CC'));
 Configure::write('App.EmailSubjectPrefix', '[DH Course Registry]');
 
+Configure::write('debugging.mail', env('DEBUG_MAIL_TO'));
+
 // send an update reminder after this period, make traffic-light display according to this setting
 Configure::write('App.CourseWarnPeriod', (60*60*24*300));
 

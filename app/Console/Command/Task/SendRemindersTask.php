@@ -16,33 +16,33 @@
  * limitations under the License.
  */
 class SendRemindersTask extends Shell {
-	
+
 	public $uses = array('Course');
-	
-	
+
+
 	public function execute($out = null, $to = null) {
 		Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
-		
+
 		$collection = $this->Course->getReminderCollection();
 		if(Configure::read('debug') > 0) $to = Configure::read('debugging.mail');
 		$this->out('Debug level: ' . Configure::read('debug'));
 		$this->out('Alternative addressee (debug): ' . $to);
 		if(!empty($collection)) {
-			
+
 			if($out !== false) {
 				App::uses('CakeEmail', 'Network/Email');
-				
+
 				$this->out('Sending emails to:');
 				foreach($collection as $email => $data) {
 					if($email == 'no_owner') continue;
-					
+
 					$this->out($email . ': ' . $data['maintainer']);
-					
+
 					$ccMod = false;
 					$country_id = null;
 					foreach($data as $id => $record) {
 						if($id == 'maintainer') continue;
-						
+
 						// set the last reminder timestamp only, if it is the first mailing after last update
 						if(	$record['Course']['last_reminder'] < $record['Course']['updated']) {
 							$save = array(
@@ -52,20 +52,20 @@ class SendRemindersTask extends Shell {
 							);
 							$this->Course->save($save, array('validate' => false));
 						}
-						
-						// cc moderator only, if there were subsequent reminders after last update 
+
+						// cc moderator only, if there were subsequent reminders after last update
 						if(	$record['Course']['last_reminder'] > $record['Course']['updated']
 						AND	$record['Course']['last_reminder'] < date('Y-m-d H:i:s', time() - 60*60*24*60)) {
 							$ccMod = true;
 							$country_id = $record['Course']['country_id'];
 						}
 					}
-					
+
 					$Email = new CakeEmail('default');
 					$subject_prefix = (Configure::read('App.EmailSubjectPrefix'))
 						? trim(Configure::read('App.EmailSubjectPrefix')) . ' '
 						: '';
-					
+
 					if(!empty($to)) $email = $to;
 					$options = array(
 						'subject_prefix' => $subject_prefix,
@@ -84,7 +84,7 @@ class SendRemindersTask extends Shell {
 						$Email->viewVars(array(
 							'data' => $options['data']
 						));
-						if($ccMod) {
+						if($ccMod AND !Configure::read('debug')) {
 							$mods = $this->Course->AppUser->getModerators($country_id);
 							if($mods)
 								$Email->cc($mods[0]['AppUser']['email']);
@@ -95,11 +95,11 @@ class SendRemindersTask extends Shell {
 						$Email->send();
 					}
 					unset($Email);
-				} 
+				}
 			}
 		}
 	}
-	
-	
+
+
 }
 ?>
