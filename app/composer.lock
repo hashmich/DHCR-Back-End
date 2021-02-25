@@ -4,24 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dafc9f389b36b5cb1fb6f0a4f9963fe4",
+    "content-hash": "070c83872b4dace8e5455a371d8d3a88",
     "packages": [
         {
             "name": "cakephp/cakephp",
-            "version": "2.10.22",
+            "version": "2.10.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "d0c51b37422d0d2c99be74045d4439a674259308"
+                "reference": "cf14e6546ec44e3369e3531add11fdb946656280"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/d0c51b37422d0d2c99be74045d4439a674259308",
-                "reference": "d0c51b37422d0d2c99be74045d4439a674259308",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/cf14e6546ec44e3369e3531add11fdb946656280",
+                "reference": "cf14e6546ec44e3369e3531add11fdb946656280",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.3.0,<8.0.0"
             },
             "require-dev": {
                 "cakephp/cakephp-codesniffer": "^1.0.0",
@@ -56,7 +56,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/cakephp"
             },
-            "time": "2020-06-07T02:16:36+00:00"
+            "time": "2020-12-16T02:47:53+00:00"
         },
         {
             "name": "josegonzalez/dotenv",
@@ -185,7 +185,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.2"
+        "php": "7.0.*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
