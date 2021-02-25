@@ -27,10 +27,10 @@
 #spl_autoload_unregister(array('App', 'load'));
 #spl_autoload_register(array('App', 'load'), true, true);
 /* This is eating up 134217728 bytes of allowed memory.
-	However, it could save us from requiring all those dependencies 
+	However, it could save us from requiring all those dependencies
 	for the dotenv loader
-	Indicated here: 
-	https://book.cakephp.org/2/en/installation/advanced-installation.html 
+	Indicated here:
+	https://book.cakephp.org/2/en/installation/advanced-installation.html
 */
 
 // load configuration from .env file, if specific variable is not already present on host system
@@ -65,7 +65,7 @@ if(stripos(env('DHCR_ENV'), 'true') !== 0 && file_exists(CONFIG . '.env')) {
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
-	Configure::write('debug', (stripos(env('DEBUG'), 'true') === 0) ? 2 : 0);
+	Configure::write('debug', 1);
 
 /**
  * Configure the Error handler used to handle errors for your application. By default
