@@ -24,7 +24,7 @@ class SendRemindersTask extends Shell {
 		Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
 
 		$collection = $this->Course->getReminderCollection();
-		if(Configure::read('debug') > 0) $to = Configure::read('debugging.mail');
+		if(Configure::read('debug') > 1) $to = Configure::read('debugging.mail');
 		$this->out('Debug level: ' . Configure::read('debug'));
 		$this->out('Alternative addressee (debug): ' . $to);
 		if(!empty($collection)) {
@@ -84,12 +84,12 @@ class SendRemindersTask extends Shell {
 						$Email->viewVars(array(
 							'data' => $options['data']
 						));
-						if($ccMod AND !Configure::read('debug')) {
+						if($ccMod AND Configure::read('debug') <= 1) {
 							$mods = $this->Course->AppUser->getModerators($country_id);
 							if($mods)
 								$Email->cc($mods[0]['AppUser']['email']);
 						}
-						if(Configure::read('debug') > 0 AND empty($to)) {
+						if(Configure::read('debug') > 1 AND empty($to)) {
 							$Email->transport('Debug');
 						}
 						$Email->send();

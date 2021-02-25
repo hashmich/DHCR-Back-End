@@ -465,7 +465,7 @@ class AppUsersController extends UsersController {
 			'sender' => Configure::read('App.defaultEmail'),
 			'replyTo' => $this->Auth->user('email')
 		);
-		if(Configure::read('debug') > 0) $mailOpts['transport'] = 'Debug';
+		if(Configure::read('debug') > 1) $mailOpts['transport'] = 'Debug';
 		$mailOpts['email'] = $user[$this->modelClass]['email'];
 		$mailOpts['data'] = $user;
 		$this->_sendUserManagementMail($mailOpts);
