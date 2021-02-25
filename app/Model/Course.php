@@ -301,14 +301,7 @@ class Course extends AppModel {
                 $alert_mods = false;
         }
 
-        $subscribers = false;
-		if($subscribers AND Configure::read('debug') == 0) {
-            // if we would like to send out mails from the old legacy app, we would start here
-            // instead, we'd like to go for a method triggered by cronjob in the new front end app
-            // (cronjob because no backend is available yet - migration pending)
-        }
-
-        if($alert_mods AND Configure::read('debug') == 0) {
+        if($alert_mods AND Configure::read('debug') <= 1) {
             $admins = $this->AppUser->getModerators($this->data['Course']['country_id'], $user_admin = true);
             if($admins) {
                 $token = $this->generateToken('approval_token');
@@ -330,7 +323,7 @@ class Course extends AppModel {
                         'email' => $admin['AppUser']['email']
                     );
 
-                    if(Configure::read('debug') > 0) $options['email'] = Configure::read('debugging.mail');
+                    if(Configure::read('debug') > 1) $options['email'] = Configure::read('debugging.mail');
 
                     if(is_string($options['email'])) {
                         $Email->to($options['email']);

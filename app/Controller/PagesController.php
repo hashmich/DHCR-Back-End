@@ -35,11 +35,11 @@ class PagesController extends AppController {
  */
 	public $uses = array(
 	    'Course');
-	
-	
+
+
 	public function beforeFilter() {
 		parent::beforeFilter();
-		
+
 		$this->Auth->allow('display');
 	}
 
@@ -76,7 +76,7 @@ class PagesController extends AppController {
 		try {
 			$this->render(implode('/', $path));
 		} catch (MissingViewException $e) {
-			if (Configure::read('debug')) {
+			if (Configure::read('debug') > 1) {
 				throw $e;
 			}
 			throw new NotFoundException();

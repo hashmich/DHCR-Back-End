@@ -65,7 +65,7 @@ if(stripos(env('DHCR_ENV'), 'true') !== 0 && file_exists(CONFIG . '.env')) {
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
-	Configure::write('debug', 1);
+	Configure::write('debug', (stripos(env('DEBUG'), 'true') === 0) ? 2 : 1);
 
 /**
  * Configure the Error handler used to handle errors for your application. By default
@@ -391,7 +391,7 @@ $engine = 'File';
 
 // In development mode, caches should expire quickly.
 $duration = '+999 days';
-if (Configure::read('debug') > 0) {
+if (Configure::read('debug') > 1) {
 	$duration = '+10 seconds';
 }
 

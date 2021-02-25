@@ -20,22 +20,22 @@
 <head>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
+
 	<?php echo $this->Html->charset(); ?>
 	<title>DHCR Back End</title>
 	<?php
 	echo $this->Html->meta(array('name' => 'robots', 'content' => 'noindex'));
 	echo $this->Html->meta(array('name' => 'robots', 'content' => 'nofollow'));
-	
+
 	echo $this->Html->meta('icon');
-	
-	if(Configure::read('debug') > 0) echo $this->Html->css('cake_debugging.css');
-	
+
+	if(Configure::read('debug') > 1) echo $this->Html->css('cake_debugging.css');
+
 	// custom CSS
 	echo $this->Html->css('styles.css');
 	echo $this->fetch('css');
 	?>
-	
+
 </head>
 
 <?php
@@ -48,9 +48,9 @@ if(!empty($auth_user)) {
 
 	<div id="container">
         <div id="header">
-            
+
             <a class="blue back button" href="<?= Configure::read('dhcr.baseUrl') ?>">Go to Start</a>
-            
+
             <div id="logo">
                 <?php
                 $logo = array(
@@ -72,9 +72,9 @@ if(!empty($auth_user)) {
 
                 </div>
             </div>
-            
+
         </div>
-		
+
 		<div class="columns">
 			<div id="left">
 				<?php
@@ -82,7 +82,7 @@ if(!empty($auth_user)) {
                 ?>
 
 			</div>
-			
+
 			<div id="content">
 				<?php
 				echo $this->Session->flash();
@@ -90,14 +90,14 @@ if(!empty($auth_user)) {
 				?>
 			</div>
 		</div>
-		
+
 		<div id="footer">
 			<?php echo $this->element('footer'); ?>
 		</div>
 	</div>
-	
-	
-	
+
+
+
 	<script src="https://code.jquery.com/jquery-1.12.4.min.js"
 		integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
 		crossorigin="anonymous">
@@ -105,17 +105,17 @@ if(!empty($auth_user)) {
 	<script type="text/javascript">
 		window.jQuery || document.write('<script type="text/javascript" src="<?php echo $this->Html->url('/js/jquery-1.12.4.min.js', true); ?>"><\/script>')
 	</script>
-	
-	
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
-		integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
+
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+		integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
 		crossorigin="anonymous">
 	</script>
 	<script type="text/javascript">
 		(typeof $().modal == 'function') || document.write('<script type="text/javascript" src="<?php echo $this->Html->url('/js/bootstrap.min.js', true); ?>"><\/script>')
 	</script>
-	
-	
+
+
 	<?php echo $this->fetch('script'); ?>
 
     <!-- Matomo (before was Piwik) -->
@@ -129,7 +129,7 @@ if(!empty($auth_user)) {
         ?>
         _paq.push(['trackPageView']);
         _paq.push(['enableLinkTracking']);
-        
+
         (function() {
             var u="//matomo.acdh.oeaw.ac.at/";
             _paq.push(['setTrackerUrl', u+'piwik.php']);

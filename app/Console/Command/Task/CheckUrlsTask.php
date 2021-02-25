@@ -16,35 +16,32 @@
  * limitations under the License.
  */
 class CheckUrlsTask extends Shell {
-	
+
 	public $uses = array('Course');
-	
-	
+
+
 	public function execute($sendMails = null, $to = null) {
 		Configure::write('App.fullBaseUrl', Configure::read('App.consoleBaseUrl'));
-		
+
 		$collection = $this->Course->checkUrls();
-		if(Configure::read('debug') > 0 AND $to == null) $to = Configure::read('debugging.mail');
+		if(Configure::read('debug') > 1 AND $to == null) $to = Configure::read('debugging.mail');
 		$this->out('Debug level: ' . Configure::read('debug'));
 		$this->out('Alternative addressee (debug): ' . $to);
 		if(!empty($collection)) {
-			if(Configure::read('debug') > 0) {
-				//debug(count($collection));
-			}
 			if($sendMails !== false) {
 				App::uses('CakeEmail', 'Network/Email');
-				
+
 				$this->out('Sending emails to:');
 				foreach($collection as $email => $data) {
 					if($email == 'no_owner') continue;
-					
+
 					$this->out($email . ': ' . $data['maintainer']);
-					
+
 					$Email = new CakeEmail('default');
 					$subject_prefix = (Configure::read('App.EmailSubjectPrefix'))
 						? trim(Configure::read('App.EmailSubjectPrefix')) . ' '
 						: '';
-					
+
 					if(!empty($to)) $email = $to;
 					$options = array(
 						'subject_prefix' => $subject_prefix,
@@ -63,17 +60,17 @@ class CheckUrlsTask extends Shell {
 						$Email->viewVars(array(
 							'data' => $options['data']
 						));
-						if(Configure::read('debug') > 0 AND empty($to)) {
+						if(Configure::read('debug') > 1 AND empty($to)) {
 							$Email->transport('Debug');
 						}
 						$Email->send();
 					}
 					unset($Email);
-				} 
+				}
 			}
 		}
 	}
-	
-	
+
+
 }
 ?>

@@ -32,28 +32,28 @@ class AppController extends Controller {
 
 	public $components = array(
 		'Users.DefaultAuth' => ['components' => ['Auth' => ['logoutRedirect' => '/users/login']]],
-		'DebugKit.Toolbar',
+		//'DebugKit.Toolbar',
 		'Paginator',
 		'Session',
 		'Flash',
 		'Cakeclient.Crud',
 		'RequestHandler'
 	);
-	
+
 	// paging defaults
 	public $paginate = array(
 		'limit' => 10,
 		'maxLimit' => 200
 	);
-	
+
 	public $uses = array(
 		'AppUser'
 	);
-	
+
 	public $shibUser = null;
-	
-	
-	
+
+
+
 	public function beforeFilter() {
 		// maintain pagination settings
 		if($paginate = $this->Session->read('Paginate'))
@@ -71,26 +71,26 @@ class AppController extends Controller {
         AND !$this->Auth->user()) {
             $this->_resetFilter();
         }
-		
-		
+
+
 		if(isset($this->Security))	{
 			$this->Security->requireSecure = array();
 			$this->Security->unlockedFields[] = 'g-recaptcha-response';
 		}
-		
+
 		$this->set('modelName', $this->modelClass);
-		
+
 		if($this->Auth->user('user_role_id') AND $this->Auth->user('user_role_id') < 3) {
 			// dynamically load the AclMenu Component
 			if(!isset($this->AclMenu)) {
 				$this->AclMenu = $this->Components->load('Cakeclient.AclMenu');
 				// if not loaded before beforeFilter, we need to initialize manually
 				$this->AclMenu->initialize($this);
-				
-				
+
+
 			}
 		}
-		
+
 		if(!empty($_SERVER['HTTP_EPPN'])) {
             $this->shibUser = new AppUser();
             if($this->shibUser->isShibUser()) {
@@ -109,10 +109,10 @@ class AppController extends Controller {
             }
 		}
 	}
-	
-	
-	
-	
+
+
+
+
 	public function beforeRedirect($url, $status = null, $exit = true) {
 		if(	!empty($this->request->params['layout'])
 		AND	$this->request->params['layout'] == 'iframe'
@@ -126,8 +126,8 @@ class AppController extends Controller {
 			);
 		}
 	}
-	
-	
+
+
 	// reset filter function
 	public function reset_filter($filter = null) {
 		$this->_resetFilter($filter);
@@ -145,22 +145,22 @@ class AppController extends Controller {
             $this->Session->delete('filter');
         }
     }
-	
-	
+
+
 	protected function _checkCaptcha(&$errors = array()) {
-		
+
 		$ip = $_SERVER['REMOTE_ADDR'];
-		if(!empty($_SERVER['HTTP_CLIENT_IP'])) 
+		if(!empty($_SERVER['HTTP_CLIENT_IP']))
 			$ip = $_SERVER['HTTP_CLIENT_IP'];
-		elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) 
+		elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
 			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-		
+
 		$data = array(
 			'secret' => Configure::read('App.reCaptchaPrivateKey'),
 			'response' => $this->request->data['g-recaptcha-response'],
 			'remoteip' => $ip
 		);
-		
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
 		curl_setopt($ch, CURLOPT_POST, true);
@@ -168,15 +168,15 @@ class AppController extends Controller {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
 		$result = curl_exec($ch);
 		curl_close($ch);
-		
+
 		if(empty($result)) return false;
 		$result = json_decode($result, true);
 		if(!empty($result['error-codes'])) $errors = $result['error-codes'];
 		if(!empty($result['success'])) return true;
-		
+
 		return false;
 	}
-	
+
 }
 
 
