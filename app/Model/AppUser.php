@@ -18,9 +18,9 @@
 App::uses('User', 'Users.Model');
 
 class AppUser extends User {
-    
+
 	public $name = 'AppUser';
-	
+
     public $useTable = 'users';
 
     private $__isShibUser = false;
@@ -28,7 +28,7 @@ class AppUser extends User {
     public function isShibUser() {
     	return $this->__isShibUser;
 	}
-	
+
 	// a set of validation rules, extending or overriding the given rules from the plugin
 	public $validationRules = array(
 		'institution_id' => array(
@@ -61,7 +61,7 @@ class AppUser extends User {
 	);
 
 
-	
+
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
 		$this->validate = array_merge($this->validate, $this->validationRules);
@@ -81,8 +81,8 @@ class AppUser extends User {
 			}
 		}
 	}
-	
-				
+
+
 	public function beforeSave($options = array()) {
 		// quietly remove the eppn value, if already connected to a different account
 		if(!empty($this->data[$this->alias]['shib_eppn'])) {
@@ -98,8 +98,8 @@ class AppUser extends User {
 		}
 		return true;
 	}
-	
-	
+
+
 	public function afterSave($created, $options = array()) {
 		//check the email subscription
 		if(isset($this->request->data[$this->modelClass]['mail_list'])) {
@@ -107,14 +107,14 @@ class AppUser extends User {
 			$this->handleUserDHMailList($this->request->data['AppUser']['email'], $subsrcibe);
 		}
 	}
-	
-	
+
+
 	public $virtualFields = array(
 		'name' => 'TRIM(CONCAT(AppUser.academic_title, " ", AppUser.first_name, " ", AppUser.last_name))'
 	);
-	
-	
-	
+
+
+
 	public $belongsTo = array(
 		'Institution' => array(
 			'className' => 'Institution',
@@ -123,7 +123,7 @@ class AppUser extends User {
 		'UserRole',
 		'Country'
 	);
-	
+
 	public $hasMany = array(
 		'Course' => array(
 			'className' => 'Course',
@@ -136,12 +136,12 @@ class AppUser extends User {
 			'dependent' => false
 		)
 	);
-	
-	
+
+
 	// custom validation
 	public function checkUniversity($check) {
 		$universities = $this->Institution->find('list');
-		
+
 		if(	!empty($this->data[$this->alias]['institution_id'])
 		AND	isset($universities[$this->data[$this->alias]['institution_id']])
 		) {
@@ -161,11 +161,11 @@ class AppUser extends User {
 			}
 			return true;
 		}
-		
+
 		return false;
 	}
-	
-	
+
+
 	public function inviteRegister($data = array()) {
 		$result = false;
 		$this->set($data);
@@ -177,13 +177,13 @@ class AppUser extends User {
 			$this->data[$this->alias]['approved'] = 1;
 			$this->data[$this->alias]['password_token'] = $token;
 			$this->data[$this->alias]['password_token_expires'] = $expiry;
-			
+
 			$result = $this->save($this->data, array('validate' => false));
 			$result[$this->alias]['name'] = $result[$this->alias]['first_name'] . ' ' . $result[$this->alias]['last_name'];
 		}
 		return $result;
 	}
-	
+
 	/**
 	 * @param null $token
 	 * @return array|bool|int|null
@@ -200,12 +200,12 @@ class AppUser extends User {
 		if(empty($user)) return false;
 		return $user;
 	}
-	
-	
+
+
 	public function approve($data = array()) {
 		if(isset($data[$this->alias])) $data = $data[$this->alias];
 		$this->data[$this->alias] = $data;
-		
+
 		$validator = $this->validator();
 		unset($validator['email']);
 		unset($validator['new_email']);
@@ -228,7 +228,7 @@ class AppUser extends User {
 				'message' => 'Country may not be left blank.'
 			)
 		);
-		
+
 		$this->data[$this->alias]['active'] = 1;
 		$this->data[$this->alias]['approved'] = 1; // if approved is true, but active false, then the user is banned!
 		$this->data[$this->alias]['approval_token'] = null;
@@ -239,8 +239,8 @@ class AppUser extends User {
 		}
 		return false;
 	}
-	
-	
+
+
 	function getModerators($country_id = null, $user_admin = true) {
 		$admins = array();
 		// try fetching the moderator in charge of the user's country,
@@ -274,10 +274,10 @@ class AppUser extends User {
 					)
 			));
 		}
-		
+
 		return $admins;
 	}
-	
+
 	/**
 	 * @param $user
 	 * @return array|bool|int|null
@@ -302,7 +302,7 @@ class AppUser extends User {
 					'AppUser.active' => true
 				)
 			));
-			
+
 			if(!empty($user) AND count($user) == 1) {
 				// unique identification
 				return $user;
@@ -344,8 +344,8 @@ class AppUser extends User {
 		}
 		return array();
 	}
-	
-	
+
+
 	/**
 	 *
 	 * @param string $email
@@ -366,7 +366,7 @@ class AppUser extends User {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
-			curl_setopt($ch,CURLOPT_POSTFIELDS, "&adminpw=".$mailcfg['adminPwd']);
+			curl_setopt($ch,CURLOPT_POSTFIELDS, ["adminpw" => $mailcfg['adminPwd']]);
 			$response = curl_exec($ch);
 			if (curl_errno($ch)) {
 				error_log(print_r(curl_error($ch),true));
@@ -376,7 +376,7 @@ class AppUser extends User {
 			error_log('problem with the list config variables');
 		}
 	}
-	
-	
+
+
 }
 ?>
