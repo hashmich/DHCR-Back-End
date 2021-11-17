@@ -40,30 +40,17 @@
 
 class EmailConfig {
 
-	public function __construct() {
-		if(!Configure::read('App.defaultEmail'))
-			Configure::write('App.defaultEmail', 'noreply@example.com');
-		
-		$this->default['from'] = Configure::read('App.defaultEmail');
-	}
-	
-	
-	
-	
-	
+    public $default = array(
+        'transport' => 'Smtp',
+        'from' => ['dh-course-registry@dhcr.clarin-dariah.eu' => 'DH Course Registry'],
+        'host' => 'smtp.oeaw.ac.at',
+        'port' => 25,
+        'timeout' => 30,
+        'client' => null,
+        'log' => false,		// enabling this will print the full messages into the log
+        'charset' => 'utf-8',
+        'headerCharset' => 'utf-8',
+        'returnPath' => 'dh-course-registry@dhcr.clarin-dariah.eu'
+    );
 
-	public $default = array(
-		'transport' => 'Smtp',
-		// the following line has to be set from constructor!
-		//'from' => Configure::read('App.defaultEmail'),
-		'host' => 'smtp.oeaw.ac.at',
-		'port' => 25,
-		'timeout' => 30,
-		'client' => null,
-		'log' => false,		// enabling this will print the full messages into the log
-		'charset' => 'utf-8',
-		'headerCharset' => 'utf-8',
-		'returnPath' => 'dh-course-registry@dhcr.clarin-dariah.eu'
-	);
- 
 }
