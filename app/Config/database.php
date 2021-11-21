@@ -96,10 +96,8 @@ class DATABASE_CONFIG {
 		$this->test = array(
 			'datasource'  => 'Database/Mysql',
 			'persistent'  => false,
-            'host'        => env('TEST_DB_HOST', null),
-            'login'       => env('TESt_DB_USER', null),
-            'password'    => env('TEST_DB_PASS', null),
-            'database'    => env('TEST_DB_NAME', null),
+            'url' => env('DATABASE_TEST_URL',
+                      env('DATABASE_URL', null)),
 			'prefix' => '',
 			'encoding' => 'utf8'
 		);
