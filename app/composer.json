@@ -6,7 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "~7.2",
-        "cakephp/cakephp": "^2.10",
+        "cakephp/cakephp": "^3.10",
         "josegonzalez/dotenv": "3.*"
     },
     "config": {
